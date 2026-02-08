@@ -9,5 +9,8 @@ anthropic>=0.40.0
 # Google AI (for image generation)
 google-generativeai>=0.8.0
 
+# Web interface
+flask>=3.0.0
+
 # Utilities
 python-dotenv>=1.0.0

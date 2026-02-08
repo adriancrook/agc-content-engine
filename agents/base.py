@@ -4,6 +4,7 @@ Base Agent class for all content engine agents.
 
 import json
 import logging
+import os
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -45,7 +46,7 @@ class BaseAgent(ABC):
         self,
         name: str,
         model: str,
-        model_type: str = "ollama",  # "ollama" or "anthropic" or "google"
+        model_type: str = "ollama",  # "ollama" or "anthropic" or "openrouter" or "google"
         ollama_url: str = "http://localhost:11434",
         api_key: Optional[str] = None,
         temperature: float = 0.7,
@@ -59,7 +60,20 @@ class BaseAgent(ABC):
         self.temperature = temperature
         self.max_tokens = max_tokens
         
-        logger.info(f"Initialized {name} with model {model} ({model_type})")
+        # Auto-detect OpenRouter if no Anthropic key but OpenRouter key exists
+        if model_type == "anthropic" and not api_key:
+            openrouter_key = os.getenv("OPENROUTER_API_KEY")
+            if openrouter_key:
+                self.model_type = "openrouter"
+                self.api_key = openrouter_key
+                # Map Anthropic model names to OpenRouter
+                if "sonnet" in model.lower():
+                    self.model = "anthropic/claude-sonnet-4"
+                elif "opus" in model.lower():
+                    self.model = "anthropic/claude-opus-4"
+                logger.info(f"Using OpenRouter for {model} -> {self.model}")
+        
+        logger.info(f"Initialized {name} with model {self.model} ({self.model_type})")
     
     @abstractmethod
     def run(self, input: AgentInput) -> AgentOutput:
@@ -114,12 +128,46 @@ class BaseAgent(ABC):
         
         return response.content[0].text
     
+    def _call_openrouter(self, prompt: str, system: Optional[str] = None) -> str:
+        """Call OpenRouter API (OpenAI-compatible)."""
+        url = "https://openrouter.ai/api/v1/chat/completions"
+        
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://adriancrook.com",
+            "X-Title": "AGC Content Engine",
+        }
+        
+        messages = []
+        if system:
+            messages.append({"role": "system", "content": system})
+        messages.append({"role": "user", "content": prompt})
+        
+        payload = {
+            "model": self.model,
+            "messages": messages,
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
+        }
+        
+        try:
+            response = requests.post(url, headers=headers, json=payload, timeout=300)
+            response.raise_for_status()
+            result = response.json()
+            return result["choices"][0]["message"]["content"]
+        except Exception as e:
+            logger.error(f"OpenRouter call failed: {e}")
+            raise
+    
     def _call_model(self, prompt: str, system: Optional[str] = None) -> str:
         """Call the configured model (local or cloud)."""
         if self.model_type == "ollama":
             return self._call_ollama(prompt, system)
         elif self.model_type == "anthropic":
             return self._call_anthropic(prompt, system)
+        elif self.model_type == "openrouter":
+            return self._call_openrouter(prompt, system)
         else:
             raise ValueError(f"Unknown model type: {self.model_type}")
     
