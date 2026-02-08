@@ -1,0 +1,1 @@
+{"model": "qwen2.5:14b", "prompt": "Test: Write one sentence", "stream": false}
