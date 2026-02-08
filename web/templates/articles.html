@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles - AGC</title>
+    <style>
+        body { font-family: sans-serif; background: #1a1a2e; color: #e0e0e0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { color: #fff; }
+        a { color: #667eea; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/">← Back</a>
+        <h1>Articles</h1>
+        <p>{{ articles|length }} articles</p>
+        {% for article in articles %}
+        <div style="padding: 15px; margin: 10px 0; background: rgba(255,255,255,0.05); border-radius: 8px;">
+            <strong>{{ article.title or 'Untitled' }}</strong>
+            <span style="color: #888;">{{ article.status }}</span>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
