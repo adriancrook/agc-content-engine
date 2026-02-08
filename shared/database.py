@@ -116,9 +116,10 @@ def get_session():
 # Topic functions
 def get_topics(status: Optional[str] = None, limit: int = 50) -> List[Dict]:
     with get_session() as session:
-        query = session.query(Topic).order_by(Topic.created_at.desc()).limit(limit)
+        query = session.query(Topic)
         if status:
             query = query.filter(Topic.status == status)
+        query = query.order_by(Topic.created_at.desc()).limit(limit)
         return [{"id": t.id, "title": t.title, "keyword": t.keyword, "status": t.status, 
                  "priority": t.priority, "created_at": t.created_at.isoformat() if t.created_at else None} 
                 for t in query.all()]
@@ -224,9 +225,10 @@ def create_article(topic_id: str, title: str) -> Dict:
 
 def get_articles(status: Optional[str] = None, limit: int = 20) -> List[Dict]:
     with get_session() as session:
-        query = session.query(Article).order_by(Article.created_at.desc()).limit(limit)
+        query = session.query(Article)
         if status:
             query = query.filter(Article.status == status)
+        query = query.order_by(Article.created_at.desc()).limit(limit)
         return [{"id": a.id, "title": a.title, "status": a.status, "stage": a.stage,
                  "word_count": a.word_count, "ai_score": a.ai_score} for a in query.all()]
 
