@@ -4,7 +4,7 @@
     "builder": "NIXPACKS"
   },
   "deploy": {
-    "startCommand": "cd web && python app.py",
+    "startCommand": "python web/app_minimal.py",
     "healthcheckPath": "/",
     "healthcheckTimeout": 100
   }
