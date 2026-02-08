@@ -18,6 +18,8 @@ from flask import Flask, render_template, request, jsonify, send_from_directory
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from pipeline import ContentPipeline
+from agents.topic_discovery import TopicDiscoveryAgent
+from agents.base import AgentInput
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -26,8 +28,20 @@ app.secret_key = os.urandom(24)
 active_jobs = {}
 completed_jobs = {}
 
-# Initialize pipeline
+# Initialize pipeline and discovery agent
 pipeline = None
+discovery_agent = None
+
+def get_discovery_agent():
+    global discovery_agent
+    if discovery_agent is None:
+        brave_key = os.getenv("BRAVE_API_KEY", "")
+        discovery_agent = TopicDiscoveryAgent(
+            brave_api_key=brave_key,
+            niche="mobile gaming and game design",
+            blog_url="https://adriancrook.com",
+        )
+    return discovery_agent
 
 def get_pipeline():
     global pipeline
@@ -65,6 +79,45 @@ def run_pipeline_async(job_id, topic, keywords, primary_keyword):
 def index():
     """Main page with article generation form."""
     return render_template("index.html")
+
+
+@app.route("/discover", methods=["POST"])
+def discover():
+    """Discover article topics."""
+    data = request.json
+    
+    focus_areas_raw = data.get("focus_areas", "")
+    focus_areas = [f.strip() for f in focus_areas_raw.split(",") if f.strip()]
+    
+    if not focus_areas:
+        focus_areas = [
+            "mobile game monetization",
+            "free-to-play design", 
+            "game economy",
+            "player retention",
+        ]
+    
+    try:
+        agent = get_discovery_agent()
+        
+        agent_input = AgentInput(
+            data={
+                "existing_articles": [],  # TODO: Load from blog
+                "focus_areas": focus_areas,
+                "max_topics": 10,
+            },
+            workspace=Path(__file__).parent.parent / "outputs",
+        )
+        
+        output = agent.run(agent_input)
+        
+        return jsonify({
+            "topics": output.data.get("topics", []),
+            "total_discovered": output.data.get("total_discovered", 0),
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/generate", methods=["POST"])

@@ -12,6 +12,7 @@ from .seo import SEOAgent
 from .media import MediaAgent
 from .humanizer import HumanizerAgent
 from .supervisor import SupervisorAgent
+from .topic_discovery import TopicDiscoveryAgent
 
 __all__ = [
     "BaseAgent",
@@ -24,4 +25,5 @@ __all__ = [
     "MediaAgent",
     "HumanizerAgent",
     "SupervisorAgent",
+    "TopicDiscoveryAgent",
 ]
