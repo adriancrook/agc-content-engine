@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Topics - AGC Content Engine</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        h1 { color: #fff; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .btn-primary { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        .stats { display: flex; gap: 15px; margin-bottom: 30px; }
+        .stat-card { background: rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 10px; text-align: center; }
+        .stat-card h3 { font-size: 24px; color: #fff; }
+        .stat-card p { color: #aaa; font-size: 12px; text-transform: uppercase; }
+        
+        .filters { margin-bottom: 20px; }
+        .filters a { color: #aaa; text-decoration: none; padding: 8px 15px; border-radius: 5px; margin-right: 5px; }
+        .filters a.active, .filters a:hover { background: rgba(255,255,255,0.1); color: #fff; }
+        
+        .topic-list { display: flex; flex-direction: column; gap: 10px; }
+        .topic-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .topic-card:hover { background: rgba(255,255,255,0.08); }
+        .topic-title { font-size: 16px; color: #fff; }
+        .topic-keyword { font-size: 12px; color: #888; margin-top: 5px; }
+        .topic-actions { display: flex; gap: 10px; }
+        .topic-actions .btn { padding: 8px 15px; font-size: 13px; }
+        
+        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; text-transform: uppercase; }
+        .status-pending { background: #ffc107; color: #000; }
+        .status-approved { background: #28a745; color: #fff; }
+        .status-declined { background: #dc3545; color: #fff; }
+        .status-processing { background: #17a2b8; color: #fff; }
+        .status-completed { background: #6c757d; color: #fff; }
+        
+        .back-link { color: #667eea; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div>
+                <a href="/" class="back-link">← Back to Dashboard</a>
+                <h1>Topic Queue</h1>
+            </div>
+            <button class="btn btn-primary" onclick="generateTopics()">Generate 20 Topics</button>
+        </header>
+        
+        <div class="stats">
+            <div class="stat-card"><h3>{{ counts.pending }}</h3><p>Pending Review</p></div>
+            <div class="stat-card"><h3>{{ counts.approved }}</h3><p>Approved</p></div>
+            <div class="stat-card"><h3>{{ counts.processing }}</h3><p>Processing</p></div>
+            <div class="stat-card"><h3>{{ counts.completed }}</h3><p>Completed</p></div>
+            <div class="stat-card"><h3>{{ counts.declined }}</h3><p>Declined</p></div>
+        </div>
+        
+        <div class="filters">
+            <a href="/topics" {% if not current_status %}class="active"{% endif %}>All</a>
+            <a href="/topics?status=pending" {% if current_status == 'pending' %}class="active"{% endif %}>Pending</a>
+            <a href="/topics?status=approved" {% if current_status == 'approved' %}class="active"{% endif %}>Approved</a>
+            <a href="/topics?status=processing" {% if current_status == 'processing' %}class="active"{% endif %}>Processing</a>
+            <a href="/topics?status=completed" {% if current_status == 'completed' %}class="active"{% endif %}>Completed</a>
+        </div>
+        
+        <div class="topic-list">
+            {% for topic in topics %}
+            <div class="topic-card" id="topic-{{ topic.id }}">
+                <div>
+                    <div class="topic-title">{{ topic.title }}</div>
+                    <div class="topic-keyword">🔑 {{ topic.keyword }}</div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <span class="status-badge status-{{ topic.status }}">{{ topic.status }}</span>
+                    {% if topic.status == 'pending' %}
+                    <div class="topic-actions">
+                        <button class="btn btn-success" onclick="approveTopic('{{ topic.id }}')">✓ Approve</button>
+                        <button class="btn btn-danger" onclick="declineTopic('{{ topic.id }}')">✗ Decline</button>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% if not topics %}
+            <div style="text-align: center; padding: 40px; color: #888;">
+                No topics found. Click "Generate 20 Topics" to get started.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    <script>
+        async function approveTopic(id) {
+            await fetch(`/api/topics/${id}/approve`, { method: 'POST' });
+            location.reload();
+        }
+        
+        async function declineTopic(id) {
+            await fetch(`/api/topics/${id}/decline`, { method: 'POST' });
+            location.reload();
+        }
+        
+        async function generateTopics() {
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = 'Generating...';
+            
+            await fetch('/api/topics/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ count: 20 })
+            });
+            
+            alert('Topic generation task queued! The Mac Mini worker will process it.');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

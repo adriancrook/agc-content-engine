@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """
 AGC Local Worker - Runs on Mac Mini
-Polls Supabase for tasks, processes with local Ollama, updates results
+Polls Railway API for tasks, processes with local Ollama, updates results
 """
 
 import os
 import sys
 import json
 import time
+import socket
 import requests
 from datetime import datetime
 from pathlib import Path
@@ -22,86 +23,135 @@ from agents.seo import SEOAgent
 from agents.topic_discovery import TopicDiscoveryAgent
 from agents.base import AgentInput
 
-# Supabase config (will be set via env vars)
-SUPABASE_URL = os.getenv("SUPABASE_URL", "")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "")
-POLL_INTERVAL = int(os.getenv("POLL_INTERVAL", "30"))  # seconds
+# Railway API config
+API_URL = os.getenv("AGC_API_URL", "https://web-production-c28a3.up.railway.app")
+POLL_INTERVAL = int(os.getenv("POLL_INTERVAL", "30"))
+WORKER_ID = os.getenv("WORKER_ID", socket.gethostname())
 
-# Local Ollama config
-OLLAMA_URL = "http://localhost:11434"
+# Local Ollama
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://localhost:11434")
 
 
 class LocalWorker:
     def __init__(self):
-        self.research_agent = ResearchAgent()
-        self.writer_agent = WriterAgent()
-        self.fact_checker = FactCheckerAgent()
-        self.seo_agent = SEOAgent()
-        self.topic_agent = TopicDiscoveryAgent(
-            brave_api_key=os.getenv("BRAVE_API_KEY", ""),
-            niche="mobile gaming and game design",
-            blog_url="https://adriancrook.com"
-        )
+        print(f"Initializing agents...")
+        self.research_agent = None
+        self.writer_agent = None
+        self.fact_checker = None
+        self.seo_agent = None
+        self.topic_agent = None
+        self._init_agents()
+        
+    def _init_agents(self):
+        """Lazy init agents"""
+        try:
+            self.research_agent = ResearchAgent()
+            self.writer_agent = WriterAgent()
+            self.fact_checker = FactCheckerAgent()
+            self.seo_agent = SEOAgent()
+            self.topic_agent = TopicDiscoveryAgent(
+                brave_api_key=os.getenv("BRAVE_API_KEY", ""),
+                niche="mobile gaming and game design",
+                blog_url="https://adriancrook.com"
+            )
+            print("✅ Agents initialized")
+        except Exception as e:
+            print(f"⚠️ Agent init error: {e}")
         
     def check_ollama(self):
         """Verify Ollama is running"""
         try:
             r = requests.get(f"{OLLAMA_URL}/api/tags", timeout=5)
+            models = r.json().get("models", [])
+            model_names = [m.get("name") for m in models]
+            print(f"   Ollama models: {', '.join(model_names)}")
             return r.status_code == 200
-        except:
+        except Exception as e:
+            print(f"   Ollama error: {e}")
+            return False
+    
+    def check_api(self):
+        """Verify Railway API is reachable"""
+        try:
+            r = requests.get(f"{API_URL}/api/health", timeout=10)
+            return r.status_code == 200
+        except Exception as e:
+            print(f"   API error: {e}")
             return False
     
     def poll_tasks(self):
-        """Get pending tasks from Supabase"""
-        if not SUPABASE_URL:
-            print("No Supabase URL configured")
-            return []
-            
-        headers = {
-            "apikey": SUPABASE_KEY,
-            "Authorization": f"Bearer {SUPABASE_KEY}"
-        }
-        
+        """Get pending tasks from Railway API"""
         try:
-            r = requests.get(
-                f"{SUPABASE_URL}/rest/v1/tasks?status=eq.pending&order=created_at",
-                headers=headers,
-                timeout=10
-            )
+            r = requests.get(f"{API_URL}/api/tasks/pending?limit=5", timeout=10)
             return r.json() if r.status_code == 200 else []
         except Exception as e:
             print(f"Error polling tasks: {e}")
             return []
     
-    def update_task(self, task_id, status, result=None):
-        """Update task status in Supabase"""
-        headers = {
-            "apikey": SUPABASE_KEY,
-            "Authorization": f"Bearer {SUPABASE_KEY}",
-            "Content-Type": "application/json"
-        }
-        
-        data = {
-            "status": status,
-            "updated_at": datetime.utcnow().isoformat()
-        }
-        if result:
-            data["result"] = json.dumps(result)
-            
-        requests.patch(
-            f"{SUPABASE_URL}/rest/v1/tasks?id=eq.{task_id}",
-            headers=headers,
-            json=data
-        )
+    def claim_task(self, task_id):
+        """Claim a task for processing"""
+        try:
+            r = requests.post(
+                f"{API_URL}/api/tasks/{task_id}/claim",
+                json={"worker_id": WORKER_ID},
+                timeout=10
+            )
+            return r.json() if r.status_code == 200 else None
+        except:
+            return None
+    
+    def complete_task(self, task_id, result):
+        """Mark task as completed"""
+        try:
+            requests.post(
+                f"{API_URL}/api/tasks/{task_id}/complete",
+                json={"result": result},
+                timeout=30
+            )
+        except Exception as e:
+            print(f"Error completing task: {e}")
+    
+    def fail_task(self, task_id, error):
+        """Mark task as failed"""
+        try:
+            requests.post(
+                f"{API_URL}/api/tasks/{task_id}/fail",
+                json={"error": str(error)},
+                timeout=10
+            )
+        except:
+            pass
+    
+    def save_topics(self, topics):
+        """Save generated topics to Railway"""
+        for topic in topics:
+            try:
+                requests.post(
+                    f"{API_URL}/api/topics",
+                    json={"title": topic, "keyword": topic.lower().replace(" ", "-")[:50]},
+                    timeout=10
+                )
+            except:
+                pass
     
     def process_task(self, task):
         """Process a single task with local agents"""
         task_type = task.get("type")
         task_id = task.get("id")
-        payload = json.loads(task.get("payload", "{}"))
+        payload = task.get("payload", {})
         
-        print(f"Processing task {task_id}: {task_type}")
-        self.update_task(task_id, "processing")
+        if isinstance(payload, str):
+            payload = json.loads(payload)
+        
+        print(f"\n{'='*50}")
+        print(f"Processing: {task_type} (ID: {task_id[:8]}...)")
+        print(f"{'='*50}")
+        
+        # Claim the task
+        claimed = self.claim_task(task_id)
+        if not claimed:
+            print("❌ Could not claim task (already taken?)")
+            return
         
         try:
             if task_type == "generate_topics":
@@ -117,76 +167,142 @@ class LocalWorker:
             else:
                 result = {"error": f"Unknown task type: {task_type}"}
                 
-            self.update_task(task_id, "completed", result)
-            print(f"Task {task_id} completed")
+            self.complete_task(task_id, result)
+            print(f"✅ Task completed")
             
         except Exception as e:
-            self.update_task(task_id, "failed", {"error": str(e)})
-            print(f"Task {task_id} failed: {e}")
+            print(f"❌ Task failed: {e}")
+            self.fail_task(task_id, str(e))
     
     def generate_topics(self, payload):
-        """Generate topic suggestions"""
+        """Generate topic suggestions using local model"""
         count = payload.get("count", 20)
-        focus_areas = payload.get("focus_areas", [])
+        focus_areas = payload.get("focus_areas", [
+            "mobile game monetization",
+            "freemium game design", 
+            "game economy modeling",
+            "player retention strategies",
+            "in-app purchase optimization"
+        ])
         
-        agent_input = AgentInput(
-            topic=f"Generate {count} SEO-optimized blog topic ideas",
-            context={"focus_areas": focus_areas}
-        )
+        print(f"Generating {count} topics for: {', '.join(focus_areas)}")
         
-        result = self.topic_agent.run(agent_input)
-        return {"topics": result.content if hasattr(result, 'content') else str(result)}
+        if self.topic_agent:
+            agent_input = AgentInput(
+                topic=f"Generate {count} unique, SEO-optimized blog topic ideas for a mobile game consulting blog. Focus areas: {', '.join(focus_areas)}. Each topic should target a specific long-tail keyword.",
+                context={"focus_areas": focus_areas, "count": count}
+            )
+            
+            result = self.topic_agent.run(agent_input)
+            content = result.content if hasattr(result, 'content') else str(result)
+            
+            # Parse topics from response
+            topics = []
+            for line in content.split('\n'):
+                line = line.strip()
+                if line and not line.startswith('#') and len(line) > 10:
+                    # Remove numbering like "1. " or "- "
+                    if line[0].isdigit() and '.' in line[:3]:
+                        line = line.split('.', 1)[1].strip()
+                    elif line.startswith('-'):
+                        line = line[1:].strip()
+                    if len(line) > 10:
+                        topics.append(line[:200])  # Limit length
+            
+            # Save topics to Railway
+            self.save_topics(topics[:count])
+            
+            return {"topics_generated": len(topics[:count]), "topics": topics[:count]}
+        else:
+            return {"error": "Topic agent not initialized"}
     
     def do_research(self, payload):
-        """Research a topic"""
+        """Research a topic using local model"""
         topic = payload.get("topic", "")
-        agent_input = AgentInput(topic=topic, context=payload)
-        result = self.research_agent.run(agent_input)
-        return {"research": result.content if hasattr(result, 'content') else str(result)}
+        print(f"Researching: {topic}")
+        
+        if self.research_agent:
+            agent_input = AgentInput(topic=topic, context=payload)
+            result = self.research_agent.run(agent_input)
+            return {"research": result.content if hasattr(result, 'content') else str(result)}
+        return {"error": "Research agent not initialized"}
     
     def do_write(self, payload):
-        """Write article draft"""
+        """Write article draft using local model"""
         topic = payload.get("topic", "")
         research = payload.get("research", "")
-        agent_input = AgentInput(topic=topic, context={"research": research})
-        result = self.writer_agent.run(agent_input)
-        return {"draft": result.content if hasattr(result, 'content') else str(result)}
+        print(f"Writing draft for: {topic}")
+        
+        if self.writer_agent:
+            agent_input = AgentInput(topic=topic, context={"research": research})
+            result = self.writer_agent.run(agent_input)
+            return {"draft": result.content if hasattr(result, 'content') else str(result)}
+        return {"error": "Writer agent not initialized"}
     
     def do_fact_check(self, payload):
-        """Fact check draft"""
+        """Fact check draft using local model"""
         draft = payload.get("draft", "")
-        agent_input = AgentInput(topic="Fact check", context={"draft": draft})
-        result = self.fact_checker.run(agent_input)
-        return {"verified": result.content if hasattr(result, 'content') else str(result)}
+        print("Fact checking draft...")
+        
+        if self.fact_checker:
+            agent_input = AgentInput(topic="Fact check", context={"draft": draft})
+            result = self.fact_checker.run(agent_input)
+            return {"verified": result.content if hasattr(result, 'content') else str(result)}
+        return {"error": "Fact checker not initialized"}
     
     def do_seo(self, payload):
-        """SEO optimize"""
+        """SEO optimize using local model"""
         draft = payload.get("draft", "")
         keyword = payload.get("keyword", "")
-        agent_input = AgentInput(topic=keyword, context={"draft": draft})
-        result = self.seo_agent.run(agent_input)
-        return {"optimized": result.content if hasattr(result, 'content') else str(result)}
+        print(f"SEO optimizing for: {keyword}")
+        
+        if self.seo_agent:
+            agent_input = AgentInput(topic=keyword, context={"draft": draft})
+            result = self.seo_agent.run(agent_input)
+            return {"optimized": result.content if hasattr(result, 'content') else str(result)}
+        return {"error": "SEO agent not initialized"}
     
     def run(self):
         """Main worker loop"""
-        print("=" * 50)
-        print("AGC Local Worker Starting")
-        print(f"Ollama: {OLLAMA_URL}")
-        print(f"Supabase: {SUPABASE_URL[:30]}..." if SUPABASE_URL else "Supabase: Not configured")
-        print(f"Poll interval: {POLL_INTERVAL}s")
-        print("=" * 50)
+        print("\n" + "="*60)
+        print("   AGC LOCAL WORKER")
+        print("="*60)
+        print(f"   Worker ID: {WORKER_ID}")
+        print(f"   API URL: {API_URL}")
+        print(f"   Ollama: {OLLAMA_URL}")
+        print(f"   Poll interval: {POLL_INTERVAL}s")
+        print("="*60 + "\n")
         
-        if not self.check_ollama():
-            print("WARNING: Ollama not running!")
+        # Check connections
+        print("Checking connections...")
+        ollama_ok = self.check_ollama()
+        api_ok = self.check_api()
+        
+        if not ollama_ok:
+            print("⚠️  WARNING: Ollama not running! Start with: ollama serve")
+        if not api_ok:
+            print("⚠️  WARNING: Cannot reach Railway API!")
+        
+        if ollama_ok and api_ok:
+            print("\n✅ All systems ready. Waiting for tasks...\n")
         
         while True:
-            tasks = self.poll_tasks()
-            
-            for task in tasks:
-                self.process_task(task)
-            
-            if not tasks:
-                print(f"[{datetime.now().strftime('%H:%M:%S')}] No pending tasks")
+            try:
+                tasks = self.poll_tasks()
+                
+                if tasks:
+                    print(f"\n📥 Found {len(tasks)} pending task(s)")
+                    for task in tasks:
+                        self.process_task(task)
+                else:
+                    now = datetime.now().strftime('%H:%M:%S')
+                    print(f"[{now}] No pending tasks. Waiting {POLL_INTERVAL}s...", end='\r')
+                
+            except KeyboardInterrupt:
+                print("\n\nShutting down worker...")
+                break
+            except Exception as e:
+                print(f"\nError in main loop: {e}")
             
             time.sleep(POLL_INTERVAL)
 
