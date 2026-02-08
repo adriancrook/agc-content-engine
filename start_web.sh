@@ -1,37 +1,27 @@
 #!/bin/bash
-# AGC Content Engine - Web Interface Startup Script
+# Start the AGC Content Engine web server
 
-cd /Users/kitwren/agc-content-engine
+cd "$(dirname "$0")"
 
 # Activate virtual environment
 source venv/bin/activate
 
-# Set API keys from credentials
-export BRAVE_API_KEY=$(cat ~/.credentials/brave-api.txt 2>/dev/null)
-export OPENROUTER_API_KEY=$(cat ~/.credentials/openrouter.txt 2>/dev/null)
-export GOOGLE_API_KEY=$(cat ~/.credentials/gemini-api.txt 2>/dev/null)
+# Load API keys
+export BRAVE_API_KEY=$(cat ~/.credentials/brave-api.txt 2>/dev/null | head -1)
+export OPENROUTER_API_KEY=$(grep -oP 'OPENROUTER_API_KEY=\K.*' ~/.credentials/openrouter.txt 2>/dev/null || cat ~/.credentials/openrouter.txt 2>/dev/null | grep -v '^#' | head -1)
+export GEMINI_API_KEY=$(cat ~/.credentials/gemini-api.txt 2>/dev/null | head -1)
 
-# Check if Ollama is running
-if ! curl -s http://localhost:11434/api/tags > /dev/null 2>&1; then
-    echo "⚠️  Ollama is not running. Starting in CPU mode..."
-    OLLAMA_FLASH_ATTENTION="1" OLLAMA_KV_CACHE_TYPE="q8_0" /opt/homebrew/opt/ollama/bin/ollama serve &
-    sleep 5
+echo "🚀 Starting AGC Content Engine..."
+echo "   BRAVE_API_KEY: ${BRAVE_API_KEY:0:10}..."
+echo "   OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:0:20}..."
+echo "   Web UI: http://192.168.1.162:8080"
+
+# Ensure Ollama is running
+if ! curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
+    echo "⚠️  Ollama not running. Starting..."
+    OLLAMA_FLASH_ATTENTION="1" OLLAMA_KV_CACHE_TYPE="q8_0" ollama serve &
+    sleep 3
 fi
 
-echo ""
-echo "🚀 AGC Content Engine"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "Web Interface: http://$(hostname):8080"
-echo "              http://localhost:8080"
-echo ""
-echo "API Keys:"
-echo "  • Brave Search: $([ -n "$BRAVE_API_KEY" ] && echo '✅' || echo '❌')"
-echo "  • OpenRouter:   $([ -n "$OPENROUTER_API_KEY" ] && echo '✅' || echo '❌')"
-echo "  • Google/Gemini:$([ -n "$GOOGLE_API_KEY" ] && echo '✅' || echo '❌')"
-echo ""
-echo "Press Ctrl+C to stop"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-
-# Start Flask app
+# Start Flask
 python web/app.py

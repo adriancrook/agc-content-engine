@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: agc-content-engine
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: cd web && python app.py
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: OPENROUTER_API_KEY
+        sync: false

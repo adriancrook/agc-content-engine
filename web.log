@@ -1,0 +1,11 @@
+🚀 AGC Content Engine Web UI
+   http://0.0.0.0:5000
+   Press Ctrl+C to stop
+ * Serving Flask app 'app'
+ * Debug mode: off
+2026-02-08 11:38:21,875 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.162:5000
+2026-02-08 11:38:21,875 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2026-02-08 11:38:24,821 - werkzeug - INFO - 127.0.0.1 - - [08/Feb/2026 11:38:24] "GET / HTTP/1.1" 200 -
