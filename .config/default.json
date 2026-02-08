@@ -1,0 +1,15 @@
+{
+  "ollama_url": "http://localhost:11434",
+  "models": {
+    "research": "qwen2.5:14b",
+    "writer": "qwen2.5:14b",
+    "fact_checker": "qwen2.5:14b",
+    "seo": "qwen2.5:14b",
+    "humanizer": "claude-sonnet-4-20250514",
+    "supervisor": "claude-opus-4-20250514"
+  },
+  "target_word_count": 2500,
+  "max_sources": 20,
+  "author_voice": "knowledgeable but approachable tech writer who explains complex topics clearly, with a focus on mobile gaming and game design",
+  "humanizer_intensity": "medium"
+}

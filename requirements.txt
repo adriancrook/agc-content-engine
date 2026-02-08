@@ -1,0 +1,13 @@
+# AGC Content Engine Dependencies
+
+# HTTP & APIs
+requests>=2.31.0
+
+# Anthropic API
+anthropic>=0.40.0
+
+# Google AI (for image generation)
+google-generativeai>=0.8.0
+
+# Utilities
+python-dotenv>=1.0.0
