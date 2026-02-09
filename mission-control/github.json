@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T23:09:02Z",
-  "lastUpdateHuman": "2026-02-09 15:09 Pacific",
+  "lastUpdate": "2026-02-09T23:14:17Z",
+  "lastUpdateHuman": "2026-02-09 15:14 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,56 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12931,
+      "title": "Feature: configurable /new greeting model (or option to suppress greeting)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12931",
+      "author": "sherly-techtree",
+      "createdAt": "2026-02-09T23:12:55Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12930,
+      "title": "Feature: Agent Persona — per-agent display identity across channels",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12930",
+      "author": "cathrynlavery",
+      "createdAt": "2026-02-09T23:12:07Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12929,
+      "title": "Telegram: message_thread_id sent on private DMs causes 'message thread not found...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12929",
+      "author": "enti-bot",
+      "createdAt": "2026-02-09T23:11:35Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12928,
+      "title": "bug: Internal errors (tool failures, rate limits) leak to user DM channel",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12928",
+      "author": "bendyclaw",
+      "createdAt": "2026-02-09T23:09:40Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12927,
+      "title": "Feature Request: Support for multiple browser profiles",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12927",
+      "author": "koltregaskes",
+      "createdAt": "2026-02-09T23:09:15Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12924,
       "title": "Bug: OpenRouter models with \"openrouter/\" prefix not working (e.g., aurora-alpha...",
@@ -36,58 +86,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12919",
       "author": "jorgejhms",
       "createdAt": "2026-02-09T22:47:01Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12918,
-      "title": "Looking For CTO or Senior Blockchain Developer and Full stack Developer",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12918",
-      "author": "techclient01",
-      "createdAt": "2026-02-09T22:46:45Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12915,
-      "title": "📱 Request iOS TestFlight Access - @enki",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12915",
-      "author": "octaviofroid",
-      "createdAt": "2026-02-09T22:34:45Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12914,
-      "title": "Feature Request: message:sent and message:received hook events for output valida...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12914",
-      "author": "joegra2003",
-      "createdAt": "2026-02-09T22:31:55Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12912,
-      "title": "Mobile interface",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12912",
-      "author": "fjadron",
-      "createdAt": "2026-02-09T22:27:39Z",
-      "labels": [
-        "bug"
-      ],
-      "isNew": true
-    },
-    {
-      "number": 12911,
-      "title": "Feature: Live Voice Mode in /chat UI (Grok Voice Loop)",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12911",
-      "author": "haverAI",
-      "createdAt": "2026-02-09T22:25:47Z",
       "labels": [],
       "isNew": true
     }
