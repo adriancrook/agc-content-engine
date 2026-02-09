@@ -21,6 +21,8 @@ from agents.research import ResearchAgent
 from agents.writer import WriterAgent
 from agents.fact_checker import FactCheckerAgent
 from agents.seo import SEOAgent
+from agents.humanizer import HumanizerAgent
+from agents.media import MediaAgent
 
 # Setup logging
 logging.basicConfig(
@@ -51,21 +53,42 @@ async def lifespan(app: FastAPI):
 
     # Initialize agents
     brave_api_key = os.getenv("BRAVE_API_KEY")
+    openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+    google_api_key = os.getenv("GOOGLE_API_KEY")
     use_real_agents = os.getenv("USE_REAL_AGENTS", "false").lower() == "true"
 
     if use_real_agents and brave_api_key:
-        # Real agents (Ollama + Brave API)
-        logger.info("Initializing REAL agents with Ollama")
+        # Real agents configuration
+        logger.info("Initializing REAL agents...")
+
+        # Free agents (Ollama + Brave)
         agents = {
             ArticleState.PENDING: ResearchAgent({"brave_api_key": brave_api_key}),
             ArticleState.RESEARCHING: WriterAgent(),
             ArticleState.WRITING: FactCheckerAgent(),
             ArticleState.FACT_CHECKING: SEOAgent(),
-            ArticleState.SEO_OPTIMIZING: MockAgent(), # TODO: HumanizeAgent (Claude)
-            ArticleState.HUMANIZING: MockAgent(),     # TODO: MediaAgent (Gemini)
-            ArticleState.MEDIA_GENERATING: MockAgent(),
         }
-        logger.info("✓ Real agents: Research, Writer, FactCheck, SEO (all local/free)")
+
+        # Paid agents (optional)
+        if openrouter_api_key:
+            agents[ArticleState.SEO_OPTIMIZING] = HumanizerAgent({"openrouter_api_key": openrouter_api_key})
+            logger.info("  + HumanizeAgent (Claude via OpenRouter)")
+        else:
+            agents[ArticleState.SEO_OPTIMIZING] = MockAgent()
+            logger.info("  - HumanizeAgent (no OpenRouter key)")
+
+        if google_api_key:
+            agents[ArticleState.HUMANIZING] = MediaAgent({"google_api_key": google_api_key})
+            logger.info("  + MediaAgent (Gemini)")
+        else:
+            agents[ArticleState.HUMANIZING] = MockAgent()
+            logger.info("  - MediaAgent (no Google key)")
+
+        agents[ArticleState.MEDIA_GENERATING] = MockAgent()
+
+        logger.info("✓ Agents ready: 4 free + {} paid".format(
+            sum([1 for k in [openrouter_api_key, google_api_key] if k])
+        ))
     else:
         # Mock agents for testing
         agents = {
