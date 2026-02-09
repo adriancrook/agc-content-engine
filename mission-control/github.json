@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T20:40:53Z",
-  "lastUpdateHuman": "2026-02-09 12:40 Pacific",
+  "lastUpdate": "2026-02-09T20:46:18Z",
+  "lastUpdateHuman": "2026-02-09 12:46 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12869,
+      "title": "Bug: OPENROUTER_DEFAULT_MODEL_REF uses invalid model path 'openrouter/auto'",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12869",
+      "author": "baccula",
+      "createdAt": "2026-02-09T20:41:12Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12867,
       "title": "Feature request: message:received hook for pre-processing incoming messages",
@@ -78,19 +88,25 @@
       "createdAt": "2026-02-09T20:22:27Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12857,
-      "title": "Gateway config wiped to defaults on restart",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12857",
-      "author": "wrytn",
-      "createdAt": "2026-02-09T20:22:21Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12871,
+      "title": "fix: use bash and warn about shell injection (issue #12836)",
+      "url": "https://github.com/openclaw/openclaw/pull/12871",
+      "author": "ambicuity",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:42:52Z"
+    },
+    {
+      "number": 12870,
+      "title": "fix: recover from telegram fetch errors (issue #12835)",
+      "url": "https://github.com/openclaw/openclaw/pull/12870",
+      "author": "ambicuity",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:42:40Z"
+    },
     {
       "number": 12865,
       "title": "Merge remote-tracking branch 'origin/ci-tiered-gates-v2'",
@@ -108,28 +124,12 @@
       "createdAt": "2026-02-09T20:37:12Z"
     },
     {
-      "number": 12863,
-      "title": "ci: add SwiftPM cache, fix Mintlify frontmatter",
-      "url": "https://github.com/openclaw/openclaw/pull/12863",
-      "author": "quotentiroler",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:31:37Z"
-    },
-    {
       "number": 12849,
       "title": "Plugins: fallback bundled channel specs when npm install ret...",
       "url": "https://github.com/openclaw/openclaw/pull/12849",
       "author": "vincentkoc",
       "isDraft": true,
       "createdAt": "2026-02-09T20:09:56Z"
-    },
-    {
-      "number": 12846,
-      "title": "fix(gateway): normalize session key casing to prevent ghost ...",
-      "url": "https://github.com/openclaw/openclaw/pull/12846",
-      "author": "mcaxtr",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:07:43Z"
     }
   ],
   "myPrs": [
@@ -176,9 +176,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "0b7e561",
-    "message": "ci: split format/lint into tiered gates with shared setup ac",
-    "date": "2026-02-09T20:24:11Z",
-    "author": "quotentiroler"
+    "sha": "65dae9a",
+    "message": "ci: add SwiftPM cache, fix Mintlify frontmatter (#12863)",
+    "date": "2026-02-09T20:40:58Z",
+    "author": "max"
   }
 }
