@@ -326,3 +326,19 @@ if __name__ == "__main__":
     print(f"🚀 AGC Content Engine")
     print(f"   http://0.0.0.0:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)
+
+
+@app.route("/api/tasks/reset-stuck", methods=["POST"])
+def api_reset_stuck_tasks():
+    """Reset stuck processing tasks back to pending"""
+    from shared.database import get_session, Task
+    with get_session() as session:
+        stuck = session.query(Task).filter(Task.status == "processing").all()
+        count = 0
+        for task in stuck:
+            task.status = "pending"
+            task.claimed_by = None
+            task.claimed_at = None
+            count += 1
+        session.commit()
+        return jsonify({"reset": count})
