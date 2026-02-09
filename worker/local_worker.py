@@ -120,7 +120,7 @@ class LocalWorker:
                 print(f"   DEBUG: draft type={type(draft)}, len={len(str(draft))}")
                 if isinstance(draft, dict):
                     draft = draft.get("markdown", str(draft))
-                r = requests.put(
+                r = requests.patch(
                     f"{API_URL}/api/articles/{article_id}",
                     json={"draft_content": draft, "status": "written"},
                     timeout=10
