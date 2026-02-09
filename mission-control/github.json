@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T23:19:33Z",
-  "lastUpdateHuman": "2026-02-09 15:19 Pacific",
+  "lastUpdate": "2026-02-09T23:24:48Z",
+  "lastUpdateHuman": "2026-02-09 15:24 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12933,
+      "title": "Signal health check fails with signal-cli 0.13.x (JSON-RPC)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12933",
+      "author": "PhenixStar",
+      "createdAt": "2026-02-09T23:23:44Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12932,
       "title": "Security Hardening: Apply 10-step Clawdbot Security Guide",
@@ -76,16 +86,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12924",
       "author": "PyVent",
       "createdAt": "2026-02-09T23:01:34Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12921,
-      "title": "Compaction produces empty summary despite 36k tokens of content",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12921",
-      "author": "duckshrug",
-      "createdAt": "2026-02-09T22:49:40Z",
       "labels": [],
       "isNew": true
     }
