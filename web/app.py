@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 
 # Add parent directory for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
@@ -191,6 +191,21 @@ def api_set_setting(key):
     data = request.json
     set_setting(key, data.get("value", {}))
     return jsonify({"key": key, "status": "updated"})
+
+
+# ========================================
+# PIXEL DASHBOARD (Moltcraft-style)
+# ========================================
+
+DASHBOARD_DIR = Path(__file__).parent.parent / "dashboard"
+
+@app.route("/dashboard")
+def dashboard():
+    return send_from_directory(DASHBOARD_DIR, "index.html")
+
+@app.route("/dashboard/<path:filename>")
+def dashboard_static(filename):
+    return send_from_directory(DASHBOARD_DIR, filename)
 
 
 if __name__ == "__main__":
