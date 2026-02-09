@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T20:56:56Z",
-  "lastUpdateHuman": "2026-02-09 12:56 Pacific",
+  "lastUpdate": "2026-02-09T21:02:14Z",
+  "lastUpdateHuman": "2026-02-09 13:02 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12880,
+      "title": "memory_get: support workspace files beyond MEMORY.md (USER.md, SOUL.md, etc.)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12880",
+      "author": "Alfridus1",
+      "createdAt": "2026-02-09T21:01:47Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12879,
       "title": "📱 Request iOS/Android TestFlight/Beta Access — @johnhamilton09",
@@ -76,16 +86,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12866",
       "author": "visshehi",
       "createdAt": "2026-02-09T20:38:41Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12862,
-      "title": "SECURITY: Please delete PR #12847 — leaked credentials",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12862",
-      "author": "Deuzio-glitch",
-      "createdAt": "2026-02-09T20:29:59Z",
       "labels": [],
       "isNew": true
     }
