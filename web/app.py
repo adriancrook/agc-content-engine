@@ -379,8 +379,13 @@ def kit_dashboard():
     return send_from_directory(str(MISSION_CONTROL_DIR), "index.html")
 
 @app.route("/kit/<path:filename>")
-@kit_auth_required
 def kit_static(filename):
+    # Allow unauthenticated access to static assets and data files
+    if filename.startswith('_next/') or filename.endswith('.json') or filename.endswith('.js') or filename.endswith('.css') or filename.endswith('.svg') or filename.endswith('.ico') or filename.endswith('.woff2') or filename.endswith('.jpg') or filename.endswith('.png'):
+        return send_from_directory(str(MISSION_CONTROL_DIR), filename)
+    # Require auth for HTML pages
+    if not session.get("kit_authenticated"):
+        return redirect(url_for("kit_login"))
     return send_from_directory(str(MISSION_CONTROL_DIR), filename)
 
 
