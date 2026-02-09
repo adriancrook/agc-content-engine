@@ -1,14 +1,36 @@
 {
-  "lastUpdate": "2026-02-09T19:31:35Z",
-  "lastUpdateHuman": "2026-02-09 11:31 Pacific",
+  "lastUpdate": "2026-02-09T19:37:23Z",
+  "lastUpdateHuman": "2026-02-09 11:37 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
-    "openIssues": 1000,
+    "openIssues": 0,
     "openedToday": 0,
     "closedToday": 0,
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12835,
+      "title": "[Bug]: Gateway crashes on Telegram fetch errors",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12835",
+      "author": "troylee17",
+      "createdAt": "2026-02-09T19:35:05Z",
+      "labels": [
+        "bug"
+      ],
+      "isNew": true
+    },
+    {
+      "number": 12833,
+      "title": "Feature request: Natural message pacing / staggered delivery for multi-message r...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12833",
+      "author": "wenyonglim",
+      "createdAt": "2026-02-09T19:31:51Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12832,
       "title": "Gemini fallback: empty function_response.name causes 400 INVALID_ARGUMENT",
@@ -29,16 +51,6 @@
       "labels": [
         "enhancement"
       ],
-      "isNew": true
-    },
-    {
-      "number": 12830,
-      "title": "Prevent tool_use/tool_result mismatch errors in sessions",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12830",
-      "author": "karmgate",
-      "createdAt": "2026-02-09T19:21:06Z",
-      "labels": [],
       "isNew": true
     },
     {
@@ -80,21 +92,17 @@
       "createdAt": "2026-02-09T19:01:46Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12811,
-      "title": "[Feature]: ctx.accountId undefined in plugin command handlers",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12811",
-      "author": "habib256",
-      "createdAt": "2026-02-09T18:31:33Z",
-      "labels": [
-        "enhancement"
-      ],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12834,
+      "title": "docs(gateway): clarify there is no standalone clawrouter bin...",
+      "url": "https://github.com/openclaw/openclaw/pull/12834",
+      "author": "JBrady",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:33:02Z"
+    },
     {
       "number": 12829,
       "title": "fix(cron): don't hold store lock during manual run",
@@ -126,14 +134,6 @@
       "author": "JBrady",
       "isDraft": false,
       "createdAt": "2026-02-09T18:53:40Z"
-    },
-    {
-      "number": 12818,
-      "title": "docs(messages): clarify message tool ordering vs inline repl...",
-      "url": "https://github.com/openclaw/openclaw/pull/12818",
-      "author": "JBrady",
-      "isDraft": false,
-      "createdAt": "2026-02-09T18:48:28Z"
     }
   ],
   "myPrs": [
@@ -180,9 +180,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "2680949",
-    "message": "fix: reduce brew noise in onboarding",
-    "date": "2026-02-09T19:27:13Z",
-    "author": "Peter Steinberger"
+    "sha": "50b3d32",
+    "message": "CI: add code-size check for files crossing LOC threshold (#1",
+    "date": "2026-02-09T19:34:18Z",
+    "author": "max"
   }
 }
