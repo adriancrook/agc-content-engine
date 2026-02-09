@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T20:03:46Z",
-  "lastUpdateHuman": "2026-02-09 12:03 Pacific",
+  "lastUpdate": "2026-02-09T20:09:09Z",
+  "lastUpdateHuman": "2026-02-09 12:09 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12843,
+      "title": "Signal group message delivery fails due to case-sensitive group ID lowercasing",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12843",
+      "author": "wilmerdooley1-star",
+      "createdAt": "2026-02-09T20:04:34Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12841,
       "title": "[Bug]:  `npm install -g openclaw` fails in environments without GitHub SSH keys",
@@ -82,21 +92,33 @@
       "createdAt": "2026-02-09T19:27:43Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12831,
-      "title": "Feature: Activity panel / tool call observer mode",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12831",
-      "author": "michaellatham",
-      "createdAt": "2026-02-09T19:27:18Z",
-      "labels": [
-        "enhancement"
-      ],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12846,
+      "title": "fix(gateway): normalize session key casing to prevent ghost ...",
+      "url": "https://github.com/openclaw/openclaw/pull/12846",
+      "author": "mcaxtr",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:07:43Z"
+    },
+    {
+      "number": 12845,
+      "title": "Agents: add antigravity Opus 4.6 thinking forward-compat fal...",
+      "url": "https://github.com/openclaw/openclaw/pull/12845",
+      "author": "vincentkoc",
+      "isDraft": true,
+      "createdAt": "2026-02-09T20:07:22Z"
+    },
+    {
+      "number": 12844,
+      "title": "fix(llm-task): use correct import path for built/npm install...",
+      "url": "https://github.com/openclaw/openclaw/pull/12844",
+      "author": "scout-wolfe",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:05:14Z"
+    },
     {
       "number": 12842,
       "title": "Docs: add DigitalOcean deployment options (1-Click + App Pla...",
@@ -112,30 +134,6 @@
       "author": "sfo2001",
       "isDraft": false,
       "createdAt": "2026-02-09T19:55:36Z"
-    },
-    {
-      "number": 12837,
-      "title": "fix(heartbeat): suppress HEARTBEAT_OK token delivery",
-      "url": "https://github.com/openclaw/openclaw/pull/12837",
-      "author": "JBrady",
-      "isDraft": false,
-      "createdAt": "2026-02-09T19:47:25Z"
-    },
-    {
-      "number": 12834,
-      "title": "docs(gateway): clarify there is no standalone clawrouter bin...",
-      "url": "https://github.com/openclaw/openclaw/pull/12834",
-      "author": "JBrady",
-      "isDraft": false,
-      "createdAt": "2026-02-09T19:33:02Z"
-    },
-    {
-      "number": 12823,
-      "title": "Feat/litellm provider",
-      "url": "https://github.com/openclaw/openclaw/pull/12823",
-      "author": "ryan-crabbe",
-      "isDraft": false,
-      "createdAt": "2026-02-09T19:06:30Z"
     }
   ],
   "myPrs": [
