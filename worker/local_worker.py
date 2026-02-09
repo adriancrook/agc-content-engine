@@ -150,6 +150,8 @@ class LocalWorker:
         
         print(f"\n{'='*50}")
         print(f"Processing: {task_type} (ID: {task_id[:8]}...)")
+        print(f"🖥️  Model: qwen2.5:14b (LOCAL Ollama)")
+        print(f"💰 Cost: $0.00 (free local processing)")
         print(f"{'='*50}")
         
         # Claim the task
