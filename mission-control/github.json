@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T22:48:03Z",
-  "lastUpdateHuman": "2026-02-09 14:48 Pacific",
+  "lastUpdate": "2026-02-09T22:53:19Z",
+  "lastUpdateHuman": "2026-02-09 14:53 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12921,
+      "title": "Compaction produces empty summary despite 36k tokens of content",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12921",
+      "author": "duckshrug",
+      "createdAt": "2026-02-09T22:49:40Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12919,
       "title": "Bug: MEMORY.md path has null byte (\\^@) causing ENOTDIR on QMD boot",
@@ -80,19 +90,17 @@
       "createdAt": "2026-02-09T22:23:09Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12909,
-      "title": "Docs: system prompt page incorrectly describes memory file injection behavior",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12909",
-      "author": "1kuna",
-      "createdAt": "2026-02-09T22:21:45Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12920,
+      "title": "fix: prune stale session entries, cap entry count, and rotat...",
+      "url": "https://github.com/openclaw/openclaw/pull/12920",
+      "author": "skyfallsin",
+      "isDraft": true,
+      "createdAt": "2026-02-09T22:48:00Z"
+    },
     {
       "number": 12917,
       "title": "feat(gateway): add agents.health RPC method for per-agent he...",
@@ -124,14 +132,6 @@
       "author": "ultragenez",
       "isDraft": false,
       "createdAt": "2026-02-09T22:19:46Z"
-    },
-    {
-      "number": 12906,
-      "title": "fix: ensure CLI exits after command completion",
-      "url": "https://github.com/openclaw/openclaw/pull/12906",
-      "author": "DrCrinkle",
-      "isDraft": false,
-      "createdAt": "2026-02-09T22:18:24Z"
     }
   ],
   "myPrs": [
