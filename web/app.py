@@ -220,6 +220,15 @@ def dashboard():
 def dashboard_static(filename):
     return send_from_directory(str(DASHBOARD_DIR), filename)
 
+# Serve dashboard assets from root paths (for relative URLs in HTML)
+@app.route("/css/<path:filename>")
+def dashboard_css(filename):
+    return send_from_directory(str(DASHBOARD_DIR / "css"), filename)
+
+@app.route("/js/<path:filename>")
+def dashboard_js(filename):
+    return send_from_directory(str(DASHBOARD_DIR / "js"), filename)
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
