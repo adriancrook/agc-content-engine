@@ -200,6 +200,15 @@ def api_set_setting(key):
 # In Docker, working dir is /app, so dashboard is at /app/dashboard
 DASHBOARD_DIR = Path(__file__).resolve().parent.parent / "dashboard"
 
+@app.route("/debug-path")
+def debug_path():
+    import os
+    cwd = os.getcwd()
+    files = os.listdir(cwd)
+    dash_exists = DASHBOARD_DIR.exists()
+    dash_files = list(DASHBOARD_DIR.iterdir()) if dash_exists else []
+    return f"CWD: {cwd}\nFiles: {files}\nDashboard exists: {dash_exists}\nDashboard path: {DASHBOARD_DIR}\nDashboard files: {dash_files}"
+
 @app.route("/dashboard")
 @app.route("/dashboard/")
 def dashboard():
