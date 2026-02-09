@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T19:26:14Z",
-  "lastUpdateHuman": "2026-02-09 11:26 Pacific",
+  "lastUpdate": "2026-02-09T19:31:35Z",
+  "lastUpdateHuman": "2026-02-09 11:31 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,28 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12832,
+      "title": "Gemini fallback: empty function_response.name causes 400 INVALID_ARGUMENT",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12832",
+      "author": "sachah",
+      "createdAt": "2026-02-09T19:27:43Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12831,
+      "title": "Feature: Activity panel / tool call observer mode",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12831",
+      "author": "michaellatham",
+      "createdAt": "2026-02-09T19:27:18Z",
+      "labels": [
+        "enhancement"
+      ],
+      "isNew": true
+    },
     {
       "number": 12830,
       "title": "Prevent tool_use/tool_result mismatch errors in sessions",
@@ -69,26 +91,6 @@
       "labels": [
         "enhancement"
       ],
-      "isNew": true
-    },
-    {
-      "number": 12807,
-      "title": "[Bug] voice-call plugin: EADDRINUSE port conflict when initiating calls",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12807",
-      "author": "Banzai8",
-      "createdAt": "2026-02-09T18:20:51Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12805,
-      "title": "RFC: Programmatic Job System — Oban-inspired background jobs without LLM calls",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12805",
-      "author": "TinyTb",
-      "createdAt": "2026-02-09T18:19:15Z",
-      "labels": [],
       "isNew": true
     }
   ],
@@ -178,9 +180,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "9a765c9",
-    "message": "chore(mac): update appcast for 2026.2.9",
-    "date": "2026-02-09T19:23:38Z",
+    "sha": "2680949",
+    "message": "fix: reduce brew noise in onboarding",
+    "date": "2026-02-09T19:27:13Z",
     "author": "Peter Steinberger"
   }
 }
