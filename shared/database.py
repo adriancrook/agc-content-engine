@@ -17,9 +17,17 @@ import uuid
 
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///agc.db")
 
+# Debug: print what we got
+print(f"DATABASE_URL: {DATABASE_URL[:50]}..." if len(DATABASE_URL) > 50 else f"DATABASE_URL: {DATABASE_URL}")
+
 # Handle Railway's postgres:// vs postgresql://
 if DATABASE_URL.startswith("postgres://"):
     DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+# Validate URL format before creating engine
+if not DATABASE_URL.startswith(("postgresql://", "sqlite:///")):
+    print(f"WARNING: Invalid DATABASE_URL format, falling back to SQLite")
+    DATABASE_URL = "sqlite:///agc.db"
 
 engine = create_engine(DATABASE_URL, echo=False)
 SessionLocal = sessionmaker(bind=engine)
