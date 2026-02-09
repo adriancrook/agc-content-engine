@@ -142,6 +142,13 @@ def api_pending_tasks():
     return jsonify(get_pending_tasks(limit=limit))
 
 
+@app.route("/api/tasks", methods=["POST"])
+def api_create_task():
+    data = request.json
+    task = create_task(data.get("type"), data.get("payload", {}), data.get("article_id"))
+    return jsonify(task), 201
+
+
 @app.route("/api/tasks/<task_id>/claim", methods=["POST"])
 def api_claim_task(task_id):
     data = request.json or {}
