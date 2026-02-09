@@ -197,15 +197,19 @@ def api_set_setting(key):
 # PIXEL DASHBOARD (Moltcraft-style)
 # ========================================
 
-DASHBOARD_DIR = Path(__file__).parent.parent / "dashboard"
+# In Docker, working dir is /app, so dashboard is at /app/dashboard
+DASHBOARD_DIR = Path(__file__).resolve().parent.parent / "dashboard"
 
 @app.route("/dashboard")
+@app.route("/dashboard/")
 def dashboard():
-    return send_from_directory(DASHBOARD_DIR, "index.html")
+    if not DASHBOARD_DIR.exists():
+        return f"Dashboard not found at {DASHBOARD_DIR}", 404
+    return send_from_directory(str(DASHBOARD_DIR), "index.html")
 
 @app.route("/dashboard/<path:filename>")
 def dashboard_static(filename):
-    return send_from_directory(DASHBOARD_DIR, filename)
+    return send_from_directory(str(DASHBOARD_DIR), filename)
 
 
 if __name__ == "__main__":
