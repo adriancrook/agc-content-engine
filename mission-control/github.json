@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T19:15:38Z",
-  "lastUpdateHuman": "2026-02-09 11:15 Pacific",
+  "lastUpdate": "2026-02-09T19:20:56Z",
+  "lastUpdateHuman": "2026-02-09 11:20 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,16 +9,6 @@
     "trend": 0
   },
   "issues": [
-    {
-      "number": 12827,
-      "title": "Runtime tool system reads agent config from file, not database",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12827",
-      "author": "MPIsaac-Syn",
-      "createdAt": "2026-02-09T19:12:50Z",
-      "labels": [],
-      "isNew": true
-    },
     {
       "number": 12826,
       "title": "Slack DM allowlist not working - still shows pairing prompt",
@@ -90,16 +80,26 @@
       "createdAt": "2026-02-09T18:19:15Z",
       "labels": [],
       "isNew": true
+    },
+    {
+      "number": 12799,
+      "title": "Feature Request: Cron catch-up for missed scheduled jobs",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12799",
+      "author": "milocoreai",
+      "createdAt": "2026-02-09T17:59:35Z",
+      "labels": [],
+      "isNew": true
     }
   ],
   "prs": [
     {
-      "number": 12828,
-      "title": "chore: add tsconfig.test.json for type-checking test files",
-      "url": "https://github.com/openclaw/openclaw/pull/12828",
-      "author": "quotentiroler",
+      "number": 12829,
+      "title": "fix(cron): don't hold store lock during manual run",
+      "url": "https://github.com/openclaw/openclaw/pull/12829",
+      "author": "yeyebot",
       "isDraft": false,
-      "createdAt": "2026-02-09T19:15:13Z"
+      "createdAt": "2026-02-09T19:16:06Z"
     },
     {
       "number": 12823,
@@ -178,9 +178,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "ec55583",
-    "message": "fix: align extension tests and fetch typing for gate stabili",
-    "date": "2026-02-09T19:12:07Z",
-    "author": "Seb Slight"
+    "sha": "ce71c73",
+    "message": "chore: add tsconfig.test.json for type-checking test files (",
+    "date": "2026-02-09T19:16:19Z",
+    "author": "max"
   }
 }
