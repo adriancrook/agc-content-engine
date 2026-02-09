@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:49:59Z",
-  "lastUpdateHuman": "2026-02-09 13:49 Pacific",
+  "lastUpdate": "2026-02-09T21:55:14Z",
+  "lastUpdateHuman": "2026-02-09 13:55 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12893,
+      "title": "📱 Request iOS TestFlight Access - @fabiantaboo",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12893",
+      "author": "fabiantaboo",
+      "createdAt": "2026-02-09T21:54:04Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12892,
       "title": "Bedrock: tool name validation error (length/pattern constraint)",
@@ -80,16 +90,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12885",
       "author": "Realowg",
       "createdAt": "2026-02-09T21:14:20Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12882,
-      "title": "TUI leaks internal sub-agent announce messages as user messages",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12882",
-      "author": "joeyfrasier",
-      "createdAt": "2026-02-09T21:05:19Z",
       "labels": [],
       "isNew": true
     }
