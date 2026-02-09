@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:34:09Z",
-  "lastUpdateHuman": "2026-02-09 13:34 Pacific",
+  "lastUpdate": "2026-02-09T21:39:25Z",
+  "lastUpdateHuman": "2026-02-09 13:39 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,28 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12890,
+      "title": "[Bug]: TUI crash: Rendered line exceeds terminal width on narrow terminals",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12890",
+      "author": "kutayilmaaz",
+      "createdAt": "2026-02-09T21:36:23Z",
+      "labels": [
+        "bug"
+      ],
+      "isNew": true
+    },
+    {
+      "number": 12889,
+      "title": "False positive context overflow detection still triggers in 2026.2.9",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12889",
+      "author": "jordan-gamora",
+      "createdAt": "2026-02-09T21:35:27Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12888,
       "title": "[Bug]: Sub-agent Spawning Fails with TypeError on workspace.trim()",
@@ -68,26 +90,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12881",
       "author": "vguillaume8",
       "createdAt": "2026-02-09T21:03:34Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12880,
-      "title": "memory_get: support workspace files beyond MEMORY.md (USER.md, SOUL.md, etc.)",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12880",
-      "author": "Alfridus1",
-      "createdAt": "2026-02-09T21:01:47Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12879,
-      "title": "📱 Request iOS/Android TestFlight/Beta Access — @johnhamilton09",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12879",
-      "author": "jhamilton0437",
-      "createdAt": "2026-02-09T20:56:27Z",
       "labels": [],
       "isNew": true
     }
