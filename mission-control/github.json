@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T22:42:46Z",
-  "lastUpdateHuman": "2026-02-09 14:42 Pacific",
+  "lastUpdate": "2026-02-09T22:48:03Z",
+  "lastUpdateHuman": "2026-02-09 14:48 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12919,
+      "title": "Bug: MEMORY.md path has null byte (\\^@) causing ENOTDIR on QMD boot",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12919",
+      "author": "jorgejhms",
+      "createdAt": "2026-02-09T22:47:01Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12918,
+      "title": "Looking For CTO or Senior Blockchain Developer and Full stack Developer",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12918",
+      "author": "techclient01",
+      "createdAt": "2026-02-09T22:46:45Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12915,
       "title": "📱 Request iOS TestFlight Access - @enki",
@@ -70,29 +90,25 @@
       "createdAt": "2026-02-09T22:21:45Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12908,
-      "title": "Request iOS test flight access",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12908",
-      "author": "poisenloaf",
-      "createdAt": "2026-02-09T22:21:24Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12904,
-      "title": "[Bug]: CLI commands hang after completion (process never exits)",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12904",
-      "author": "DrCrinkle",
-      "createdAt": "2026-02-09T22:16:30Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12917,
+      "title": "feat(gateway): add agents.health RPC method for per-agent he...",
+      "url": "https://github.com/openclaw/openclaw/pull/12917",
+      "author": "jlwainwright",
+      "isDraft": false,
+      "createdAt": "2026-02-09T22:46:27Z"
+    },
+    {
+      "number": 12916,
+      "title": "docs: clarify MEMORY.md injection and memory file behavior",
+      "url": "https://github.com/openclaw/openclaw/pull/12916",
+      "author": "JBrady",
+      "isDraft": false,
+      "createdAt": "2026-02-09T22:46:15Z"
+    },
     {
       "number": 12913,
       "title": "TUI: truncate lines to fit terminal width on narrow terminal...",
@@ -116,22 +132,6 @@
       "author": "DrCrinkle",
       "isDraft": false,
       "createdAt": "2026-02-09T22:18:24Z"
-    },
-    {
-      "number": 12900,
-      "title": "fix(tools): handle xAI Grok response format with web_search_...",
-      "url": "https://github.com/openclaw/openclaw/pull/12900",
-      "author": "danielheyman",
-      "isDraft": false,
-      "createdAt": "2026-02-09T22:02:45Z"
-    },
-    {
-      "number": 12897,
-      "title": "fix(otel): complete diagnostics-otel OpenTelemetry v2 API mi...",
-      "url": "https://github.com/openclaw/openclaw/pull/12897",
-      "author": "vincentkoc",
-      "isDraft": false,
-      "createdAt": "2026-02-09T21:58:22Z"
     }
   ],
   "myPrs": [
