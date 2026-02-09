@@ -5,31 +5,43 @@
     "status": "online",
     "statusText": "Running on Mac Mini M4"
   },
-  "lastSync": "2026-02-08T20:50:00-08:00",
+  "lastSync": "2026-02-08T20:55:00-08:00",
   "tasks": {
     "todo": [
-      {"title": "Daily Tesla search (Kijiji, Craigslist, FB)", "date": "Recurring"},
-      {"title": "Check kit@adriancrook.com", "date": "2-3x daily"}
+      {"title": "Tonight: Dashboard Quick Actions (buttons to trigger jobs)", "date": "Overnight build"},
+      {"title": "Doctor imaging reminder (Mondays 9am)", "date": "Recurring"}
     ],
     "inProgress": [
-      {"title": "Mission Control Dashboard", "date": "Feb 8"}
+      {"title": "Mission Control Dashboard on Railway", "date": "Feb 8"}
     ],
     "done": [
       {"title": "SOUL.md rewrite with personality", "date": "Feb 8"},
-      {"title": "Maine Coon search - COMPLETE (Saffron!)", "date": "Jan 31"}
+      {"title": "Dashboard: GitHub Activity widget", "date": "Feb 7"},
+      {"title": "Dashboard: Sessions Monitor widget", "date": "Feb 6"},
+      {"title": "Maine Coon search - bought Saffron! 🐱", "date": "Jan 31"}
     ],
     "archived": []
   },
   "scheduledJobs": [
-    {"name": "Overnight Builds", "schedule": "11pm Pacific nightly", "description": "Build something useful while Adrian sleeps"},
-    {"name": "Heartbeat checks", "schedule": "Every 30 min", "description": "Email, calendar, Tesla listings"}
+    {"name": "Morning Briefing", "schedule": "4:30am daily", "description": "Gmail, DMs, calendar digest"},
+    {"name": "Tesla Daily Monitor", "schedule": "10am daily", "description": "Craigslist, Kijiji, FB Marketplace"},
+    {"name": "X Daily Briefing", "schedule": "9am daily", "description": "Check @Theo_March activity"},
+    {"name": "Overnight Build", "schedule": "11pm daily", "description": "Build something useful while Adrian sleeps"},
+    {"name": "Build Accountability", "schedule": "4am daily", "description": "Did I actually ship?"},
+    {"name": "Security Audit", "schedule": "9am daily", "description": "Clawdbot update check"},
+    {"name": "RFP Weekly", "schedule": "Mon 9am", "description": "Government contract opportunities"},
+    {"name": "Clawdbot News", "schedule": "Wed 10am", "description": "New features, community tips"}
   ],
   "actionLog": [
     {"time": "2026-02-08T20:41:00-08:00", "action": "Rewrote SOUL.md with strong personality"},
-    {"time": "2026-02-08T16:53:00-08:00", "action": "Deployed AGC pixel dashboard to Railway"}
+    {"time": "2026-02-08T10:06:55-08:00", "action": "📚 Learning: No tables on Telegram + always include links"},
+    {"time": "2026-02-08T10:05:57-08:00", "action": "📚 Learning: FB Marketplace uses browser"},
+    {"time": "2026-02-07T23:06:02-08:00", "action": "Overnight build: GitHub Activity widget"},
+    {"time": "2026-02-07T22:55:35-08:00", "action": "Daily log: DreamDrop toon shaders"}
   ],
   "notes": [
     "Draft approval required for ALL external messages",
-    "Adrian's waking hours: 5am - 10pm Pacific"
+    "Adrian's waking hours: 5am - 10pm Pacific",
+    "Tesla budget: $20-30K, under 125K km, clean title only"
   ]
 }
