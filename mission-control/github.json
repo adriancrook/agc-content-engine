@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:55:14Z",
-  "lastUpdateHuman": "2026-02-09 13:55 Pacific",
+  "lastUpdate": "2026-02-09T22:00:36Z",
+  "lastUpdateHuman": "2026-02-09 14:00 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12895,
+      "title": "Dashboard shows recurring 'event gap detected' errors due to dropIfSlow race wit...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12895",
+      "author": "justinthericoftime",
+      "createdAt": "2026-02-09T21:57:57Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12893,
       "title": "📱 Request iOS TestFlight Access - @fabiantaboo",
@@ -82,19 +92,33 @@
       "createdAt": "2026-02-09T21:15:35Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12885,
-      "title": "OpenAI Responses API: Stale previous_response_id causes 404 'Item not found' err...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12885",
-      "author": "Realowg",
-      "createdAt": "2026-02-09T21:14:20Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12898,
+      "title": "pull request",
+      "url": "https://github.com/openclaw/openclaw/pull/12898",
+      "author": "hkjang",
+      "isDraft": false,
+      "createdAt": "2026-02-09T22:00:13Z"
+    },
+    {
+      "number": 12897,
+      "title": "fix(otel): complete diagnostics-otel OpenTelemetry v2 API mi...",
+      "url": "https://github.com/openclaw/openclaw/pull/12897",
+      "author": "vincentkoc",
+      "isDraft": true,
+      "createdAt": "2026-02-09T21:58:22Z"
+    },
+    {
+      "number": 12896,
+      "title": "feat: built-in auto-update with configurable schedule, confi...",
+      "url": "https://github.com/openclaw/openclaw/pull/12896",
+      "author": "jarvislanou",
+      "isDraft": false,
+      "createdAt": "2026-02-09T21:58:20Z"
+    },
     {
       "number": 12884,
       "title": "Feature/named persistent sessions",
@@ -110,30 +134,6 @@
       "author": "compass-soul",
       "isDraft": false,
       "createdAt": "2026-02-09T21:06:35Z"
-    },
-    {
-      "number": 12877,
-      "title": "fix: backfill empty toolName on toolResult messages for Gemi...",
-      "url": "https://github.com/openclaw/openclaw/pull/12877",
-      "author": "aldoeliacim",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:55:08Z"
-    },
-    {
-      "number": 12876,
-      "title": "major test workflow: enhance coverage infrastructure",
-      "url": "https://github.com/openclaw/openclaw/pull/12876",
-      "author": "Mathbkj",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:54:32Z"
-    },
-    {
-      "number": 12872,
-      "title": "fix(ci): trim heartbeat-runner line count",
-      "url": "https://github.com/openclaw/openclaw/pull/12872",
-      "author": "vincentkoc",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:48:06Z"
     }
   ],
   "myPrs": [
@@ -180,9 +180,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "1074d13",
-    "message": "Improve flagging in code analyzer",
-    "date": "2026-02-09T21:41:36Z",
-    "author": "quotentiroler"
+    "sha": "1cee513",
+    "message": "fix: preserve original filename for WhatsApp inbound documen",
+    "date": "2026-02-09T21:56:19Z",
+    "author": "Sk Akram"
   }
 }
