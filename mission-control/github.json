@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T22:11:09Z",
-  "lastUpdateHuman": "2026-02-09 14:11 Pacific",
+  "lastUpdate": "2026-02-09T22:16:26Z",
+  "lastUpdateHuman": "2026-02-09 14:16 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12903,
+      "title": "Telegram streaming breaks when chunkMode splits messages",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12903",
+      "author": "Littlericket",
+      "createdAt": "2026-02-09T22:13:08Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12902,
       "title": "[Bug]: Telegram webhook listener does not start on port 8787, causing 502 Bad Ga...",
@@ -81,16 +91,6 @@
       "labels": [
         "bug"
       ],
-      "isNew": true
-    },
-    {
-      "number": 12889,
-      "title": "False positive context overflow detection still triggers in 2026.2.9",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12889",
-      "author": "jordan-gamora",
-      "createdAt": "2026-02-09T21:35:27Z",
-      "labels": [],
       "isNew": true
     }
   ],
