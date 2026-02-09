@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T23:14:17Z",
-  "lastUpdateHuman": "2026-02-09 15:14 Pacific",
+  "lastUpdate": "2026-02-09T23:19:33Z",
+  "lastUpdateHuman": "2026-02-09 15:19 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12932,
+      "title": "Security Hardening: Apply 10-step Clawdbot Security Guide",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12932",
+      "author": "benjaminbelaga",
+      "createdAt": "2026-02-09T23:18:42Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12931,
       "title": "Feature: configurable /new greeting model (or option to suppress greeting)",
@@ -76,16 +86,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12921",
       "author": "duckshrug",
       "createdAt": "2026-02-09T22:49:40Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12919,
-      "title": "Bug: MEMORY.md path has null byte (\\^@) causing ENOTDIR on QMD boot",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12919",
-      "author": "jorgejhms",
-      "createdAt": "2026-02-09T22:47:01Z",
       "labels": [],
       "isNew": true
     }
