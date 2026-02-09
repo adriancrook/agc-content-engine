@@ -213,12 +213,54 @@ def api_fail_task(task_id):
     return jsonify(result) if result else ("Not found", 404)
 
 
+@app.route("/api/tasks/reset-stuck", methods=["POST"])
+def api_reset_stuck_tasks():
+    """Reset tasks stuck in 'processing' for more than 1 hour"""
+    from shared.database import get_session, Task
+    from datetime import timedelta
+
+    with get_session() as session:
+        cutoff_time = datetime.utcnow() - timedelta(hours=1)
+        stuck_tasks = session.query(Task).filter(
+            Task.status == "processing",
+            Task.started_at < cutoff_time
+        ).all()
+
+        reset_count = 0
+        for task in stuck_tasks:
+            task.status = "pending"
+            task.worker_id = None
+            task.started_at = None
+            reset_count += 1
+
+        session.commit()
+        return jsonify({"reset_count": reset_count, "message": f"Reset {reset_count} stuck task(s)"})
+
+
+
 # Articles API
 @app.route("/api/articles")
 def api_get_articles():
     status = request.args.get("status")
     limit = int(request.args.get("limit", 20))
     return jsonify(get_articles(status=status, limit=limit))
+
+
+@app.route("/api/articles/<article_id>", methods=["GET"])
+def api_get_article(article_id):
+    """Get full article details including content"""
+    from shared.database import get_session, Article
+    with get_session() as session:
+        article = session.query(Article).filter_by(id=article_id).first()
+        if article:
+            return jsonify({
+                "id": article.id,
+                "title": article.title,
+                "status": article.status,
+                "draft_content": article.draft_content,
+                "word_count": len(article.draft_content.split()) if article.draft_content else 0
+            })
+        return ("Not found", 404)
 
 
 @app.route("/api/articles/<article_id>", methods=["PATCH"])
