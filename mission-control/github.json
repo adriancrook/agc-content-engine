@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T20:46:18Z",
-  "lastUpdateHuman": "2026-02-09 12:46 Pacific",
+  "lastUpdate": "2026-02-09T20:51:36Z",
+  "lastUpdateHuman": "2026-02-09 12:51 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12874,
+      "title": "[SECURITY] Command Injection Risk in Proposed Twilio-OpenClaw CLI Integration",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12874",
+      "author": "paulpreibisch",
+      "createdAt": "2026-02-09T20:50:44Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12873,
+      "title": "iMessage plugin: Outgoing messages echo as incoming (is_from_me not filtered)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12873",
+      "author": "nulljosh",
+      "createdAt": "2026-02-09T20:49:56Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12869,
       "title": "Bug: OPENROUTER_DEFAULT_MODEL_REF uses invalid model path 'openrouter/auto'",
@@ -68,29 +88,17 @@
       "createdAt": "2026-02-09T20:22:51Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12859,
-      "title": "Version downgrade on restart: pre-release tag (-3) not preserved",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12859",
-      "author": "wrytn",
-      "createdAt": "2026-02-09T20:22:33Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12858,
-      "title": "openclaw doctor --fix overwrites valid config without backup",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12858",
-      "author": "wrytn",
-      "createdAt": "2026-02-09T20:22:27Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12872,
+      "title": "fix(ci): trim heartbeat-runner line count",
+      "url": "https://github.com/openclaw/openclaw/pull/12872",
+      "author": "vincentkoc",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:48:06Z"
+    },
     {
       "number": 12871,
       "title": "fix: use bash and warn about shell injection (issue #12836)",
@@ -122,14 +130,6 @@
       "author": "divol89",
       "isDraft": false,
       "createdAt": "2026-02-09T20:37:12Z"
-    },
-    {
-      "number": 12849,
-      "title": "Plugins: fallback bundled channel specs when npm install ret...",
-      "url": "https://github.com/openclaw/openclaw/pull/12849",
-      "author": "vincentkoc",
-      "isDraft": true,
-      "createdAt": "2026-02-09T20:09:56Z"
     }
   ],
   "myPrs": [
