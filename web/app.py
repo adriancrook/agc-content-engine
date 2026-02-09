@@ -98,6 +98,9 @@ def api_approve_topic(topic_id):
         # Auto-create article and research task for approved topics
         article = create_article(topic_id, result.get("title"))
         create_task("research", {"topic": result.get("title"), "keyword": result.get("keyword")}, article.get("id"))
+        # Update topic to processing status
+        update_topic(topic_id, {"status": "processing"})
+        result["status"] = "processing"
     return jsonify(result) if result else ("Not found", 404)
 
 
