@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:18:21Z",
-  "lastUpdateHuman": "2026-02-09 13:18 Pacific",
+  "lastUpdate": "2026-02-09T21:23:37Z",
+  "lastUpdateHuman": "2026-02-09 13:23 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -96,7 +96,7 @@
       "title": "Feature/named persistent sessions",
       "url": "https://github.com/openclaw/openclaw/pull/12884",
       "author": "dylanb",
-      "isDraft": false,
+      "isDraft": true,
       "createdAt": "2026-02-09T21:13:56Z"
     },
     {
@@ -176,9 +176,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "65dae9a",
-    "message": "ci: add SwiftPM cache, fix Mintlify frontmatter (#12863)",
-    "date": "2026-02-09T20:40:58Z",
-    "author": "max"
+    "sha": "1fad190",
+    "message": "fix: improve code-size gate output and duplicate detection, ",
+    "date": "2026-02-09T21:18:51Z",
+    "author": "quotentiroler"
   }
 }
