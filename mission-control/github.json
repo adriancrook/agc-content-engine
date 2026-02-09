@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T23:35:21Z",
-  "lastUpdateHuman": "2026-02-09 15:35 Pacific",
+  "lastUpdate": "2026-02-09T23:40:37Z",
+  "lastUpdateHuman": "2026-02-09 15:40 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -92,6 +92,14 @@
   ],
   "prs": [
     {
+      "number": 12937,
+      "title": "docs: clarify which workspace files are injected into contex...",
+      "url": "https://github.com/openclaw/openclaw/pull/12937",
+      "author": "omair445",
+      "isDraft": false,
+      "createdAt": "2026-02-09T23:35:19Z"
+    },
+    {
       "number": 12936,
       "title": "fix(telegram): omit message_thread_id for private DM chats",
       "url": "https://github.com/openclaw/openclaw/pull/12936",
@@ -122,14 +130,6 @@
       "author": "skyfallsin",
       "isDraft": true,
       "createdAt": "2026-02-09T22:48:00Z"
-    },
-    {
-      "number": 12917,
-      "title": "feat(gateway): add agents.health RPC method for per-agent he...",
-      "url": "https://github.com/openclaw/openclaw/pull/12917",
-      "author": "jlwainwright",
-      "isDraft": false,
-      "createdAt": "2026-02-09T22:46:27Z"
     }
   ],
   "myPrs": [
