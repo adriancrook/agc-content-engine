@@ -19,6 +19,8 @@ from engine.state_machine import StateMachineEngine
 from agents.mock_agent import MockAgent
 from agents.research import ResearchAgent
 from agents.writer import WriterAgent
+from agents.fact_checker import FactCheckerAgent
+from agents.seo import SEOAgent
 
 # Setup logging
 logging.basicConfig(
@@ -57,13 +59,13 @@ async def lifespan(app: FastAPI):
         agents = {
             ArticleState.PENDING: ResearchAgent({"brave_api_key": brave_api_key}),
             ArticleState.RESEARCHING: WriterAgent(),
-            ArticleState.WRITING: MockAgent(),        # TODO: FactCheckAgent
-            ArticleState.FACT_CHECKING: MockAgent(),  # TODO: SEOAgent
-            ArticleState.SEO_OPTIMIZING: MockAgent(), # TODO: HumanizeAgent
-            ArticleState.HUMANIZING: MockAgent(),     # TODO: MediaAgent
+            ArticleState.WRITING: FactCheckerAgent(),
+            ArticleState.FACT_CHECKING: SEOAgent(),
+            ArticleState.SEO_OPTIMIZING: MockAgent(), # TODO: HumanizeAgent (Claude)
+            ArticleState.HUMANIZING: MockAgent(),     # TODO: MediaAgent (Gemini)
             ArticleState.MEDIA_GENERATING: MockAgent(),
         }
-        logger.info("✓ Real agents initialized (research + writer)")
+        logger.info("✓ Real agents: Research, Writer, FactCheck, SEO (all local/free)")
     else:
         # Mock agents for testing
         agents = {
