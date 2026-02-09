@@ -103,14 +103,26 @@ class LocalWorker:
         except:
             return None
     
-    def complete_task(self, task_id, result):
-        """Mark task as completed"""
+    def complete_task(self, task_id, result, article_id=None):
+        """Mark task as completed and save article content to Railway API"""
         try:
             requests.post(
                 f"{API_URL}/api/tasks/{task_id}/complete",
                 json={"result": result},
                 timeout=30
             )
+            
+            # Save article content directly to Railway API
+            if article_id and "draft" in result:
+                draft = result["draft"]
+                if isinstance(draft, dict):
+                    draft = draft.get("markdown", str(draft))
+                requests.put(
+                    f"{API_URL}/api/articles/{article_id}",
+                    json={"content": draft, "status": "written"},
+                    timeout=10
+                )
+                print(f"   📝 Article content saved ({len(draft)} chars)")
         except Exception as e:
             print(f"Error completing task: {e}")
     
@@ -174,7 +186,9 @@ class LocalWorker:
             else:
                 result = {"error": f"Unknown task type: {task_type}"}
                 
-            self.complete_task(task_id, result)
+            # Pass article_id for write tasks
+            article_id = payload.get("article_id")
+            self.complete_task(task_id, result, article_id)
             print(f"✅ Task completed")
             
         except Exception as e:
