@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T22:27:00Z",
-  "lastUpdateHuman": "2026-02-09 14:27 Pacific",
+  "lastUpdate": "2026-02-09T22:32:17Z",
+  "lastUpdateHuman": "2026-02-09 14:32 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,28 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12914,
+      "title": "Feature Request: message:sent and message:received hook events for output valida...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12914",
+      "author": "joegra2003",
+      "createdAt": "2026-02-09T22:31:55Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12912,
+      "title": "Mobile interface",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12912",
+      "author": "fjadron",
+      "createdAt": "2026-02-09T22:27:39Z",
+      "labels": [
+        "bug"
+      ],
+      "isNew": true
+    },
     {
       "number": 12911,
       "title": "Feature: Live Voice Mode in /chat UI (Grok Voice Loop)",
@@ -68,31 +90,17 @@
       "createdAt": "2026-02-09T22:13:08Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12902,
-      "title": "[Bug]: Telegram webhook listener does not start on port 8787, causing 502 Bad Ga...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12902",
-      "author": "crnlicp",
-      "createdAt": "2026-02-09T22:03:59Z",
-      "labels": [
-        "bug"
-      ],
-      "isNew": true
-    },
-    {
-      "number": 12901,
-      "title": "📱 Request iOS TestFlight Access — @spaceynyc",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12901",
-      "author": "spaceynyc",
-      "createdAt": "2026-02-09T22:03:31Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12913,
+      "title": "TUI: truncate lines to fit terminal width on narrow terminal...",
+      "url": "https://github.com/openclaw/openclaw/pull/12913",
+      "author": "kutayilmaaz",
+      "isDraft": false,
+      "createdAt": "2026-02-09T22:28:15Z"
+    },
     {
       "number": 12907,
       "title": "feat: add Gonka.ai as optional LLM provider with ECDSA signi...",
@@ -124,14 +132,6 @@
       "author": "vincentkoc",
       "isDraft": false,
       "createdAt": "2026-02-09T21:58:22Z"
-    },
-    {
-      "number": 12896,
-      "title": "feat: built-in auto-update with configurable schedule, confi...",
-      "url": "https://github.com/openclaw/openclaw/pull/12896",
-      "author": "jarvislanou",
-      "isDraft": false,
-      "createdAt": "2026-02-09T21:58:20Z"
     }
   ],
   "myPrs": [
@@ -178,9 +178,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "a172ff9",
-    "message": "docs: SEO and AI discoverability improvements",
-    "date": "2026-02-09T22:20:56Z",
-    "author": "quotentiroler"
+    "sha": "ae99e65",
+    "message": "(fix): .env vars not available during runtime config reloads",
+    "date": "2026-02-09T22:31:41Z",
+    "author": "Rodrigo Uroz"
   }
 }
