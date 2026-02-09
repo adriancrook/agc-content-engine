@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:02:14Z",
-  "lastUpdateHuman": "2026-02-09 13:02 Pacific",
+  "lastUpdate": "2026-02-09T21:07:40Z",
+  "lastUpdateHuman": "2026-02-09 13:07 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12882,
+      "title": "TUI leaks internal sub-agent announce messages as user messages",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12882",
+      "author": "joeyfrasier",
+      "createdAt": "2026-02-09T21:05:19Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12881,
+      "title": "openclaw agent --session-id ignored unless --to/--agent provided",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12881",
+      "author": "vguillaume8",
+      "createdAt": "2026-02-09T21:03:34Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12880,
       "title": "memory_get: support workspace files beyond MEMORY.md (USER.md, SOUL.md, etc.)",
@@ -68,29 +88,17 @@
       "createdAt": "2026-02-09T20:41:12Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12867,
-      "title": "Feature request: message:received hook for pre-processing incoming messages",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12867",
-      "author": "visshehi",
-      "createdAt": "2026-02-09T20:38:55Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12866,
-      "title": "message(action=read, threadId=X) returns channel messages instead of thread repl...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12866",
-      "author": "visshehi",
-      "createdAt": "2026-02-09T20:38:41Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12883,
+      "title": "feat: cron catch-up for missed scheduled jobs (#12799)",
+      "url": "https://github.com/openclaw/openclaw/pull/12883",
+      "author": "compass-soul",
+      "isDraft": false,
+      "createdAt": "2026-02-09T21:06:35Z"
+    },
     {
       "number": 12877,
       "title": "fix: backfill empty toolName on toolResult messages for Gemi...",
@@ -122,14 +130,6 @@
       "author": "ambicuity",
       "isDraft": false,
       "createdAt": "2026-02-09T20:42:52Z"
-    },
-    {
-      "number": 12870,
-      "title": "fix: recover from telegram fetch errors (issue #12835)",
-      "url": "https://github.com/openclaw/openclaw/pull/12870",
-      "author": "ambicuity",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:42:40Z"
     }
   ],
   "myPrs": [
