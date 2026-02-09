@@ -153,6 +153,16 @@ def decline_topic(topic_id: str) -> Optional[Dict]:
     return update_topic(topic_id, {"status": "declined"})
 
 
+def delete_topic(topic_id: str) -> bool:
+    with get_session() as session:
+        topic = session.query(Topic).filter_by(id=topic_id).first()
+        if topic:
+            session.delete(topic)
+            session.commit()
+            return True
+        return False
+
+
 def count_topics_by_status() -> Dict[str, int]:
     with get_session() as session:
         topics = session.query(Topic).all()

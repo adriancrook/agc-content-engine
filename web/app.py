@@ -16,7 +16,7 @@ from flask import Flask, render_template, request, jsonify
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from shared.database import (
-    init_db, get_topics, create_topic, update_topic, approve_topic, decline_topic,
+    init_db, get_topics, create_topic, update_topic, approve_topic, decline_topic, delete_topic,
     count_topics_by_status, get_pending_tasks, create_task, claim_task, complete_task,
     fail_task, get_articles, create_article, update_article, get_setting, set_setting
 )
@@ -105,6 +105,12 @@ def api_approve_topic(topic_id):
 def api_decline_topic(topic_id):
     result = decline_topic(topic_id)
     return jsonify(result) if result else ("Not found", 404)
+
+
+@app.route("/api/topics/<topic_id>", methods=["DELETE"])
+def api_delete_topic(topic_id):
+    result = delete_topic(topic_id)
+    return jsonify({"deleted": True}) if result else ("Not found", 404)
 
 
 @app.route("/api/topics/counts")

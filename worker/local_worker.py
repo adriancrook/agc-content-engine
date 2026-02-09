@@ -44,19 +44,22 @@ class LocalWorker:
         
     def _init_agents(self):
         """Lazy init agents"""
+        brave_api_key = os.getenv("BRAVE_API_KEY", "")
         try:
-            self.research_agent = ResearchAgent()
+            self.research_agent = ResearchAgent(brave_api_key=brave_api_key)
             self.writer_agent = WriterAgent()
             self.fact_checker = FactCheckerAgent()
             self.seo_agent = SEOAgent()
             self.topic_agent = TopicDiscoveryAgent(
-                brave_api_key=os.getenv("BRAVE_API_KEY", ""),
+                brave_api_key=brave_api_key,
                 niche="mobile gaming and game design",
                 blog_url="https://adriancrook.com"
             )
             print("✅ Agents initialized")
         except Exception as e:
             print(f"⚠️ Agent init error: {e}")
+            import traceback
+            traceback.print_exc()
         
     def check_ollama(self):
         """Verify Ollama is running"""
@@ -126,9 +129,11 @@ class LocalWorker:
         """Save generated topics to Railway"""
         for topic in topics:
             try:
+                # Generate SEO-friendly slug from title
+                keyword = topic.lower().replace(" ", "-").replace(":", "").replace("'", "")
                 requests.post(
                     f"{API_URL}/api/topics",
-                    json={"title": topic, "keyword": topic.lower().replace(" ", "-")[:50]},
+                    json={"title": topic, "keyword": keyword},
                     timeout=10
                 )
             except:
@@ -189,25 +194,29 @@ class LocalWorker:
         
         if self.topic_agent:
             agent_input = AgentInput(
-                topic=f"Generate {count} unique, SEO-optimized blog topic ideas for a mobile game consulting blog. Focus areas: {', '.join(focus_areas)}. Each topic should target a specific long-tail keyword.",
-                context={"focus_areas": focus_areas, "count": count}
+                data={
+                    "topic": f"Generate {count} unique, SEO-optimized blog topic ideas for a mobile game consulting blog. Focus areas: {', '.join(focus_areas)}. Each topic should target a specific long-tail keyword.",
+                    "focus_areas": focus_areas,
+                    "count": count
+                },
+                workspace=Path("/tmp/agc")
             )
             
             result = self.topic_agent.run(agent_input)
-            content = result.content if hasattr(result, 'content') else str(result)
             
-            # Parse topics from response
+            # Extract topics from AgentOutput.data
             topics = []
-            for line in content.split('\n'):
-                line = line.strip()
-                if line and not line.startswith('#') and len(line) > 10:
-                    # Remove numbering like "1. " or "- "
-                    if line[0].isdigit() and '.' in line[:3]:
-                        line = line.split('.', 1)[1].strip()
-                    elif line.startswith('-'):
-                        line = line[1:].strip()
-                    if len(line) > 10:
-                        topics.append(line[:200])  # Limit length
+            if hasattr(result, 'data') and isinstance(result.data, dict):
+                raw_topics = result.data.get("topics", [])
+                for t in raw_topics:
+                    if isinstance(t, dict):
+                        title = t.get("title", "")
+                        if title:
+                            topics.append(title)
+                    elif isinstance(t, str):
+                        topics.append(t)
+            
+            print(f"Generated {len(topics)} topics")
             
             # Save topics to Railway
             self.save_topics(topics[:count])
@@ -222,9 +231,9 @@ class LocalWorker:
         print(f"Researching: {topic}")
         
         if self.research_agent:
-            agent_input = AgentInput(topic=topic, context=payload)
+            agent_input = AgentInput(data={"topic": topic, **payload}, workspace=Path("/tmp/agc"))
             result = self.research_agent.run(agent_input)
-            return {"research": result.content if hasattr(result, 'content') else str(result)}
+            return {"research": result.data if hasattr(result, 'data') else str(result)}
         return {"error": "Research agent not initialized"}
     
     def do_write(self, payload):
@@ -234,9 +243,9 @@ class LocalWorker:
         print(f"Writing draft for: {topic}")
         
         if self.writer_agent:
-            agent_input = AgentInput(topic=topic, context={"research": research})
+            agent_input = AgentInput(data={"topic": topic, "research": research}, workspace=Path("/tmp/agc"))
             result = self.writer_agent.run(agent_input)
-            return {"draft": result.content if hasattr(result, 'content') else str(result)}
+            return {"draft": result.data if hasattr(result, 'data') else str(result)}
         return {"error": "Writer agent not initialized"}
     
     def do_fact_check(self, payload):
@@ -245,9 +254,9 @@ class LocalWorker:
         print("Fact checking draft...")
         
         if self.fact_checker:
-            agent_input = AgentInput(topic="Fact check", context={"draft": draft})
+            agent_input = AgentInput(data={"topic": "Fact check", "draft": draft}, workspace=Path("/tmp/agc"))
             result = self.fact_checker.run(agent_input)
-            return {"verified": result.content if hasattr(result, 'content') else str(result)}
+            return {"verified": result.data if hasattr(result, 'data') else str(result)}
         return {"error": "Fact checker not initialized"}
     
     def do_seo(self, payload):
@@ -257,9 +266,9 @@ class LocalWorker:
         print(f"SEO optimizing for: {keyword}")
         
         if self.seo_agent:
-            agent_input = AgentInput(topic=keyword, context={"draft": draft})
+            agent_input = AgentInput(data={"topic": keyword, "draft": draft}, workspace=Path("/tmp/agc"))
             result = self.seo_agent.run(agent_input)
-            return {"optimized": result.content if hasattr(result, 'content') else str(result)}
+            return {"optimized": result.data if hasattr(result, 'data') else str(result)}
         return {"error": "SEO agent not initialized"}
     
     def run(self):
