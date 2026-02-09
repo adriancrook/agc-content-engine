@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T19:58:27Z",
-  "lastUpdateHuman": "2026-02-09 11:58 Pacific",
+  "lastUpdate": "2026-02-09T20:03:46Z",
+  "lastUpdateHuman": "2026-02-09 12:03 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,28 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12841,
+      "title": "[Bug]:  `npm install -g openclaw` fails in environments without GitHub SSH keys",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12841",
+      "author": "nachoaIvarez",
+      "createdAt": "2026-02-09T19:59:53Z",
+      "labels": [
+        "bug"
+      ],
+      "isNew": true
+    },
+    {
+      "number": 12840,
+      "title": "Feature: homard-proactive-workflow",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12840",
+      "author": "Deuzio-glitch",
+      "createdAt": "2026-02-09T19:59:23Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12838,
       "title": "Feature Request: Auto-resize large images before LLM submission",
@@ -72,29 +94,17 @@
         "enhancement"
       ],
       "isNew": true
-    },
-    {
-      "number": 12826,
-      "title": "Slack DM allowlist not working - still shows pairing prompt",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12826",
-      "author": "visshehi",
-      "createdAt": "2026-02-09T19:11:23Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12825,
-      "title": "Slack DM allowlist not working - still shows pairing prompt",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12825",
-      "author": "visshehi",
-      "createdAt": "2026-02-09T19:08:34Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12842,
+      "title": "Docs: add DigitalOcean deployment options (1-Click + App Pla...",
+      "url": "https://github.com/openclaw/openclaw/pull/12842",
+      "author": "adugan-do",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:00:01Z"
+    },
     {
       "number": 12839,
       "title": "feat(vault): add vault proxy mode for credential isolation  ",
@@ -118,14 +128,6 @@
       "author": "JBrady",
       "isDraft": false,
       "createdAt": "2026-02-09T19:33:02Z"
-    },
-    {
-      "number": 12829,
-      "title": "fix(cron): don't hold store lock during manual run",
-      "url": "https://github.com/openclaw/openclaw/pull/12829",
-      "author": "yeyebot",
-      "isDraft": false,
-      "createdAt": "2026-02-09T19:16:06Z"
     },
     {
       "number": 12823,
