@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:44:44Z",
-  "lastUpdateHuman": "2026-02-09 13:44 Pacific",
+  "lastUpdate": "2026-02-09T21:49:59Z",
+  "lastUpdateHuman": "2026-02-09 13:49 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12892,
+      "title": "Bedrock: tool name validation error (length/pattern constraint)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12892",
+      "author": "flowsome-magnus",
+      "createdAt": "2026-02-09T21:47:51Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12890,
       "title": "[Bug]: TUI crash: Rendered line exceeds terminal width on narrow terminals",
@@ -80,16 +90,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12882",
       "author": "joeyfrasier",
       "createdAt": "2026-02-09T21:05:19Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12881,
-      "title": "openclaw agent --session-id ignored unless --to/--agent provided",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12881",
-      "author": "vguillaume8",
-      "createdAt": "2026-02-09T21:03:34Z",
       "labels": [],
       "isNew": true
     }
