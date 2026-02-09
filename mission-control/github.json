@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T20:35:36Z",
-  "lastUpdateHuman": "2026-02-09 12:35 Pacific",
+  "lastUpdate": "2026-02-09T20:40:53Z",
+  "lastUpdateHuman": "2026-02-09 12:40 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12867,
+      "title": "Feature request: message:received hook for pre-processing incoming messages",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12867",
+      "author": "visshehi",
+      "createdAt": "2026-02-09T20:38:55Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12866,
+      "title": "message(action=read, threadId=X) returns channel messages instead of thread repl...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12866",
+      "author": "visshehi",
+      "createdAt": "2026-02-09T20:38:41Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12862,
       "title": "SECURITY: Please delete PR #12847 — leaked credentials",
@@ -68,29 +88,25 @@
       "createdAt": "2026-02-09T20:22:21Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12856,
-      "title": "Node pairing: pending requests written to disk but never exposed via API",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12856",
-      "author": "wrytn",
-      "createdAt": "2026-02-09T20:22:15Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12855,
-      "title": "[Feature]: Built-in auto-update with configurable schedule, confirmation, and po...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12855",
-      "author": "jarvislanou",
-      "createdAt": "2026-02-09T20:21:10Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12865,
+      "title": "Merge remote-tracking branch 'origin/ci-tiered-gates-v2'",
+      "url": "https://github.com/openclaw/openclaw/pull/12865",
+      "author": "smaltLin",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:38:01Z"
+    },
+    {
+      "number": 12864,
+      "title": "fix(telegram): omit thread_id=1 for DMs to prevent cron deli...",
+      "url": "https://github.com/openclaw/openclaw/pull/12864",
+      "author": "divol89",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:37:12Z"
+    },
     {
       "number": 12863,
       "title": "ci: add SwiftPM cache, fix Mintlify frontmatter",
@@ -114,22 +130,6 @@
       "author": "mcaxtr",
       "isDraft": false,
       "createdAt": "2026-02-09T20:07:43Z"
-    },
-    {
-      "number": 12845,
-      "title": "Agents: add antigravity Opus 4.6 thinking forward-compat fal...",
-      "url": "https://github.com/openclaw/openclaw/pull/12845",
-      "author": "vincentkoc",
-      "isDraft": true,
-      "createdAt": "2026-02-09T20:07:22Z"
-    },
-    {
-      "number": 12844,
-      "title": "fix(llm-task): use correct import path for built/npm install...",
-      "url": "https://github.com/openclaw/openclaw/pull/12844",
-      "author": "scout-wolfe",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:05:14Z"
     }
   ],
   "myPrs": [
