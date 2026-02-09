@@ -1,6 +1,0 @@
-{
-  "lastUpdate": "2026-02-08T07:42:34.375160Z",
-  "events": [],
-  "connected": false,
-  "message": "Calendar not connected. Run scripts/fetch-calendar.py manually to authorize."
-}
