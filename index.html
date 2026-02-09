@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🤖 AGC Content Engine - Live Dashboard</title>
+    <link rel="stylesheet" href="css/style.css?v=28">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+<script>
+window.onerror = function(msg, url, line, col, err) {
+    document.body.innerHTML = '<div style="color:red;padding:20px;font-family:monospace;font-size:14px;background:#111;">'
+        + '<h2>JS ERROR</h2>'
+        + '<p>' + msg + '</p>'
+        + '<p>File: ' + url + ' Line: ' + line + '</p>'
+        + '<pre>' + (err && err.stack || '') + '</pre>'
+        + '</div>';
+};
+</script>
+    <!-- Connection Overlay -->
+    <div id="connectionOverlay" class="overlay">
+        <div class="connection-panel">
+            <h1 class="pixel-title">🤖 AGC ENGINE</h1>
+            <p class="connection-subtitle">AI Content Generation Dashboard</p>
+            <div class="form-group">
+                <label>API URL</label>
+                <input type="text" id="gatewayUrl" placeholder="https://agc-content-engine-production.up.railway.app" value="">
+            </div>
+            <div class="form-group" style="display:none;">
+                <label>Token</label>
+                <input type="password" id="gatewayToken" placeholder="Optional" value="agc">
+            </div>
+            <div class="button-row">
+                <button id="connectBtn" class="btn-primary">CONNECT</button>
+            </div>
+            <div id="connectionError" class="error-message"></div>
+            <div class="connection-help">
+                <p>🤖 <strong>6 AI Agents</strong> working together</p>
+                <p>🖥️ <strong>Local LLMs</strong> (qwen2.5:14b) - $0 cost</p>
+                <p>📊 Watch your content pipeline in real-time!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Status Bar -->
+    <div id="topBar" class="top-bar">
+        <div class="top-bar-left">
+            <span class="title pixel-title">🤖 AGC ENGINE</span>
+            <!-- Removed: NEW QUEST button — agents are spawned via chat -->
+        </div>
+        <div class="top-bar-center">
+            <span class="token-count">⬡ <span id="tokenCount">0</span></span>
+            <span class="stat-display">💰 <span id="totalCost">$0.0000</span></span>
+            <span class="stat-display">⏱️ <span id="activeTime">00:00:00</span></span>
+            <span class="status-badge working">
+                <span id="workingCount">0</span> WORKING
+            </span>
+            <span class="status-badge idle">
+                <span id="idleCount">0</span> IDLE
+            </span>
+            <span class="status-badge waiting">
+                <span id="waitingCount">0</span> WAITING
+            </span>
+        </div>
+        <div class="top-bar-right">
+            <button id="settingsBtn" class="mute-btn" title="Settings">⚙️</button>
+            <button id="muteBtn" class="mute-btn" title="Toggle Sound">🔊</button>
+            <div id="channelIndicators" class="channel-indicators"></div>
+            <span id="onlineStatus" class="status-badge online">ONLINE</span>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Left Sidebar - Session List -->
+        <div id="leftSidebar" class="left-sidebar">
+            <div class="sidebar-header">
+                <span class="pixel-text">AGENTS</span>
+                <span class="agent-count" id="agentCount">0</span>
+            </div>
+            <div id="sessionList" class="session-list">
+                <!-- Sessions will be populated here -->
+            </div>
+        </div>
+
+        <!-- Center - Isometric World -->
+        <div class="world-container">
+            <canvas id="worldCanvas"></canvas>
+            <div class="minimap-container">
+                <canvas id="minimapCanvas" width="150" height="150"></canvas>
+            </div>
+        </div>
+
+        <!-- Right Sidebar - Chat Only -->
+        <div id="chatSidebar" class="chat-sidebar hidden">
+            <div class="chat-sidebar-header">
+                <span class="pixel-text">SESSION CHAT</span>
+            </div>
+            <div id="chatMessages" class="chat-messages">
+                <div class="chat-empty">Select an agent to chat...</div>
+            </div>
+            <div class="chat-input-row">
+                <button id="micBtn" class="mic-btn" title="Hold to speak">🎤</button>
+                <input type="text" id="messageInput" placeholder="Send a message..." class="chat-input">
+                <button id="sendMessageBtn" class="send-btn">⚡</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Panel - Agent Details -->
+    <div id="bottomPanel" class="bottom-panel hidden">
+        <div class="panel-left">
+            <div class="portrait-frame">
+                <canvas id="portraitCanvas" width="100" height="100"></canvas>
+            </div>
+        </div>
+        <div class="panel-center">
+            <div class="session-header">
+                <span class="session-name" id="selectedSessionName">Agent Name</span>
+                <span class="model-badge" id="selectedModel">claude-opus-4-5</span>
+            </div>
+            <div class="session-stats">
+                <div class="stat-item">
+                    <span class="stat-label">CTX:</span>
+                    <div class="progress-bar">
+                        <div id="ctxProgress" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <span id="ctxPercent">0%</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="tokenUsage">0</span> tokens
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="messageCount">0</span> msgs
+                </div>
+                <div class="stat-item">
+                    <span class="channel-badge" id="channelBadge">telegram</span>
+                </div>
+            </div>
+        </div>
+        <div class="panel-right">
+        </div>
+    </div>
+
+    <!-- New Quest Modal -->
+    <div id="newQuestModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="pixel-title">⚔️ NEW QUEST</h2>
+            </div>
+            <div class="modal-body">
+                <label class="modal-label">Quest Description:</label>
+                <textarea id="questTaskInput" class="quest-input" placeholder="Enter the quest task..." rows="4"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button onclick="window.moltcraftApp.spawnNewQuest()" class="btn-primary">SPAWN AGENT</button>
+                <button onclick="window.moltcraftApp.hideNewQuestModal()" class="btn-secondary">CANCEL</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-content" style="width:600px;max-height:80vh;display:flex;flex-direction:column;">
+            <div class="modal-header">
+                <h2 class="pixel-title">⚙️ SETTINGS</h2>
+                <div class="settings-tabs">
+                    <button class="settings-tab active" data-tab="moltcraft">🎮 MOLTCRAFT</button>
+                    <button class="settings-tab" data-tab="moltbot">🤖 MOLTBOT</button>
+                </div>
+            </div>
+            <div class="modal-body" style="overflow-y:auto;flex:1;">
+                <!-- Moltcraft Tab -->
+                <div id="tab-moltcraft" class="settings-tab-content">
+                    <h3 class="settings-section-title">🔊 Voice & Audio</h3>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="ambientSoundEnabled"> Background ambient sound
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="autoSpeakEnabled"> Auto-speak agent responses
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="autoSpeakToasts"> Speak toast notifications
+                        </label>
+                    </div>
+                    <div id="elevenLabsStatus" class="config-row" style="margin-top:10px;">
+                        <span class="config-label">ElevenLabs (from Moltbot)</span>
+                        <span class="config-badge off">⏳ CHECKING...</span>
+                    </div>
+                    <h3 class="settings-section-title">🎭 Agent Voices</h3>
+                    <div id="voiceRoster" class="config-grid">
+                        <p class="settings-hint">Connect to see agent voice assignments.</p>
+                    </div>
+                    <p class="settings-hint">🎤 Mic: browser Speech Recognition (free).<br>🔊 TTS: ElevenLabs from Moltbot (skill: sag).<br>🎭 Each agent gets a unique voice automatically.</p>
+                </div>
+
+                <!-- Moltbot Tab -->
+                <div id="tab-moltbot" class="settings-tab-content" style="display:none;">
+                    <div id="moltbotConfigLoading" class="settings-hint" style="text-align:center;padding:20px;">Loading gateway config...</div>
+                    <div id="moltbotConfigContent" style="display:none;">
+
+                        <h3 class="settings-section-title">📡 Channels</h3>
+                        <div id="configChannels" class="config-grid"></div>
+
+                        <h3 class="settings-section-title">🧠 Models</h3>
+                        <div id="configModels" class="config-grid"></div>
+
+                        <h3 class="settings-section-title">🔌 Skills & APIs</h3>
+                        <div id="configSkills" class="config-grid"></div>
+
+                        <h3 class="settings-section-title">⚡ Gateway</h3>
+                        <div id="configGateway" class="config-grid"></div>
+
+                        <h3 class="settings-section-title">🤖 Agent Limits</h3>
+                        <div id="configAgents" class="config-grid"></div>
+
+                        <h3 class="settings-section-title">🪝 Hooks</h3>
+                        <div id="configHooks" class="config-grid"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="window.moltcraftApp.saveSettings()" class="btn-primary">SAVE</button>
+                <button onclick="window.moltcraftApp.hideSettings()" class="btn-secondary">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Building Modal (shared for all buildings) -->
+    <div id="buildingModal" class="modal hidden">
+        <div class="modal-content" style="width:600px;max-height:80vh;display:flex;flex-direction:column;">
+            <div class="modal-header">
+                <h2 class="pixel-title" id="buildingModalTitle">Building</h2>
+            </div>
+            <div class="modal-body" id="buildingModalBody" style="overflow-y:auto;flex:1;">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="document.getElementById('buildingModal').classList.add('hidden')">CLOSE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="js/agc-adapter.js?v=1"></script>
+    <script src="js/app.js?v=28"></script>
+    <script>
+    // ========================================
+    // AGC CONTENT ENGINE OVERRIDE
+    // ========================================
+    (function() {
+        setTimeout(() => {
+            const app = window.moltcraftApp;
+            if (!app) return;
+
+            const agc = new AGCAdapter();
+            window.agcAdapter = agc;
+
+            // Override fetchSessions to use AGC
+            app.fetchSessions = async function() {
+                try {
+                    const data = await agc.fetchAll();
+                    
+                    this.sessions = data.agents.map(agent => ({
+                        sessionId: agent.sessionId,
+                        key: agent.key,
+                        label: agent.label,
+                        kind: agent.isLocal ? 'local' : 'cloud',
+                        model: agent.model,
+                        state: agent.state,
+                        stats: agent.stats,
+                        messages: agent.messages,
+                        emoji: agent.emoji,
+                        color: agent.color,
+                        activeTask: agent.activeTask,
+                        pendingCount: agent.pendingCount
+                    }));
+
+                    const stats = agc.getStats();
+                    document.getElementById('tokenCount').textContent = 
+                        this.formatNumber(stats.topicsCompleted * 2500);
+                    
+                    const costEl = document.getElementById('totalCost');
+                    if (costEl) costEl.textContent = '$' + stats.estimatedCostSaved.toFixed(2) + ' saved';
+
+                    this.updateUI();
+                    this.updateWorld();
+                    
+                    document.getElementById('onlineStatus').classList.add('online');
+                    document.getElementById('onlineStatus').classList.remove('offline');
+                    document.getElementById('onlineStatus').textContent = 'CONNECTED';
+                    
+                } catch (error) {
+                    console.error('AGC fetch failed:', error);
+                }
+            };
+
+            // Override connect
+            const originalConnect = app.connect.bind(app);
+            app.connect = async function() {
+                const urlInput = document.getElementById('gatewayUrl');
+                agc.apiUrl = urlInput.value.trim() || window.location.origin;
+                
+                try {
+                    const res = await fetch(agc.apiUrl + '/api/health');
+                    if (!res.ok) throw new Error('API not available');
+                    
+                    document.getElementById('connectionOverlay').classList.add('hidden');
+                    localStorage.setItem('agc_url', agc.apiUrl);
+                    
+                    this.showToast('🤖 Connected to AGC Content Engine!', 'success');
+                    sfx.connect();
+                    
+                    await this.fetchSessions();
+                    this.refreshInterval = setInterval(() => this.fetchSessions(), 5000);
+                    
+                } catch (error) {
+                    document.getElementById('connectionError').textContent = 
+                        'Failed to connect: ' + error.message;
+                }
+            };
+
+            // Load saved URL or use current origin
+            const savedUrl = localStorage.getItem('agc_url');
+            document.getElementById('gatewayUrl').value = savedUrl || window.location.origin;
+
+            console.log('🤖 AGC Content Engine adapter loaded');
+        }, 100);
+    })();
+    </script>
+</body>
+</html>
