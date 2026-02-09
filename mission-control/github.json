@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T22:16:26Z",
-  "lastUpdateHuman": "2026-02-09 14:16 Pacific",
+  "lastUpdate": "2026-02-09T22:21:45Z",
+  "lastUpdateHuman": "2026-02-09 14:21 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12908,
+      "title": "Request iOS test flight access",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12908",
+      "author": "poisenloaf",
+      "createdAt": "2026-02-09T22:21:24Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12904,
+      "title": "[Bug]: CLI commands hang after completion (process never exits)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12904",
+      "author": "DrCrinkle",
+      "createdAt": "2026-02-09T22:16:30Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12903,
       "title": "Telegram streaming breaks when chunkMode splits messages",
@@ -70,31 +90,25 @@
       "createdAt": "2026-02-09T21:54:04Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12892,
-      "title": "Bedrock: tool name validation error (length/pattern constraint)",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12892",
-      "author": "flowsome-magnus",
-      "createdAt": "2026-02-09T21:47:51Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12890,
-      "title": "[Bug]: TUI crash: Rendered line exceeds terminal width on narrow terminals",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12890",
-      "author": "kutayilmaaz",
-      "createdAt": "2026-02-09T21:36:23Z",
-      "labels": [
-        "bug"
-      ],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12907,
+      "title": "feat: add Gonka.ai as optional LLM provider with ECDSA signi...",
+      "url": "https://github.com/openclaw/openclaw/pull/12907",
+      "author": "ultragenez",
+      "isDraft": false,
+      "createdAt": "2026-02-09T22:19:46Z"
+    },
+    {
+      "number": 12906,
+      "title": "fix: ensure CLI exits after command completion",
+      "url": "https://github.com/openclaw/openclaw/pull/12906",
+      "author": "DrCrinkle",
+      "isDraft": false,
+      "createdAt": "2026-02-09T22:18:24Z"
+    },
     {
       "number": 12900,
       "title": "fix(tools): handle xAI Grok response format with web_search_...",
@@ -108,7 +122,7 @@
       "title": "fix(otel): complete diagnostics-otel OpenTelemetry v2 API mi...",
       "url": "https://github.com/openclaw/openclaw/pull/12897",
       "author": "vincentkoc",
-      "isDraft": true,
+      "isDraft": false,
       "createdAt": "2026-02-09T21:58:22Z"
     },
     {
@@ -118,22 +132,6 @@
       "author": "jarvislanou",
       "isDraft": false,
       "createdAt": "2026-02-09T21:58:20Z"
-    },
-    {
-      "number": 12894,
-      "title": "feat(whatsapp): add reaction notifications support",
-      "url": "https://github.com/openclaw/openclaw/pull/12894",
-      "author": "ekson73",
-      "isDraft": false,
-      "createdAt": "2026-02-09T21:55:26Z"
-    },
-    {
-      "number": 12884,
-      "title": "Feature/named persistent sessions",
-      "url": "https://github.com/openclaw/openclaw/pull/12884",
-      "author": "dylanb",
-      "isDraft": true,
-      "createdAt": "2026-02-09T21:13:56Z"
     }
   ],
   "myPrs": [
