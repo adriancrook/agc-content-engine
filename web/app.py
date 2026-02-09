@@ -163,16 +163,40 @@ def api_complete_task(task_id):
     task_result = data.get("result", {})
     result = complete_task(task_id, task_result)
     
-    # If this was a write task, update the article with the draft
-    if result and "draft" in task_result:
-        # Get the task to find the article_id
-        from shared.database import get_session, Task
-        with get_session() as session:
-            task = session.query(Task).filter_by(id=task_id).first()
-            if task and task.article_id:
-                update_article(task.article_id, {"content": task_result["draft"], "status": "written"})
+    if not result:
+        return ("Not found", 404)
     
-    return jsonify(result) if result else ("Not found", 404)
+    # Get the task to chain to next step
+    from shared.database import get_session, Task
+    with get_session() as session:
+        task = session.query(Task).filter_by(id=task_id).first()
+        if task:
+            # Chain tasks based on type
+            if task.type == "research" and "research" in task_result:
+                # Research done -> create write task with research data
+                create_task("write", {
+                    "topic": task_result.get("research", {}).get("topic", ""),
+                    "research": task_result.get("research", {})
+                }, task.article_id)
+                
+            elif task.type == "write" and "draft" in task_result:
+                # Write done -> save content and create fact_check task
+                if task.article_id:
+                    draft_content = task_result.get("draft", "")
+                    if isinstance(draft_content, dict):
+                        # Extract markdown from dict if needed
+                        draft_content = draft_content.get("markdown", str(draft_content))
+                    update_article(task.article_id, {"content": draft_content, "status": "written"})
+                    create_task("fact_check", {"draft": draft_content}, task.article_id)
+                    
+            elif task.type == "fact_check" and "verified" in task_result:
+                # Fact check done -> create SEO task
+                create_task("seo", {
+                    "draft": task_result.get("verified", ""),
+                    "keyword": task_result.get("keyword", "")
+                }, task.article_id)
+    
+    return jsonify(result)
 
 
 @app.route("/api/tasks/<task_id>/fail", methods=["POST"])
