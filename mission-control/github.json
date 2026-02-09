@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T19:20:56Z",
-  "lastUpdateHuman": "2026-02-09 11:20 Pacific",
+  "lastUpdate": "2026-02-09T19:26:14Z",
+  "lastUpdateHuman": "2026-02-09 11:26 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12830,
+      "title": "Prevent tool_use/tool_result mismatch errors in sessions",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12830",
+      "author": "karmgate",
+      "createdAt": "2026-02-09T19:21:06Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12826,
       "title": "Slack DM allowlist not working - still shows pairing prompt",
@@ -80,16 +90,6 @@
       "createdAt": "2026-02-09T18:19:15Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12799,
-      "title": "Feature Request: Cron catch-up for missed scheduled jobs",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12799",
-      "author": "milocoreai",
-      "createdAt": "2026-02-09T17:59:35Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
@@ -159,6 +159,12 @@
   ],
   "releases": [
     {
+      "tag": "v2026.2.9",
+      "name": "openclaw 2026.2.9",
+      "date": "2026-02-09T19:23:20Z",
+      "isPrerelease": false
+    },
+    {
       "tag": "v2026.2.6",
       "name": "openclaw 2026.2.6",
       "date": "2026-02-07T02:27:43Z",
@@ -169,18 +175,12 @@
       "name": "openclaw 2026.2.3",
       "date": "2026-02-05T01:57:22Z",
       "isPrerelease": false
-    },
-    {
-      "tag": "v2026.2.2",
-      "name": "openclaw 2026.2.2",
-      "date": "2026-02-04T01:05:25Z",
-      "isPrerelease": false
     }
   ],
   "lastCommit": {
-    "sha": "ce71c73",
-    "message": "chore: add tsconfig.test.json for type-checking test files (",
-    "date": "2026-02-09T19:16:19Z",
-    "author": "max"
+    "sha": "9a765c9",
+    "message": "chore(mac): update appcast for 2026.2.9",
+    "date": "2026-02-09T19:23:38Z",
+    "author": "Peter Steinberger"
   }
 }
