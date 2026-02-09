@@ -1,9 +1,9 @@
 {
-  "lastUpdate": "2026-02-09T19:53:18Z",
-  "lastUpdateHuman": "2026-02-09 11:53 Pacific",
+  "lastUpdate": "2026-02-09T19:58:27Z",
+  "lastUpdateHuman": "2026-02-09 11:58 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
-    "openIssues": 0,
+    "openIssues": 1000,
     "openedToday": 0,
     "closedToday": 0,
     "trend": 0
@@ -96,6 +96,14 @@
   ],
   "prs": [
     {
+      "number": 12839,
+      "title": "feat(vault): add vault proxy mode for credential isolation  ",
+      "url": "https://github.com/openclaw/openclaw/pull/12839",
+      "author": "sfo2001",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:55:36Z"
+    },
+    {
       "number": 12837,
       "title": "fix(heartbeat): suppress HEARTBEAT_OK token delivery",
       "url": "https://github.com/openclaw/openclaw/pull/12837",
@@ -126,17 +134,31 @@
       "author": "ryan-crabbe",
       "isDraft": false,
       "createdAt": "2026-02-09T19:06:30Z"
-    },
-    {
-      "number": 12820,
-      "title": "Dench Filesystem-First CRM via OpenClaw",
-      "url": "https://github.com/openclaw/openclaw/pull/12820",
-      "author": "kumarabhirup",
-      "isDraft": true,
-      "createdAt": "2026-02-09T18:58:00Z"
     }
   ],
-  "myPrs": [],
+  "myPrs": [
+    {
+      "repo": "clawd",
+      "number": 10,
+      "title": "feat(dashboard): Add GitHub Activity widget - Nigh...",
+      "url": "https://github.com/adriancrook/clawd/pull/10",
+      "createdAt": "2026-02-08T07:05:27Z"
+    },
+    {
+      "repo": "edclub-explorer",
+      "number": 2,
+      "title": "📚 Docs: Revise Workflow (2-Stage + NCES Guards)",
+      "url": "https://github.com/teachingcom/edclub-explorer/pull/2",
+      "createdAt": "2026-02-05T21:13:59Z"
+    },
+    {
+      "repo": "edclub-explorer",
+      "number": 1,
+      "title": "📚 Docs: Add AI Agent Enrichment Workflow",
+      "url": "https://github.com/teachingcom/edclub-explorer/pull/1",
+      "createdAt": "2026-02-05T20:41:33Z"
+    }
+  ],
   "releases": [
     {
       "tag": "v2026.2.9",
@@ -158,9 +180,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "50b3d32",
-    "message": "CI: add code-size check for files crossing LOC threshold (#1",
-    "date": "2026-02-09T19:34:18Z",
-    "author": "max"
+    "sha": "715e8b5",
+    "message": "ci: lint/format failures also block heavy jobs",
+    "date": "2026-02-09T19:54:37Z",
+    "author": "quotentiroler"
   }
 }
