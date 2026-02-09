@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T22:21:45Z",
-  "lastUpdateHuman": "2026-02-09 14:21 Pacific",
+  "lastUpdate": "2026-02-09T22:27:00Z",
+  "lastUpdateHuman": "2026-02-09 14:27 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,36 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12911,
+      "title": "Feature: Live Voice Mode in /chat UI (Grok Voice Loop)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12911",
+      "author": "haverAI",
+      "createdAt": "2026-02-09T22:25:47Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12910,
+      "title": "Grok (xAI) web_search provider returns 400: Argument not supported: include",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12910",
+      "author": "brandonmcninja",
+      "createdAt": "2026-02-09T22:23:09Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12909,
+      "title": "Docs: system prompt page incorrectly describes memory file injection behavior",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12909",
+      "author": "1kuna",
+      "createdAt": "2026-02-09T22:21:45Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12908,
       "title": "Request iOS test flight access",
@@ -58,36 +88,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12901",
       "author": "spaceynyc",
       "createdAt": "2026-02-09T22:03:31Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12899,
-      "title": "sessions.json grows unbounded from heartbeat entries — needs rotation / selectiv...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12899",
-      "author": "itsGustav",
-      "createdAt": "2026-02-09T22:00:49Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12895,
-      "title": "Dashboard shows recurring 'event gap detected' errors due to dropIfSlow race wit...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12895",
-      "author": "justinthericoftime",
-      "createdAt": "2026-02-09T21:57:57Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12893,
-      "title": "📱 Request iOS TestFlight Access - @fabiantaboo",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12893",
-      "author": "fabiantaboo",
-      "createdAt": "2026-02-09T21:54:04Z",
       "labels": [],
       "isNew": true
     }
@@ -178,9 +178,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "e4a04f3",
-    "message": "docs: add ci.md to Contributing navigation",
-    "date": "2026-02-09T21:58:41Z",
+    "sha": "a172ff9",
+    "message": "docs: SEO and AI discoverability improvements",
+    "date": "2026-02-09T22:20:56Z",
     "author": "quotentiroler"
   }
 }
