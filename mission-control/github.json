@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T19:51:24Z",
-  "lastUpdateHuman": "2026-02-09 11:51 Pacific",
+  "lastUpdate": "2026-02-09T19:53:11Z",
+  "lastUpdateHuman": "2026-02-09 11:53 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 0,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12838,
+      "title": "Feature Request: Auto-resize large images before LLM submission",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12838",
+      "author": "Knytro23",
+      "createdAt": "2026-02-09T19:51:23Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12836,
       "title": "[Bug] Embedded agent generates broken scripts with shell variable injection and ...",
@@ -82,16 +92,6 @@
       "createdAt": "2026-02-09T19:08:34Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12824,
-      "title": "Security Enhancements: Bot Lockdown, Model Upgrade, and Tailscale Serve",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12824",
-      "author": "paulpreibisch",
-      "createdAt": "2026-02-09T19:08:09Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
@@ -136,29 +136,7 @@
       "createdAt": "2026-02-09T18:58:00Z"
     }
   ],
-  "myPrs": [
-    {
-      "repo": "clawd",
-      "number": 10,
-      "title": "feat(dashboard): Add GitHub Activity widget - Nigh...",
-      "url": "https://github.com/adriancrook/clawd/pull/10",
-      "createdAt": "2026-02-08T07:05:27Z"
-    },
-    {
-      "repo": "edclub-explorer",
-      "number": 2,
-      "title": "📚 Docs: Revise Workflow (2-Stage + NCES Guards)",
-      "url": "https://github.com/teachingcom/edclub-explorer/pull/2",
-      "createdAt": "2026-02-05T21:13:59Z"
-    },
-    {
-      "repo": "edclub-explorer",
-      "number": 1,
-      "title": "📚 Docs: Add AI Agent Enrichment Workflow",
-      "url": "https://github.com/teachingcom/edclub-explorer/pull/1",
-      "createdAt": "2026-02-05T20:41:33Z"
-    }
-  ],
+  "myPrs": [],
   "releases": [
     {
       "tag": "v2026.2.9",
