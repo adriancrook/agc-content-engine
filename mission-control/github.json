@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:12:57Z",
-  "lastUpdateHuman": "2026-02-09 13:12 Pacific",
+  "lastUpdate": "2026-02-09T21:18:21Z",
+  "lastUpdateHuman": "2026-02-09 13:18 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12886,
+      "title": "Telegram: inline button callback uses callback.id as message_id, breaking reacti...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12886",
+      "author": "sam26880",
+      "createdAt": "2026-02-09T21:15:35Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12885,
+      "title": "OpenAI Responses API: Stale previous_response_id causes 404 'Item not found' err...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12885",
+      "author": "Realowg",
+      "createdAt": "2026-02-09T21:14:20Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12882,
       "title": "TUI leaks internal sub-agent announce messages as user messages",
@@ -68,29 +88,17 @@
       "createdAt": "2026-02-09T20:50:44Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12873,
-      "title": "iMessage plugin: Outgoing messages echo as incoming (is_from_me not filtered)",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12873",
-      "author": "nulljosh",
-      "createdAt": "2026-02-09T20:49:56Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12869,
-      "title": "Bug: OPENROUTER_DEFAULT_MODEL_REF uses invalid model path 'openrouter/auto'",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12869",
-      "author": "baccula",
-      "createdAt": "2026-02-09T20:41:12Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12884,
+      "title": "Feature/named persistent sessions",
+      "url": "https://github.com/openclaw/openclaw/pull/12884",
+      "author": "dylanb",
+      "isDraft": false,
+      "createdAt": "2026-02-09T21:13:56Z"
+    },
     {
       "number": 12883,
       "title": "feat: cron catch-up for missed scheduled jobs (#12799)",
@@ -122,14 +130,6 @@
       "author": "vincentkoc",
       "isDraft": false,
       "createdAt": "2026-02-09T20:48:06Z"
-    },
-    {
-      "number": 12871,
-      "title": "fix: use bash and warn about shell injection (issue #12836)",
-      "url": "https://github.com/openclaw/openclaw/pull/12871",
-      "author": "ambicuity",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:42:52Z"
     }
   ],
   "myPrs": [
