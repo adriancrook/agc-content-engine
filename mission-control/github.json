@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T21:28:52Z",
-  "lastUpdateHuman": "2026-02-09 13:28 Pacific",
+  "lastUpdate": "2026-02-09T21:34:09Z",
+  "lastUpdateHuman": "2026-02-09 13:34 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,28 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12888,
+      "title": "[Bug]: Sub-agent Spawning Fails with TypeError on workspace.trim()",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12888",
+      "author": "maartenhendrix",
+      "createdAt": "2026-02-09T21:33:04Z",
+      "labels": [
+        "bug"
+      ],
+      "isNew": true
+    },
+    {
+      "number": 12887,
+      "title": "Webchat UI: Hide or collapse tool call JSON in conversation view",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12887",
+      "author": "gaharrington",
+      "createdAt": "2026-02-09T21:32:59Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12886,
       "title": "Telegram: inline button callback uses callback.id as message_id, breaking reacti...",
@@ -66,26 +88,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12879",
       "author": "jhamilton0437",
       "createdAt": "2026-02-09T20:56:27Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12878,
-      "title": "[Bug]: A2UI bundle missing from Docker image — canvas/a2ui broken",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12878",
-      "author": "accek",
-      "createdAt": "2026-02-09T20:56:27Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12874,
-      "title": "[SECURITY] Command Injection Risk in Proposed Twilio-OpenClaw CLI Integration",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12874",
-      "author": "paulpreibisch",
-      "createdAt": "2026-02-09T20:50:44Z",
       "labels": [],
       "isNew": true
     }
