@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T20:51:36Z",
-  "lastUpdateHuman": "2026-02-09 12:51 Pacific",
+  "lastUpdate": "2026-02-09T20:56:56Z",
+  "lastUpdateHuman": "2026-02-09 12:56 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12879,
+      "title": "📱 Request iOS/Android TestFlight/Beta Access — @johnhamilton09",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12879",
+      "author": "jhamilton0437",
+      "createdAt": "2026-02-09T20:56:27Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12878,
+      "title": "[Bug]: A2UI bundle missing from Docker image — canvas/a2ui broken",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12878",
+      "author": "accek",
+      "createdAt": "2026-02-09T20:56:27Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12874,
       "title": "[SECURITY] Command Injection Risk in Proposed Twilio-OpenClaw CLI Integration",
@@ -68,29 +88,25 @@
       "createdAt": "2026-02-09T20:29:59Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12861,
-      "title": "URGENT SECURITY: Please delete PR #12847 containing sensitive data",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12861",
-      "author": "Deuzio-glitch",
-      "createdAt": "2026-02-09T20:29:30Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12860,
-      "title": "[Bug]: Grok (xAI) web_search provider returns \"No response\" — parser reads wrong...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12860",
-      "author": "FarzadClaw",
-      "createdAt": "2026-02-09T20:22:51Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12877,
+      "title": "fix: backfill empty toolName on toolResult messages for Gemi...",
+      "url": "https://github.com/openclaw/openclaw/pull/12877",
+      "author": "aldoeliacim",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:55:08Z"
+    },
+    {
+      "number": 12876,
+      "title": "major test workflow: enhance coverage infrastructure",
+      "url": "https://github.com/openclaw/openclaw/pull/12876",
+      "author": "Mathbkj",
+      "isDraft": false,
+      "createdAt": "2026-02-09T20:54:32Z"
+    },
     {
       "number": 12872,
       "title": "fix(ci): trim heartbeat-runner line count",
@@ -114,22 +130,6 @@
       "author": "ambicuity",
       "isDraft": false,
       "createdAt": "2026-02-09T20:42:40Z"
-    },
-    {
-      "number": 12865,
-      "title": "Merge remote-tracking branch 'origin/ci-tiered-gates-v2'",
-      "url": "https://github.com/openclaw/openclaw/pull/12865",
-      "author": "smaltLin",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:38:01Z"
-    },
-    {
-      "number": 12864,
-      "title": "fix(telegram): omit thread_id=1 for DMs to prevent cron deli...",
-      "url": "https://github.com/openclaw/openclaw/pull/12864",
-      "author": "divol89",
-      "isDraft": false,
-      "createdAt": "2026-02-09T20:37:12Z"
     }
   ],
   "myPrs": [
