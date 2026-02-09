@@ -19,6 +19,8 @@ class ArticleState(str, Enum):
     PENDING = "pending"
     RESEARCHING = "researching"
     WRITING = "writing"
+    ENRICHING = "enriching"  # DataEnrichment: finding citations, metrics, testimonials
+    REVISING = "revising"  # Writer Pass 2: integrating enrichment
     FACT_CHECKING = "fact_checking"
     SEO_OPTIMIZING = "seo_optimizing"
     HUMANIZING = "humanizing"
@@ -55,7 +57,9 @@ class Article(Base):
 
     # Pipeline data (JSON for flexibility)
     research = Column(JSON)           # {sources: [], outline: {}, gaps: []}
-    draft = Column(Text)               # Markdown content from writer
+    draft = Column(Text)               # Markdown content from writer (Pass 1)
+    enrichment = Column(JSON)          # {citations: [], metrics: [], testimonials: [], media: []}
+    revised_draft = Column(Text)       # After Writer Pass 2 with enrichment
     fact_check = Column(JSON)          # {verified: bool, issues: []}
     seo = Column(JSON)                 # {keyword: "", meta: {}, score: 0}
     final_content = Column(Text)       # After humanization

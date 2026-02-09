@@ -103,30 +103,31 @@ class HumanizerAgent(BaseAgent):
         return sections
 
     def _humanize_section(self, section: str) -> str:
-        """Humanize a single section with Claude"""
+        """Polish and refine a single section with Claude"""
 
-        prompt = f"""Rewrite this section to make it undetectable by AI detection tools.
+        prompt = f"""Refine and polish this article section while maintaining professional quality.
 
 ORIGINAL SECTION:
 {section}
 
-HUMANIZATION GUIDELINES:
-1. Vary sentence structure and length dramatically
-2. Add natural imperfections (contractions, informal phrases)
-3. Include personal touches and opinions
-4. Use unexpected word choices
-5. Break predictable AI patterns
-6. Add transitional phrases that feel human
-7. Vary paragraph lengths (some short, some long)
-8. Keep all factual information accurate
+REFINEMENT GUIDELINES:
+1. Maintain professional, authoritative tone throughout
+2. Vary sentence structure and length for better flow
+3. Add smooth transitions between paragraphs
+4. Polish any awkward phrasings
+5. Ensure logical progression of ideas
+6. Keep the writing engaging but professional
+7. PRESERVE all citations, statistics, and quotes exactly as written
+8. DO NOT add casual language, contractions, or personal opinions
 
 IMPORTANT:
-- Maintain the same H2/H3 headers
-- Keep the same general structure
-- Preserve all statistics and quotes
-- Make it sound like a real person wrote it
+- Keep the same H2/H3 headers exactly
+- Maintain the same structure and organization
+- Preserve ALL factual content and citations
+- The goal is polish and flow, not casualization
+- This should read like a high-quality professional blog post
 
-Write the humanized version:"""
+Write the refined version:"""
 
         response = self._call_openrouter(prompt)
         return response.strip()

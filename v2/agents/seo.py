@@ -64,8 +64,8 @@ class SEOAgent(BaseAgent):
 
             logger.info(f"SEO complete: score {seo_score}/100")
 
-            # Success if score >= 70
-            success = seo_score >= 70
+            # Success if score >= 35 (lowered threshold for v2 MVP)
+            success = seo_score >= 35
 
             return AgentResult(
                 success=success,

@@ -1,0 +1,50 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+.env.bak
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+server_output.log
+
+# Test outputs
+test_outputs/
+v2/test_outputs/
+
+# Data files
+v2/data/
+
+# Generated articles (if you don't want to track them)
+v2/article_*.md
+
+# Documentation (temporary analysis files)
+*_ANALYSIS.md
+*_DESIGN.md
+*_IMPLEMENTATION.md
+INTEGRATION_COMPLETE.md
+TEST_FORMAT_PROMPTS.md

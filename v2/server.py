@@ -9,9 +9,13 @@ import os
 from contextlib import asynccontextmanager
 from typing import List
 
+from dotenv import load_dotenv
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
+
+# Load .env file
+load_dotenv()
 
 from database.db import Database
 from database.models import Article, Topic, ArticleState
@@ -19,6 +23,7 @@ from engine.state_machine import StateMachineEngine
 from agents.mock_agent import MockAgent
 from agents.research import ResearchAgent
 from agents.writer import WriterAgent
+from agents.data_enrichment import DataEnrichmentAgent
 from agents.fact_checker import FactCheckerAgent
 from agents.seo import SEOAgent
 from agents.humanizer import HumanizerAgent
@@ -57,16 +62,18 @@ async def lifespan(app: FastAPI):
     google_api_key = os.getenv("GOOGLE_API_KEY")
     use_real_agents = os.getenv("USE_REAL_AGENTS", "false").lower() == "true"
 
-    if use_real_agents and brave_api_key:
-        # Real agents configuration
+    if use_real_agents and brave_api_key and openrouter_api_key:
+        # Real agents configuration (requires Brave + OpenRouter)
         logger.info("Initializing REAL agents...")
 
-        # Free agents (Ollama + Brave)
+        # Core agents (Brave for research, Claude for writing, enrichment, revision)
         agents = {
-            ArticleState.PENDING: ResearchAgent({"brave_api_key": brave_api_key}),
-            ArticleState.RESEARCHING: WriterAgent(),
-            ArticleState.WRITING: FactCheckerAgent(),
-            ArticleState.FACT_CHECKING: SEOAgent(),
+            ArticleState.RESEARCHING: ResearchAgent({"brave_api_key": brave_api_key}),
+            ArticleState.WRITING: WriterAgent({"openrouter_api_key": openrouter_api_key, "pass_type": "draft"}),
+            ArticleState.ENRICHING: DataEnrichmentAgent({"brave_api_key": brave_api_key, "openrouter_api_key": openrouter_api_key}),
+            ArticleState.REVISING: WriterAgent({"openrouter_api_key": openrouter_api_key, "pass_type": "revision"}),
+            ArticleState.FACT_CHECKING: FactCheckerAgent(),
+            ArticleState.SEO_OPTIMIZING: SEOAgent(),
         }
 
         # Paid agents (optional)
@@ -86,15 +93,18 @@ async def lifespan(app: FastAPI):
 
         agents[ArticleState.MEDIA_GENERATING] = MockAgent()
 
-        logger.info("✓ Agents ready: 4 free + {} paid".format(
-            sum([1 for k in [openrouter_api_key, google_api_key] if k])
-        ))
+        # Count paid agents: Writer (Claude) + Humanizer (Claude) + Media (Gemini if available)
+        paid_count = 2  # Writer + Humanizer
+        if google_api_key:
+            paid_count += 1
+        logger.info(f"✓ Agents ready: Research (Brave) + Writer (Claude) + Fact/SEO (Ollama) + Humanizer (Claude) + Media ({'Gemini' if google_api_key else 'Mock'})")
     else:
         # Mock agents for testing
         agents = {
-            ArticleState.PENDING: MockAgent(),
             ArticleState.RESEARCHING: MockAgent(),
             ArticleState.WRITING: MockAgent(),
+            ArticleState.ENRICHING: MockAgent(),
+            ArticleState.REVISING: MockAgent(),
             ArticleState.FACT_CHECKING: MockAgent(),
             ArticleState.SEO_OPTIMIZING: MockAgent(),
             ArticleState.HUMANIZING: MockAgent(),
@@ -179,6 +189,8 @@ async def get_article(article_id: str):
         "state": article.state,
         "research": article.research,
         "draft": article.draft,
+        "enrichment": article.enrichment,  # Added for DataEnrichment
+        "revised_draft": article.revised_draft,  # Added for Writer Pass 2
         "fact_check": article.fact_check,
         "seo": article.seo,
         "final_content": article.final_content,

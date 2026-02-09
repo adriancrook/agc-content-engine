@@ -117,7 +117,7 @@ class Database:
             article = Article(
                 topic_id=topic_id,
                 title=topic.title,
-                state=ArticleState.PENDING
+                state=ArticleState.RESEARCHING  # Start directly in RESEARCHING
             )
             session.add(article)
             session.commit()

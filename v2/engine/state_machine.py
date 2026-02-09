@@ -23,7 +23,9 @@ class StateMachineEngine:
     TRANSITIONS = {
         ArticleState.PENDING: ArticleState.RESEARCHING,
         ArticleState.RESEARCHING: ArticleState.WRITING,
-        ArticleState.WRITING: ArticleState.FACT_CHECKING,
+        ArticleState.WRITING: ArticleState.ENRICHING,
+        ArticleState.ENRICHING: ArticleState.REVISING,
+        ArticleState.REVISING: ArticleState.FACT_CHECKING,
         ArticleState.FACT_CHECKING: ArticleState.SEO_OPTIMIZING,
         ArticleState.SEO_OPTIMIZING: ArticleState.HUMANIZING,
         ArticleState.HUMANIZING: ArticleState.MEDIA_GENERATING,
