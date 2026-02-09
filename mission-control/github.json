@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T22:32:17Z",
-  "lastUpdateHuman": "2026-02-09 14:32 Pacific",
+  "lastUpdate": "2026-02-09T22:37:31Z",
+  "lastUpdateHuman": "2026-02-09 14:37 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12915,
+      "title": "📱 Request iOS TestFlight Access - @enki",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12915",
+      "author": "octaviofroid",
+      "createdAt": "2026-02-09T22:34:45Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12914,
       "title": "Feature Request: message:sent and message:received hook events for output valida...",
@@ -78,16 +88,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12904",
       "author": "DrCrinkle",
       "createdAt": "2026-02-09T22:16:30Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12903,
-      "title": "Telegram streaming breaks when chunkMode splits messages",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12903",
-      "author": "Littlericket",
-      "createdAt": "2026-02-09T22:13:08Z",
       "labels": [],
       "isNew": true
     }
