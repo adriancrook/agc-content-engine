@@ -17,7 +17,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from shared.database import (
     init_db, get_topics, create_topic, update_topic, approve_topic, decline_topic, delete_topic,
-    count_topics_by_status, get_pending_tasks, create_task, claim_task, complete_task,
+    count_topics_by_status, get_pending_tasks, get_active_tasks, create_task, claim_task, complete_task,
     fail_task, get_articles, create_article, update_article, get_setting, set_setting
 )
 
@@ -140,6 +140,13 @@ def api_generate_topics():
 def api_pending_tasks():
     limit = int(request.args.get("limit", 10))
     return jsonify(get_pending_tasks(limit=limit))
+
+
+@app.route("/api/tasks/active")
+def api_active_tasks():
+    """Returns both pending and processing tasks for dashboard visibility"""
+    limit = int(request.args.get("limit", 50))
+    return jsonify(get_active_tasks(limit=limit))
 
 
 @app.route("/api/tasks", methods=["POST"])

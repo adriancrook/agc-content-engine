@@ -195,6 +195,15 @@ def get_pending_tasks(limit: int = 10) -> List[Dict]:
         return [{"id": t.id, "type": t.type, "payload": t.payload, "article_id": t.article_id} for t in tasks]
 
 
+def get_active_tasks(limit: int = 50) -> List[Dict]:
+    """Get both pending and processing tasks for dashboard visibility"""
+    with get_session() as session:
+        tasks = session.query(Task).filter(Task.status.in_(["pending", "processing"])).order_by(Task.created_at).limit(limit).all()
+        return [{"id": t.id, "type": t.type, "payload": t.payload, "article_id": t.article_id,
+                 "status": t.status, "worker_id": t.worker_id, "started_at": t.started_at.isoformat() if t.started_at else None,
+                 "updated_at": t.updated_at.isoformat() if t.updated_at else None} for t in tasks]
+
+
 def claim_task(task_id: str, worker_id: str) -> Optional[Dict]:
     """Atomically claim a task for a worker"""
     with get_session() as session:

@@ -39,9 +39,9 @@ class AGCAdapter {
 
     async fetchTasks() {
         try {
-            const res = await fetch(`${this.apiUrl}/api/tasks/pending`);
-            const pending = await res.json();
-            this.currentTasks = pending;
+            const res = await fetch(`${this.apiUrl}/api/tasks/active`);
+            const activeTasks = await res.json();
+            this.currentTasks = activeTasks;
             return this.currentTasks;
         } catch (e) {
             console.error('Failed to fetch tasks:', e);
