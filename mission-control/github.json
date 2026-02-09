@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T20:24:57Z",
-  "lastUpdateHuman": "2026-02-09 12:24 Pacific",
+  "lastUpdate": "2026-02-09T20:30:21Z",
+  "lastUpdateHuman": "2026-02-09 12:30 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12862,
+      "title": "SECURITY: Please delete PR #12847 — leaked credentials",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12862",
+      "author": "Deuzio-glitch",
+      "createdAt": "2026-02-09T20:29:59Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12861,
+      "title": "URGENT SECURITY: Please delete PR #12847 containing sensitive data",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12861",
+      "author": "Deuzio-glitch",
+      "createdAt": "2026-02-09T20:29:30Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12860,
       "title": "[Bug]: Grok (xAI) web_search provider returns \"No response\" — parser reads wrong...",
@@ -66,28 +86,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12855",
       "author": "jarvislanou",
       "createdAt": "2026-02-09T20:21:10Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12854,
-      "title": "[Bug]: Extensions using CJS dependencies fail with \"require is not defined\"",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12854",
-      "author": "lukeboyett",
-      "createdAt": "2026-02-09T20:15:19Z",
-      "labels": [
-        "bug"
-      ],
-      "isNew": true
-    },
-    {
-      "number": 12853,
-      "title": "Matrix plugin ships workspace:* dependency, breaks npm install",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12853",
-      "author": "michaelgtallia",
-      "createdAt": "2026-02-09T20:14:06Z",
       "labels": [],
       "isNew": true
     }
