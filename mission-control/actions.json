@@ -1,0 +1,41 @@
+{
+  "actions": [
+    {
+      "id": "overnight-build",
+      "name": "🌙 Overnight Build",
+      "description": "Run the overnight build session",
+      "shortcut": "1",
+      "cronJob": "overnight-build"
+    },
+    {
+      "id": "check-comms",
+      "name": "📬 Check Communications",
+      "description": "Check email and Instagram DMs",
+      "shortcut": "2",
+      "command": "Check my email and Instagram DMs"
+    },
+    {
+      "id": "morning-briefing",
+      "name": "☀️ Morning Briefing",
+      "description": "Get a summary of what's going on",
+      "shortcut": "3",
+      "cronJob": "morning-briefing"
+    },
+    {
+      "id": "tesla-search",
+      "name": "🚗 Tesla Search",
+      "description": "Run the Tesla marketplace search",
+      "shortcut": "4",
+      "cronJob": "tesla-daily-monitor"
+    },
+    {
+      "id": "refresh-dashboard",
+      "name": "🔄 Refresh Dashboard",
+      "description": "Manually refresh dashboard data",
+      "shortcut": "r",
+      "command": "Refresh the Mission Control dashboard"
+    }
+  ],
+  "telegramBot": "clawdbot",
+  "helpText": "Click to copy command, then send to Kit on Telegram"
+}

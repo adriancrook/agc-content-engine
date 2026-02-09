@@ -1,0 +1,18 @@
+{
+  "email": {
+    "account": "kit@adriancrook.com",
+    "unread": 0,
+    "important": 0,
+    "lastCheck": 1770015698,
+    "lastCheckHuman": "2026-02-02 07:01 Pacific",
+    "status": "ok"
+  },
+  "instagram": {
+    "account": "@adriancrookinc",
+    "unread": 0,
+    "lastCheck": 1770015698,
+    "lastCheckHuman": "2026-02-02 07:01 Pacific",
+    "status": "ok"
+  },
+  "notes": "Checks run during heartbeat polls (2-3x daily). Status dot: 🟢 fresh, 🟡 stale (>2h), 🔴 old (>8h)"
+}

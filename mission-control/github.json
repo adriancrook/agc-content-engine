@@ -1,0 +1,184 @@
+{
+  "lastUpdate": "2026-02-08T07:42:43Z",
+  "lastUpdateHuman": "2026-02-07 23:42 Pacific",
+  "repo": "clawdbot/clawdbot",
+  "summary": {
+    "openIssues": 1000,
+    "openedToday": 0,
+    "closedToday": 0,
+    "trend": 0
+  },
+  "issues": [
+    {
+      "number": 11744,
+      "title": "meta.lastTouchedAt config changes trigger unnecessary full gateway restarts",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11744",
+      "author": "nydamon",
+      "createdAt": "2026-02-08T07:41:03Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 11741,
+      "title": "Allow sub-agents to spawn sub-agents (configurable, not hardcoded block)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11741",
+      "author": "InsipidPoint",
+      "createdAt": "2026-02-08T07:36:17Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 11739,
+      "title": "[Bug]: BlueBubbles webhook loopback address authentication bypass",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11739",
+      "author": "coygeek",
+      "createdAt": "2026-02-08T07:35:55Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 11738,
+      "title": "[Bug]: Canvas authorization IP co-tenancy bypass via hasAuthorizedWsClientForIp",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11738",
+      "author": "coygeek",
+      "createdAt": "2026-02-08T07:35:52Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 11735,
+      "title": "[Bug] Agent read tool returns image but not sent to Telegram channel",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11735",
+      "author": "khanhbkqt",
+      "createdAt": "2026-02-08T07:34:31Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 11728,
+      "title": "fix(memory): DB deletion should force full session reindex",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11728",
+      "author": "jlian",
+      "createdAt": "2026-02-08T07:11:38Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 11727,
+      "title": "memory_search returns empty results despite indexed chunks",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11727",
+      "author": "b100to",
+      "createdAt": "2026-02-08T07:08:15Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 11726,
+      "title": "Cron jobs with sessionTarget: \"main\" inject systemEvent but don't trigger agent ...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/11726",
+      "author": "bennyaph1211",
+      "createdAt": "2026-02-08T07:07:35Z",
+      "labels": [],
+      "isNew": true
+    }
+  ],
+  "prs": [
+    {
+      "number": 11743,
+      "title": "fix: remove redundant file reads from AGENTS.md template",
+      "url": "https://github.com/openclaw/openclaw/pull/11743",
+      "author": "shogunsea",
+      "isDraft": false,
+      "createdAt": "2026-02-08T07:39:44Z"
+    },
+    {
+      "number": 11742,
+      "title": "fix(bluebubbles): remove loopback address auth bypass in web...",
+      "url": "https://github.com/openclaw/openclaw/pull/11742",
+      "author": "coygeek",
+      "isDraft": false,
+      "createdAt": "2026-02-08T07:36:19Z"
+    },
+    {
+      "number": 11740,
+      "title": "fix(gateway): remove IP-based canvas auth fallback",
+      "url": "https://github.com/openclaw/openclaw/pull/11740",
+      "author": "coygeek",
+      "isDraft": false,
+      "createdAt": "2026-02-08T07:36:11Z"
+    },
+    {
+      "number": 11737,
+      "title": "feat(skills): add PIV and mini-PIV structured development sk...",
+      "url": "https://github.com/openclaw/openclaw/pull/11737",
+      "author": "SmokeAlot420",
+      "isDraft": false,
+      "createdAt": "2026-02-08T07:35:07Z"
+    },
+    {
+      "number": 11734,
+      "title": "CLI: scope /model and /new prompt messaging to fallback-only...",
+      "url": "https://github.com/openclaw/openclaw/pull/11734",
+      "author": "arimendelow",
+      "isDraft": true,
+      "createdAt": "2026-02-08T07:31:15Z"
+    }
+  ],
+  "myPrs": [
+    {
+      "repo": "clawd",
+      "number": 10,
+      "title": "feat(dashboard): Add GitHub Activity widget - Nigh...",
+      "url": "https://github.com/adriancrook/clawd/pull/10",
+      "createdAt": "2026-02-08T07:05:27Z"
+    },
+    {
+      "repo": "edclub-explorer",
+      "number": 2,
+      "title": "📚 Docs: Revise Workflow (2-Stage + NCES Guards)",
+      "url": "https://github.com/teachingcom/edclub-explorer/pull/2",
+      "createdAt": "2026-02-05T21:13:59Z"
+    },
+    {
+      "repo": "edclub-explorer",
+      "number": 1,
+      "title": "📚 Docs: Add AI Agent Enrichment Workflow",
+      "url": "https://github.com/teachingcom/edclub-explorer/pull/1",
+      "createdAt": "2026-02-05T20:41:33Z"
+    }
+  ],
+  "releases": [
+    {
+      "tag": "v2026.2.6",
+      "name": "openclaw 2026.2.6",
+      "date": "2026-02-07T02:27:43Z",
+      "isPrerelease": false
+    },
+    {
+      "tag": "v2026.2.3",
+      "name": "openclaw 2026.2.3",
+      "date": "2026-02-05T01:57:22Z",
+      "isPrerelease": false
+    },
+    {
+      "tag": "v2026.2.2",
+      "name": "openclaw 2026.2.2",
+      "date": "2026-02-04T01:05:25Z",
+      "isPrerelease": false
+    }
+  ],
+  "lastCommit": {
+    "sha": "b75d618",
+    "message": "fix(doctor): suppress repeated legacy state migration warnin",
+    "date": "2026-02-08T07:27:49Z",
+    "author": "Gustavo Madeira Santana"
+  }
+}

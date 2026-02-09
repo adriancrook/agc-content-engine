@@ -1,0 +1,20 @@
+{
+  "clients": [
+    {
+      "name": "Realize VR",
+      "invoiceId": "RVR-2026-001",
+      "amount": 2500,
+      "currency": "USD",
+      "dueDate": "2026-02-15",
+      "status": "pending",
+      "sentDate": "2026-01-15",
+      "notes": "Monthly consulting retainer"
+    }
+  ],
+  "settings": {
+    "warningDays": 7,
+    "alertDays": 0,
+    "currency": "USD"
+  },
+  "lastUpdated": "2026-02-05T23:00:00-08:00"
+}
