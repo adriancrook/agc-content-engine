@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-08T07:42:43Z",
-  "lastUpdateHuman": "2026-02-07 23:42 Pacific",
+  "lastUpdate": "2026-02-09T19:05:03Z",
+  "lastUpdateHuman": "2026-02-09 11:05 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -10,126 +10,130 @@
   },
   "issues": [
     {
-      "number": 11744,
-      "title": "meta.lastTouchedAt config changes trigger unnecessary full gateway restarts",
+      "number": 12821,
+      "title": "WhatsApp: filename param ignored when sending documents via message tool",
       "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11744",
-      "author": "nydamon",
-      "createdAt": "2026-02-08T07:41:03Z",
+      "url": "https://github.com/openclaw/openclaw/issues/12821",
+      "author": "JAValente7",
+      "createdAt": "2026-02-09T19:01:46Z",
       "labels": [],
       "isNew": true
     },
     {
-      "number": 11741,
-      "title": "Allow sub-agents to spawn sub-agents (configurable, not hardcoded block)",
+      "number": 12811,
+      "title": "[Feature]: ctx.accountId undefined in plugin command handlers",
       "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11741",
-      "author": "InsipidPoint",
-      "createdAt": "2026-02-08T07:36:17Z",
+      "url": "https://github.com/openclaw/openclaw/issues/12811",
+      "author": "habib256",
+      "createdAt": "2026-02-09T18:31:33Z",
+      "labels": [
+        "enhancement"
+      ],
+      "isNew": true
+    },
+    {
+      "number": 12807,
+      "title": "[Bug] voice-call plugin: EADDRINUSE port conflict when initiating calls",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12807",
+      "author": "Banzai8",
+      "createdAt": "2026-02-09T18:20:51Z",
       "labels": [],
       "isNew": true
     },
     {
-      "number": 11739,
-      "title": "[Bug]: BlueBubbles webhook loopback address authentication bypass",
+      "number": 12805,
+      "title": "RFC: Programmatic Job System — Oban-inspired background jobs without LLM calls",
       "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11739",
-      "author": "coygeek",
-      "createdAt": "2026-02-08T07:35:55Z",
+      "url": "https://github.com/openclaw/openclaw/issues/12805",
+      "author": "TinyTb",
+      "createdAt": "2026-02-09T18:19:15Z",
       "labels": [],
       "isNew": true
     },
     {
-      "number": 11738,
-      "title": "[Bug]: Canvas authorization IP co-tenancy bypass via hasAuthorizedWsClientForIp",
+      "number": 12799,
+      "title": "Feature Request: Cron catch-up for missed scheduled jobs",
       "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11738",
-      "author": "coygeek",
-      "createdAt": "2026-02-08T07:35:52Z",
+      "url": "https://github.com/openclaw/openclaw/issues/12799",
+      "author": "milocoreai",
+      "createdAt": "2026-02-09T17:59:35Z",
       "labels": [],
       "isNew": true
     },
     {
-      "number": 11735,
-      "title": "[Bug] Agent read tool returns image but not sent to Telegram channel",
+      "number": 12797,
+      "title": "Feature: Debounce/Batch incoming Telegram messages (handle forwarded posts + com...",
       "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11735",
-      "author": "khanhbkqt",
-      "createdAt": "2026-02-08T07:34:31Z",
+      "url": "https://github.com/openclaw/openclaw/issues/12797",
+      "author": "Vovch0",
+      "createdAt": "2026-02-09T17:56:38Z",
       "labels": [],
       "isNew": true
     },
     {
-      "number": 11728,
-      "title": "fix(memory): DB deletion should force full session reindex",
+      "number": 12789,
+      "title": "Connection persistence issue: drops on screen lock, audio unrecoverable",
       "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11728",
-      "author": "jlian",
-      "createdAt": "2026-02-08T07:11:38Z",
+      "url": "https://github.com/openclaw/openclaw/issues/12789",
+      "author": "drclausen",
+      "createdAt": "2026-02-09T17:47:09Z",
       "labels": [],
       "isNew": true
     },
     {
-      "number": 11727,
-      "title": "memory_search returns empty results despite indexed chunks",
+      "number": 12787,
+      "title": "[Feature]: Slack Indicator when typing",
       "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11727",
-      "author": "b100to",
-      "createdAt": "2026-02-08T07:08:15Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 11726,
-      "title": "Cron jobs with sessionTarget: \"main\" inject systemEvent but don't trigger agent ...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/11726",
-      "author": "bennyaph1211",
-      "createdAt": "2026-02-08T07:07:35Z",
-      "labels": [],
+      "url": "https://github.com/openclaw/openclaw/issues/12787",
+      "author": "dcrowder147",
+      "createdAt": "2026-02-09T17:42:11Z",
+      "labels": [
+        "enhancement"
+      ],
       "isNew": true
     }
   ],
   "prs": [
     {
-      "number": 11743,
-      "title": "fix: remove redundant file reads from AGENTS.md template",
-      "url": "https://github.com/openclaw/openclaw/pull/11743",
-      "author": "shogunsea",
-      "isDraft": false,
-      "createdAt": "2026-02-08T07:39:44Z"
-    },
-    {
-      "number": 11742,
-      "title": "fix(bluebubbles): remove loopback address auth bypass in web...",
-      "url": "https://github.com/openclaw/openclaw/pull/11742",
-      "author": "coygeek",
-      "isDraft": false,
-      "createdAt": "2026-02-08T07:36:19Z"
-    },
-    {
-      "number": 11740,
-      "title": "fix(gateway): remove IP-based canvas auth fallback",
-      "url": "https://github.com/openclaw/openclaw/pull/11740",
-      "author": "coygeek",
-      "isDraft": false,
-      "createdAt": "2026-02-08T07:36:11Z"
-    },
-    {
-      "number": 11737,
-      "title": "feat(skills): add PIV and mini-PIV structured development sk...",
-      "url": "https://github.com/openclaw/openclaw/pull/11737",
-      "author": "SmokeAlot420",
-      "isDraft": false,
-      "createdAt": "2026-02-08T07:35:07Z"
-    },
-    {
-      "number": 11734,
-      "title": "CLI: scope /model and /new prompt messaging to fallback-only...",
-      "url": "https://github.com/openclaw/openclaw/pull/11734",
-      "author": "arimendelow",
+      "number": 12820,
+      "title": "Dench Filesystem-First CRM via OpenClaw",
+      "url": "https://github.com/openclaw/openclaw/pull/12820",
+      "author": "kumarabhirup",
       "isDraft": true,
-      "createdAt": "2026-02-08T07:31:15Z"
+      "createdAt": "2026-02-09T18:58:00Z"
+    },
+    {
+      "number": 12819,
+      "title": "docs(hooks): document plugin hook names and clarify naming",
+      "url": "https://github.com/openclaw/openclaw/pull/12819",
+      "author": "JBrady",
+      "isDraft": false,
+      "createdAt": "2026-02-09T18:53:40Z"
+    },
+    {
+      "number": 12818,
+      "title": "docs(messages): clarify message tool ordering vs inline repl...",
+      "url": "https://github.com/openclaw/openclaw/pull/12818",
+      "author": "JBrady",
+      "isDraft": false,
+      "createdAt": "2026-02-09T18:48:28Z"
+    },
+    {
+      "number": 12817,
+      "title": "feat: add shell helpers for OpenClaw development",
+      "url": "https://github.com/openclaw/openclaw/pull/12817",
+      "author": "Olshansk",
+      "isDraft": true,
+      "createdAt": "2026-02-09T18:44:30Z"
+    },
+    {
+      "number": 12816,
+      "title": "fix: align extension tests and fetch typing for gate stabili...",
+      "url": "https://github.com/openclaw/openclaw/pull/12816",
+      "author": "sebslight",
+      "isDraft": false,
+      "createdAt": "2026-02-09T18:42:01Z"
     }
   ],
   "myPrs": [
@@ -176,9 +180,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "b75d618",
-    "message": "fix(doctor): suppress repeated legacy state migration warnin",
-    "date": "2026-02-08T07:27:49Z",
-    "author": "Gustavo Madeira Santana"
+    "sha": "33c75cb",
+    "message": "chore(extensions): mark bundled packages private",
+    "date": "2026-02-09T18:56:04Z",
+    "author": "Peter Steinberger"
   }
 }

@@ -5,7 +5,7 @@
     "status": "online",
     "statusText": "Watching over things"
   },
-  "lastSync": "2026-02-08T07:42:34.354Z",
+  "lastSync": "2026-02-09T19:04:04.877Z",
   "notionUrl": "https://www.notion.so/be60b425a2ad40099338723024c839fd",
   "tasks": {
     "todo": [],
@@ -14,6 +14,15 @@
     "archived": []
   },
   "scheduledJobs": [
+    {
+      "name": "overnight-build",
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 23 * * *",
+        "tz": "America/Vancouver"
+      },
+      "description": ""
+    },
     {
       "name": "build-accountability",
       "schedule": {
@@ -42,19 +51,10 @@
       "description": ""
     },
     {
-      "name": "tesla-daily-monitor",
+      "name": "x-daily-briefing",
       "schedule": {
         "kind": "cron",
-        "expr": "0 10 * * *",
-        "tz": "America/Vancouver"
-      },
-      "description": ""
-    },
-    {
-      "name": "overnight-build",
-      "schedule": {
-        "kind": "cron",
-        "expr": "0 23 * * *",
+        "expr": "0 9 * * *",
         "tz": "America/Vancouver"
       },
       "description": ""
@@ -62,34 +62,29 @@
   ],
   "actionLog": [
     {
-      "time": "2026-02-07T23:06:02-08:00",
-      "action": "📝 Log overnight build Night 10 - GitHub Activity widget",
-      "source": "git"
-    },
-    {
-      "time": "2026-02-07T23:05:04-08:00",
-      "action": "feat(dashboard): Add GitHub Activity widget",
-      "source": "git"
-    },
-    {
-      "time": "2026-02-07T23:04:36-08:00",
+      "time": "2026-02-09T10:57:11-08:00",
       "action": "📊 Auto-update dashboard data",
       "source": "git"
     },
     {
-      "time": "2026-02-07T22:55:35-08:00",
-      "action": "📝 Daily log: DreamDrop toon shaders, Red Deer discovery",
+      "time": "2026-02-09T10:54:49-08:00",
+      "action": "📊 Update GitHub activity",
       "source": "git"
     },
     {
-      "time": "2026-02-07T15:40:39-08:00",
-      "action": "🚗 Add Facebook Marketplace to Tesla search sources",
+      "time": "2026-02-09T10:49:29-08:00",
+      "action": "📊 Auto-update dashboard data",
       "source": "git"
     },
     {
-      "time": "2026-02-07T12:00:00Z",
-      "action": "DreamDrop Toon Shader Implementation 🎨",
-      "source": "memory"
+      "time": "2026-02-09T10:49:27-08:00",
+      "action": "📊 Update GitHub activity",
+      "source": "git"
+    },
+    {
+      "time": "2026-02-09T10:44:13-08:00",
+      "action": "📊 Auto-update dashboard data",
+      "source": "git"
     }
   ],
   "notes": [
