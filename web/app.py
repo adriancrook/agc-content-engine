@@ -160,7 +160,18 @@ def api_claim_task(task_id):
 @app.route("/api/tasks/<task_id>/complete", methods=["POST"])
 def api_complete_task(task_id):
     data = request.json or {}
-    result = complete_task(task_id, data.get("result", {}))
+    task_result = data.get("result", {})
+    result = complete_task(task_id, task_result)
+    
+    # If this was a write task, update the article with the draft
+    if result and "draft" in task_result:
+        # Get the task to find the article_id
+        from shared.database import get_session, Task
+        with get_session() as session:
+            task = session.query(Task).filter_by(id=task_id).first()
+            if task and task.article_id:
+                update_article(task.article_id, {"content": task_result["draft"], "status": "written"})
+    
     return jsonify(result) if result else ("Not found", 404)
 
 
