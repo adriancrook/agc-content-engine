@@ -1,0 +1,35 @@
+{
+  "agent": {
+    "name": "Kit",
+    "emoji": "🦊",
+    "status": "online",
+    "statusText": "Running on Mac Mini M4"
+  },
+  "lastSync": "2026-02-08T20:50:00-08:00",
+  "tasks": {
+    "todo": [
+      {"title": "Daily Tesla search (Kijiji, Craigslist, FB)", "date": "Recurring"},
+      {"title": "Check kit@adriancrook.com", "date": "2-3x daily"}
+    ],
+    "inProgress": [
+      {"title": "Mission Control Dashboard", "date": "Feb 8"}
+    ],
+    "done": [
+      {"title": "SOUL.md rewrite with personality", "date": "Feb 8"},
+      {"title": "Maine Coon search - COMPLETE (Saffron!)", "date": "Jan 31"}
+    ],
+    "archived": []
+  },
+  "scheduledJobs": [
+    {"name": "Overnight Builds", "schedule": "11pm Pacific nightly", "description": "Build something useful while Adrian sleeps"},
+    {"name": "Heartbeat checks", "schedule": "Every 30 min", "description": "Email, calendar, Tesla listings"}
+  ],
+  "actionLog": [
+    {"time": "2026-02-08T20:41:00-08:00", "action": "Rewrote SOUL.md with strong personality"},
+    {"time": "2026-02-08T16:53:00-08:00", "action": "Deployed AGC pixel dashboard to Railway"}
+  ],
+  "notes": [
+    "Draft approval required for ALL external messages",
+    "Adrian's waking hours: 5am - 10pm Pacific"
+  ]
+}

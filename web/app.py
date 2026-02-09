@@ -321,7 +321,72 @@ def dashboard_js(filename):
     return send_from_directory(str(DASHBOARD_DIR / "js"), filename)
 
 
+# ========================================
+# KIT MISSION CONTROL (Password Protected)
+# ========================================
+
+MISSION_CONTROL_DIR = Path(__file__).resolve().parent.parent / "mission-control"
+KIT_PASSWORD = os.environ.get("KIT_PASSWORD", "kitfox2026")
+
+from flask import session, redirect, url_for
+from functools import wraps
+
+def kit_auth_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        if not session.get("kit_authenticated"):
+            return redirect(url_for("kit_login"))
+        return f(*args, **kwargs)
+    return decorated
+
+@app.route("/kit/login", methods=["GET", "POST"])
+def kit_login():
+    if request.method == "POST":
+        if request.form.get("password") == KIT_PASSWORD:
+            session["kit_authenticated"] = True
+            session.permanent = True
+            return redirect(url_for("kit_dashboard"))
+        return """
+        <!DOCTYPE html>
+        <html><head><title>Kit Login</title>
+        <style>body{background:#1a1a2e;color:#e4e4e7;font-family:system-ui;display:flex;justify-content:center;align-items:center;min-height:100vh}
+        .box{background:rgba(255,255,255,0.05);padding:40px;border-radius:16px;text-align:center}
+        input{padding:12px;border:none;border-radius:8px;margin:10px 0;width:200px;background:#2a2a4e;color:#fff}
+        button{padding:12px 24px;border:none;border-radius:8px;background:#ff6b35;color:#fff;cursor:pointer;font-weight:bold}
+        .error{color:#ef4444;margin-bottom:10px}</style></head>
+        <body><div class="box"><h2>🦊 Kit Mission Control</h2><p class="error">Wrong password</p>
+        <form method="post"><input type="password" name="password" placeholder="Password" autofocus>
+        <br><button type="submit">Enter</button></form></div></body></html>
+        """
+    return """
+    <!DOCTYPE html>
+    <html><head><title>Kit Login</title>
+    <style>body{background:#1a1a2e;color:#e4e4e7;font-family:system-ui;display:flex;justify-content:center;align-items:center;min-height:100vh}
+    .box{background:rgba(255,255,255,0.05);padding:40px;border-radius:16px;text-align:center}
+    input{padding:12px;border:none;border-radius:8px;margin:10px 0;width:200px;background:#2a2a4e;color:#fff}
+    button{padding:12px 24px;border:none;border-radius:8px;background:#ff6b35;color:##fff;cursor:pointer;font-weight:bold}</style></head>
+    <body><div class="box"><h2>🦊 Kit Mission Control</h2>
+    <form method="post"><input type="password" name="password" placeholder="Password" autofocus>
+    <br><button type="submit">Enter</button></form></div></body></html>
+    """
+
+@app.route("/kit")
+@app.route("/kit/")
+@kit_auth_required
+def kit_dashboard():
+    if not MISSION_CONTROL_DIR.exists():
+        return f"Mission Control not found at {MISSION_CONTROL_DIR}", 404
+    return send_from_directory(str(MISSION_CONTROL_DIR), "index.html")
+
+@app.route("/kit/<path:filename>")
+@kit_auth_required
+def kit_static(filename):
+    return send_from_directory(str(MISSION_CONTROL_DIR), filename)
+
+
 if __name__ == "__main__":
+    from datetime import timedelta
+    app.permanent_session_lifetime = timedelta(days=30)
     port = int(os.environ.get("PORT", 8080))
     print(f"🚀 AGC Content Engine")
     print(f"   http://0.0.0.0:{port}")

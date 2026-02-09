@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kit Mission Control</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #e4e4e7;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+      padding: 20px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      backdrop-filter: blur(10px);
+    }
+    
+    .agent-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .avatar {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #ff6b35, #f7931e);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+    }
+    
+    .agent-name {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 14px;
+      color: #a1a1aa;
+    }
+    
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 10px #22c55e;
+    }
+    
+    .status-dot.idle { background: #eab308; box-shadow: 0 0 10px #eab308; }
+    .status-dot.offline { background: #ef4444; box-shadow: 0 0 10px #ef4444; }
+    
+    .sync-info {
+      text-align: right;
+      font-size: 13px;
+      color: #71717a;
+    }
+    
+    .board {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+    
+    @media (max-width: 1200px) { .board { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 700px) { .board { grid-template-columns: 1fr; } }
+    
+    .column {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    
+    .column-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-weight: 600;
+    }
+    
+    .column-header .icon { font-size: 16px; }
+    .column.todo .column-header { color: #f472b6; }
+    .column.in-progress .column-header { color: #fbbf24; }
+    .column.done .column-header { color: #4ade80; }
+    .column.archived .column-header { color: #a1a1aa; }
+    
+    .task {
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 10px;
+      border-left: 3px solid transparent;
+      transition: transform 0.2s, background 0.2s;
+    }
+    
+    .task:hover {
+      background: rgba(255,255,255,0.08);
+      transform: translateX(3px);
+    }
+    
+    .column.todo .task { border-left-color: #f472b6; }
+    .column.in-progress .task { border-left-color: #fbbf24; }
+    .column.done .task { border-left-color: #4ade80; }
+    .column.archived .task { border-left-color: #71717a; opacity: 0.7; }
+    
+    .task-title { font-size: 14px; margin-bottom: 5px; }
+    .task-date { font-size: 11px; color: #71717a; }
+    
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+    
+    @media (max-width: 900px) { .bottom-grid { grid-template-columns: 1fr; } }
+    
+    .panel {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      padding: 15px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    
+    .panel-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      font-weight: 600;
+      font-size: 14px;
+      color: #a1a1aa;
+    }
+    
+    .job-item, .log-item, .note-item {
+      padding: 10px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    
+    .job-name { font-weight: 600; color: #60a5fa; }
+    .job-schedule { font-size: 11px; color: #71717a; margin-top: 3px; }
+    .job-desc { font-size: 12px; color: #a1a1aa; margin-top: 3px; }
+    
+    .log-time { font-size: 11px; color: #71717a; margin-bottom: 3px; }
+    .log-action { color: #e4e4e7; }
+    
+    .note-item {
+      border-left: 3px solid #8b5cf6;
+      padding-left: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="agent-info">
+      <div class="avatar" id="avatar">🦊</div>
+      <div>
+        <div class="agent-name" id="agentName">Kit Mission Control</div>
+        <div class="status">
+          <div class="status-dot" id="statusDot"></div>
+          <span id="statusText">Loading...</span>
+        </div>
+      </div>
+    </div>
+    <div class="sync-info">
+      <div>Last sync: <span id="lastSync">--</span></div>
+      <div style="margin-top: 5px; color: #60a5fa;">● Online</div>
+    </div>
+  </div>
+  
+  <div class="board">
+    <div class="column todo">
+      <div class="column-header"><span class="icon">📋</span> To Do</div>
+      <div id="todoTasks"></div>
+    </div>
+    <div class="column in-progress">
+      <div class="column-header"><span class="icon">⚡</span> In Progress</div>
+      <div id="inProgressTasks"></div>
+    </div>
+    <div class="column done">
+      <div class="column-header"><span class="icon">✅</span> Done</div>
+      <div id="doneTasks"></div>
+    </div>
+    <div class="column archived">
+      <div class="column-header"><span class="icon">📦</span> Archived</div>
+      <div id="archivedTasks"></div>
+    </div>
+  </div>
+  
+  <div class="bottom-grid">
+    <div class="panel">
+      <div class="panel-header">⏰ Scheduled Jobs</div>
+      <div id="scheduledJobs"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">📝 Action Log</div>
+      <div id="actionLog"></div>
+    </div>
+    <div class="panel">
+      <div class="panel-header">💡 Notes</div>
+      <div id="notes"></div>
+    </div>
+  </div>
+  
+  <script>
+    async function loadDashboard() {
+      try {
+        const res = await fetch('data.json');
+        const data = await res.json();
+        
+        // Agent info
+        document.getElementById('avatar').textContent = data.agent.emoji;
+        document.getElementById('agentName').textContent = data.agent.name + ' Mission Control';
+        document.getElementById('statusText').textContent = data.agent.statusText || data.agent.status;
+        document.getElementById('statusDot').className = 'status-dot ' + (data.agent.status === 'online' ? '' : data.agent.status);
+        
+        // Last sync
+        const syncDate = new Date(data.lastSync);
+        document.getElementById('lastSync').textContent = syncDate.toLocaleString();
+        
+        // Tasks
+        renderTasks('todoTasks', data.tasks.todo || []);
+        renderTasks('inProgressTasks', data.tasks.inProgress || []);
+        renderTasks('doneTasks', data.tasks.done || []);
+        renderTasks('archivedTasks', data.tasks.archived || []);
+        
+        // Scheduled jobs
+        const jobsHtml = (data.scheduledJobs || []).map(job => `
+          <div class="job-item">
+            <div class="job-name">${job.name}</div>
+            <div class="job-schedule">${job.schedule}</div>
+            <div class="job-desc">${job.description || ''}</div>
+          </div>
+        `).join('') || '<div class="job-item">No scheduled jobs</div>';
+        document.getElementById('scheduledJobs').innerHTML = jobsHtml;
+        
+        // Action log
+        const logHtml = (data.actionLog || []).slice(0, 5).map(log => `
+          <div class="log-item">
+            <div class="log-time">${new Date(log.time).toLocaleString()}</div>
+            <div class="log-action">${log.action}</div>
+          </div>
+        `).join('') || '<div class="log-item">No recent activity</div>';
+        document.getElementById('actionLog').innerHTML = logHtml;
+        
+        // Notes
+        const notesHtml = (data.notes || []).map(note => `
+          <div class="note-item">${note}</div>
+        `).join('') || '<div class="note-item">No notes</div>';
+        document.getElementById('notes').innerHTML = notesHtml;
+        
+      } catch (e) {
+        console.error('Failed to load dashboard data:', e);
+      }
+    }
+    
+    function renderTasks(elementId, tasks) {
+      const html = tasks.map(task => `
+        <div class="task">
+          <div class="task-title">${task.title}</div>
+          <div class="task-date">${task.date || ''}</div>
+        </div>
+      `).join('') || '';
+      document.getElementById(elementId).innerHTML = html;
+    }
+    
+    loadDashboard();
+    setInterval(loadDashboard, 30000);
+  </script>
+</body>
+</html>
