@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T19:49:32Z",
-  "lastUpdateHuman": "2026-02-09 11:49 Pacific",
+  "lastUpdate": "2026-02-09T19:51:24Z",
+  "lastUpdateHuman": "2026-02-09 11:51 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 0,
@@ -94,7 +94,48 @@
       "isNew": true
     }
   ],
-  "prs": [],
+  "prs": [
+    {
+      "number": 12837,
+      "title": "fix(heartbeat): suppress HEARTBEAT_OK token delivery",
+      "url": "https://github.com/openclaw/openclaw/pull/12837",
+      "author": "JBrady",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:47:25Z"
+    },
+    {
+      "number": 12834,
+      "title": "docs(gateway): clarify there is no standalone clawrouter bin...",
+      "url": "https://github.com/openclaw/openclaw/pull/12834",
+      "author": "JBrady",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:33:02Z"
+    },
+    {
+      "number": 12829,
+      "title": "fix(cron): don't hold store lock during manual run",
+      "url": "https://github.com/openclaw/openclaw/pull/12829",
+      "author": "yeyebot",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:16:06Z"
+    },
+    {
+      "number": 12823,
+      "title": "Feat/litellm provider",
+      "url": "https://github.com/openclaw/openclaw/pull/12823",
+      "author": "ryan-crabbe",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:06:30Z"
+    },
+    {
+      "number": 12820,
+      "title": "Dench Filesystem-First CRM via OpenClaw",
+      "url": "https://github.com/openclaw/openclaw/pull/12820",
+      "author": "kumarabhirup",
+      "isDraft": true,
+      "createdAt": "2026-02-09T18:58:00Z"
+    }
+  ],
   "myPrs": [
     {
       "repo": "clawd",
