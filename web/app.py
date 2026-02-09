@@ -186,7 +186,7 @@ def api_complete_task(task_id):
                     if isinstance(draft_content, dict):
                         # Extract markdown from dict if needed
                         draft_content = draft_content.get("markdown", str(draft_content))
-                    update_article(task.article_id, {"content": draft_content, "status": "written"})
+                    update_article(task.article_id, {"draft_content": draft_content, "status": "written"})
                     create_task("fact_check", {"draft": draft_content}, task.article_id)
                     
             elif task.type == "fact_check" and "verified" in task_result:

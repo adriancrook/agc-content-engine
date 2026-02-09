@@ -122,7 +122,7 @@ class LocalWorker:
                     draft = draft.get("markdown", str(draft))
                 r = requests.put(
                     f"{API_URL}/api/articles/{article_id}",
-                    json={"content": draft, "status": "written"},
+                    json={"draft_content": draft, "status": "written"},
                     timeout=10
                 )
                 print(f"   📝 Article PUT response: {r.status_code} - {len(draft)} chars")
@@ -194,7 +194,7 @@ class LocalWorker:
                 result = {"error": f"Unknown task type: {task_type}"}
                 
             # Pass article_id for write tasks
-            article_id = payload.get("article_id")
+            article_id = task.get("article_id")
             self.complete_task(task_id, result, article_id)
             print(f"✅ Task completed")
             
