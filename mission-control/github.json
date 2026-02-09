@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T19:05:03Z",
-  "lastUpdateHuman": "2026-02-09 11:05 Pacific",
+  "lastUpdate": "2026-02-09T19:15:38Z",
+  "lastUpdateHuman": "2026-02-09 11:15 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,46 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12827,
+      "title": "Runtime tool system reads agent config from file, not database",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12827",
+      "author": "MPIsaac-Syn",
+      "createdAt": "2026-02-09T19:12:50Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12826,
+      "title": "Slack DM allowlist not working - still shows pairing prompt",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12826",
+      "author": "visshehi",
+      "createdAt": "2026-02-09T19:11:23Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12825,
+      "title": "Slack DM allowlist not working - still shows pairing prompt",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12825",
+      "author": "visshehi",
+      "createdAt": "2026-02-09T19:08:34Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12824,
+      "title": "Security Enhancements: Bot Lockdown, Model Upgrade, and Tailscale Serve",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12824",
+      "author": "paulpreibisch",
+      "createdAt": "2026-02-09T19:08:09Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12821,
       "title": "WhatsApp: filename param ignored when sending documents via message tool",
@@ -50,51 +90,25 @@
       "createdAt": "2026-02-09T18:19:15Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12799,
-      "title": "Feature Request: Cron catch-up for missed scheduled jobs",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12799",
-      "author": "milocoreai",
-      "createdAt": "2026-02-09T17:59:35Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12797,
-      "title": "Feature: Debounce/Batch incoming Telegram messages (handle forwarded posts + com...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12797",
-      "author": "Vovch0",
-      "createdAt": "2026-02-09T17:56:38Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12789,
-      "title": "Connection persistence issue: drops on screen lock, audio unrecoverable",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12789",
-      "author": "drclausen",
-      "createdAt": "2026-02-09T17:47:09Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12787,
-      "title": "[Feature]: Slack Indicator when typing",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12787",
-      "author": "dcrowder147",
-      "createdAt": "2026-02-09T17:42:11Z",
-      "labels": [
-        "enhancement"
-      ],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12828,
+      "title": "chore: add tsconfig.test.json for type-checking test files",
+      "url": "https://github.com/openclaw/openclaw/pull/12828",
+      "author": "quotentiroler",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:15:13Z"
+    },
+    {
+      "number": 12823,
+      "title": "Feat/litellm provider",
+      "url": "https://github.com/openclaw/openclaw/pull/12823",
+      "author": "ryan-crabbe",
+      "isDraft": false,
+      "createdAt": "2026-02-09T19:06:30Z"
+    },
     {
       "number": 12820,
       "title": "Dench Filesystem-First CRM via OpenClaw",
@@ -118,22 +132,6 @@
       "author": "JBrady",
       "isDraft": false,
       "createdAt": "2026-02-09T18:48:28Z"
-    },
-    {
-      "number": 12817,
-      "title": "feat: add shell helpers for OpenClaw development",
-      "url": "https://github.com/openclaw/openclaw/pull/12817",
-      "author": "Olshansk",
-      "isDraft": true,
-      "createdAt": "2026-02-09T18:44:30Z"
-    },
-    {
-      "number": 12816,
-      "title": "fix: align extension tests and fetch typing for gate stabili...",
-      "url": "https://github.com/openclaw/openclaw/pull/12816",
-      "author": "sebslight",
-      "isDraft": false,
-      "createdAt": "2026-02-09T18:42:01Z"
     }
   ],
   "myPrs": [
@@ -180,9 +178,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "33c75cb",
-    "message": "chore(extensions): mark bundled packages private",
-    "date": "2026-02-09T18:56:04Z",
-    "author": "Peter Steinberger"
+    "sha": "ec55583",
+    "message": "fix: align extension tests and fetch typing for gate stabili",
+    "date": "2026-02-09T19:12:07Z",
+    "author": "Seb Slight"
   }
 }
