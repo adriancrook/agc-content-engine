@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T23:03:47Z",
-  "lastUpdateHuman": "2026-02-09 15:03 Pacific",
+  "lastUpdate": "2026-02-09T23:09:02Z",
+  "lastUpdateHuman": "2026-02-09 15:09 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,18 +9,6 @@
     "trend": 0
   },
   "issues": [
-    {
-      "number": 12925,
-      "title": "[Bug]:",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12925",
-      "author": "Kairomind",
-      "createdAt": "2026-02-09T23:02:56Z",
-      "labels": [
-        "bug"
-      ],
-      "isNew": true
-    },
     {
       "number": 12924,
       "title": "Bug: OpenRouter models with \"openrouter/\" prefix not working (e.g., aurora-alpha...",
@@ -92,9 +80,27 @@
         "bug"
       ],
       "isNew": true
+    },
+    {
+      "number": 12911,
+      "title": "Feature: Live Voice Mode in /chat UI (Grok Voice Loop)",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12911",
+      "author": "haverAI",
+      "createdAt": "2026-02-09T22:25:47Z",
+      "labels": [],
+      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12926,
+      "title": "refactor: centralize isPlainObject, isRecord, isErrno, isLoo...",
+      "url": "https://github.com/openclaw/openclaw/pull/12926",
+      "author": "quotentiroler",
+      "isDraft": false,
+      "createdAt": "2026-02-09T23:07:44Z"
+    },
     {
       "number": 12920,
       "title": "fix: prune stale session entries, cap entry count, and rotat...",
@@ -126,14 +132,6 @@
       "author": "kutayilmaaz",
       "isDraft": false,
       "createdAt": "2026-02-09T22:28:15Z"
-    },
-    {
-      "number": 12907,
-      "title": "feat: add Gonka.ai as optional LLM provider with ECDSA signi...",
-      "url": "https://github.com/openclaw/openclaw/pull/12907",
-      "author": "ultragenez",
-      "isDraft": false,
-      "createdAt": "2026-02-09T22:19:46Z"
     }
   ],
   "myPrs": [
@@ -180,9 +178,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "4df252d",
-    "message": "Gateway: add CLAUDE.md symlink for AGENTS.md",
-    "date": "2026-02-09T22:29:19Z",
-    "author": "Tak Hoffman"
+    "sha": "ffeed21",
+    "message": "ci(docker): use registry cache for persistent layer storage",
+    "date": "2026-02-09T23:05:12Z",
+    "author": "quotentiroler"
   }
 }
