@@ -106,6 +106,8 @@ class LocalWorker:
     def complete_task(self, task_id, result, article_id=None):
         """Mark task as completed and save article content to Railway API"""
         try:
+            print(f"   DEBUG: article_id={article_id}, keys in result={list(result.keys()) if isinstance(result, dict) else 'not a dict'}")
+            
             requests.post(
                 f"{API_URL}/api/tasks/{task_id}/complete",
                 json={"result": result},
@@ -115,16 +117,21 @@ class LocalWorker:
             # Save article content directly to Railway API
             if article_id and "draft" in result:
                 draft = result["draft"]
+                print(f"   DEBUG: draft type={type(draft)}, len={len(str(draft))}")
                 if isinstance(draft, dict):
                     draft = draft.get("markdown", str(draft))
-                requests.put(
+                r = requests.put(
                     f"{API_URL}/api/articles/{article_id}",
                     json={"content": draft, "status": "written"},
                     timeout=10
                 )
-                print(f"   📝 Article content saved ({len(draft)} chars)")
+                print(f"   📝 Article PUT response: {r.status_code} - {len(draft)} chars")
+            else:
+                print(f"   DEBUG: Not saving article - article_id={article_id}, 'draft' in result={'draft' in result if isinstance(result, dict) else False}")
         except Exception as e:
+            import traceback
             print(f"Error completing task: {e}")
+            traceback.print_exc()
     
     def fail_task(self, task_id, error):
         """Mark task as failed"""

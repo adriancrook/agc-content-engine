@@ -265,7 +265,29 @@ Respond in JSON format:
             elif "```" in response:
                 response = response.split("```")[1].split("```")[0]
             
-            data = json.loads(response.strip())
+            # Try to fix common LLM JSON errors
+            response = response.strip()
+            
+            # Fix trailing commas
+            response = response.replace(",}", "}").replace(",]", "]")
+            
+            # Fix unquoted keys (simple regex replacement)
+            import re
+            # Match { or , followed by whitespace and word followed by :
+            response = re.sub(r'([{,]\s*)(\w+)(\s*:)', r'\1"\2"\3', response)
+            
+            try:
+                data = json.loads(response)
+            except json.JSONDecodeError:
+                # Try extracting just the JSON object using regex
+                json_match = re.search(r'\{.*\}', response, re.DOTALL)
+                if json_match:
+                    try:
+                        data = json.loads(json_match.group())
+                    except:
+                        raise  # Re-raise if regex extraction also fails
+                else:
+                    raise
             
             source.key_stats = data.get("key_stats", [])
             source.key_quotes = data.get("key_quotes", [])
@@ -276,6 +298,7 @@ Respond in JSON format:
             
         except Exception as e:
             logger.warning(f"Failed to parse LLM response: {e}")
+            logger.debug(f"Response was: {response[:500] if 'response' in dir() else 'N/A'}")
             source.relevance_score = 0.5
         
         return source
