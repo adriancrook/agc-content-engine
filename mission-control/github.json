@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-09T23:24:48Z",
-  "lastUpdateHuman": "2026-02-09 15:24 Pacific",
+  "lastUpdate": "2026-02-09T23:30:03Z",
+  "lastUpdateHuman": "2026-02-09 15:30 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,16 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12934,
+      "title": "Control UI chat swallows leading slash commands (e.g. /status disappears; //stat...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12934",
+      "author": "Raikan10",
+      "createdAt": "2026-02-09T23:29:21Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12933,
       "title": "Signal health check fails with signal-cli 0.13.x (JSON-RPC)",
@@ -76,16 +86,6 @@
       "url": "https://github.com/openclaw/openclaw/issues/12927",
       "author": "koltregaskes",
       "createdAt": "2026-02-09T23:09:15Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12924,
-      "title": "Bug: OpenRouter models with \"openrouter/\" prefix not working (e.g., aurora-alpha...",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12924",
-      "author": "PyVent",
-      "createdAt": "2026-02-09T23:01:34Z",
       "labels": [],
       "isNew": true
     }
