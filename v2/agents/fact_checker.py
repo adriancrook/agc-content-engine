@@ -5,6 +5,7 @@ Verifies claims against research sources using Claude Haiku
 
 import json
 import logging
+import re
 import time
 from typing import Dict, List
 
@@ -59,20 +60,32 @@ class FactCheckerAgent(BaseAgent):
             # Ask Claude to verify claims
             verification = await self._verify_claims(draft, source_facts)
 
+            # Validate citations
+            citation_check = self._validate_citations(draft, sources)
+
             # Calculate accuracy
             total_claims = verification.get("total_claims", 0)
             verified_claims = verification.get("verified_claims", 0)
             accuracy = verified_claims / total_claims if total_claims > 0 else 1.0
 
             logger.info(f"Fact check complete: {verified_claims}/{total_claims} verified ({accuracy:.0%})")
+            logger.info(f"Citation check: {citation_check['valid_citations']}/{citation_check['total_citations']} valid")
 
-            # Success if 85%+ accuracy
-            success = accuracy >= 0.85
+            # Success if 85%+ accuracy AND citations are valid
+            success = accuracy >= 0.85 and citation_check['all_valid']
 
             # Estimate cost (Claude Haiku: $0.25/M input, $1.25/M output)
             input_tokens = len(draft.split()) * 1.3
             output_tokens = 200
             cost = (input_tokens / 1_000_000 * 0.25) + (output_tokens / 1_000_000 * 1.25)
+
+            error_msg = None
+            if not success:
+                if accuracy < 0.85:
+                    error_msg = f"Low accuracy: {accuracy:.0%}"
+                if not citation_check['all_valid']:
+                    citation_errors = ", ".join(citation_check['issues'])
+                    error_msg = f"{error_msg}; Citation issues: {citation_errors}" if error_msg else f"Citation issues: {citation_errors}"
 
             return AgentResult(
                 success=success,
@@ -82,12 +95,13 @@ class FactCheckerAgent(BaseAgent):
                         "verified_claims": verified_claims,
                         "accuracy_score": accuracy,
                         "issues": verification.get("issues", []),
-                        "verified": success
+                        "verified": success,
+                        "citations": citation_check
                     }
                 },
                 cost=cost,
                 tokens=int(input_tokens + output_tokens),
-                error=None if success else f"Low accuracy: {accuracy:.0%}"
+                error=error_msg
             )
 
         except Exception as e:
@@ -97,6 +111,55 @@ class FactCheckerAgent(BaseAgent):
                 data={},
                 error=str(e)
             )
+
+    def _validate_citations(self, draft: str, sources: List[Dict]) -> Dict:
+        """Validate citation format and URLs in article"""
+
+        # Extract all [[n]](url) citations from draft
+        citation_pattern = r'\[\[(\d+)\]\]\(([^)]+)\)'
+        citations = re.findall(citation_pattern, draft)
+
+        issues = []
+        valid_citations = 0
+        source_urls = {s.get('url', ''): i+1 for i, s in enumerate(sources)}
+
+        for citation_num, citation_url in citations:
+            citation_num = int(citation_num)
+
+            # Check if citation number is valid (within sources range)
+            if citation_num < 1 or citation_num > len(sources):
+                issues.append(f"Citation [{citation_num}] out of range (only {len(sources)} sources)")
+                continue
+
+            # Check if URL matches the source URL for that citation number
+            expected_source = sources[citation_num - 1]  # 0-indexed
+            expected_url = expected_source.get('url', '')
+
+            if citation_url != expected_url:
+                issues.append(f"Citation [{citation_num}] URL mismatch: got {citation_url[:50]}, expected {expected_url[:50]}")
+                continue
+
+            # Check URL format
+            if not citation_url.startswith('http'):
+                issues.append(f"Citation [{citation_num}] has invalid URL: {citation_url[:50]}")
+                continue
+
+            valid_citations += 1
+
+        # Check if Sources section exists
+        has_sources_section = "## Sources" in draft
+        if not has_sources_section:
+            issues.append("Missing ## Sources section at end of article")
+
+        all_valid = len(issues) == 0
+
+        return {
+            "total_citations": len(citations),
+            "valid_citations": valid_citations,
+            "all_valid": all_valid,
+            "issues": issues,
+            "has_sources_section": has_sources_section
+        }
 
     async def _verify_claims(self, draft: str, source_facts: List[str]) -> Dict:
         """Verify claims in draft against source facts"""

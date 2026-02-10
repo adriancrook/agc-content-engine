@@ -129,17 +129,20 @@ REFINEMENT GUIDELINES:
 4. Polish any awkward phrasings
 5. Ensure logical progression of ideas
 6. Keep the writing engaging but professional
-7. PRESERVE all citations, statistics, and quotes exactly as written
-8. DO NOT add casual language, contractions, or personal opinions
+7. **CRITICAL**: PRESERVE all citation links in [[n]](url) format EXACTLY as written
+8. **CRITICAL**: PRESERVE the ## Sources section exactly if present
+9. DO NOT add casual language, contractions, or personal opinions
 
 IMPORTANT:
 - Keep the same H2/H3 headers exactly
 - Maintain the same structure and organization
 - Preserve ALL factual content and citations
+- DO NOT modify, remove, or reformat [[n]](url) citations
+- DO NOT change URLs or citation numbers
 - The goal is polish and flow, not casualization
 - This should read like a high-quality professional blog post
 
-Write the refined version:"""
+Write the refined version with ALL citation links preserved:"""
 
         response = self._call_openrouter(prompt)
         return response.strip()

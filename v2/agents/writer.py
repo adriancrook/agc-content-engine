@@ -74,12 +74,13 @@ class WriterAgent(BaseAgent):
 
             conclusion = self._write_conclusion(topic, outline, sources)
 
-            # Compile full article
+            # Compile full article with sources section
             article_md = self._compile_article(
                 outline.get("title", topic),
                 intro,
                 sections,
-                conclusion
+                conclusion,
+                sources  # Pass sources for citation list
             )
 
             word_count = len(article_md.split())
@@ -107,10 +108,10 @@ class WriterAgent(BaseAgent):
     def _write_introduction(self, topic: str, outline: Dict, sources: List[Dict]) -> str:
         """Write professional introduction with citations"""
 
-        # Build source context with citations
+        # Build source context with numbered citations
         source_context = ""
         for i, s in enumerate(sources[:5], 1):
-            source_context += f"\n[Source {i}] {s.get('title', '')}\n"
+            source_context += f"\n[{i}] {s.get('title', '')}\n"
             source_context += f"URL: {s.get('url', '')}\n"
             if s.get('snippet'):
                 source_context += f"Context: {s.get('snippet', '')[:200]}\n"
@@ -123,19 +124,23 @@ class WriterAgent(BaseAgent):
 
 TOPIC: {topic}
 
-AVAILABLE SOURCES:
+AVAILABLE SOURCES (numbered for citation):
 {source_context}
 
 REQUIREMENTS:
 1. Professional, authoritative tone (NOT casual or conversational)
 2. Start with a compelling hook using a specific statistic or fact
-3. Cite sources using format: "According to [source name], ..." or "Research shows that [stat] (Source: [name])"
+3. **CRITICAL CITATION FORMAT**: Use clickable citation links like [[1]]({sources[0].get('url', '')}) at the END of sentences
+   - Example: "The mobile gaming market reached $100 billion in 2024[[1]](https://example.com/source)."
+   - Place citation AFTER the period/punctuation
+   - Use the actual source URL from the numbered sources above
 4. NO personal opinions or phrases like "I think", "Let's be honest", "Here's the thing"
 5. Focus on factual, data-driven insights
 6. **CRITICAL: 200-250 words MAXIMUM - be concise**
 7. Preview the key insights the article will cover
+8. Cite at least 2-3 sources using the [[n]](url) format
 
-Write ONLY the introduction text with proper citations."""
+Write ONLY the introduction text with proper [[n]](url) citations."""
 
         response = self._call_openrouter(prompt, max_tokens=600)
         return response.strip()
@@ -147,10 +152,10 @@ Write ONLY the introduction text with proper citations."""
         h3s = section.get("h3s", [])
         key_points = section.get("key_points", [])
 
-        # Build comprehensive source context
+        # Build comprehensive source context with numbered citations
         source_context = ""
         for i, s in enumerate(sources[:8], 1):
-            source_context += f"\n[Source {i}] {s.get('title', '')}\n"
+            source_context += f"\n[{i}] {s.get('title', '')}\n"
             source_context += f"URL: {s.get('url', '')}\n"
             for stat in s.get('key_stats', [])[:3]:
                 source_context += f"  • {stat}\n"
@@ -167,21 +172,25 @@ SUBSECTIONS TO COVER:
 KEY POINTS TO ADDRESS:
 {json.dumps(key_points, indent=2)}
 
-AVAILABLE SOURCES:
+AVAILABLE SOURCES (numbered for citation):
 {source_context}
 
 REQUIREMENTS:
 1. Professional, authoritative tone - NO casual language
 2. Use ## {h2} for main header
 3. Use ### for subsections from the list above
-4. CITE ALL FACTS: Use specific statistics, data, and quotes from sources
-5. Attribution format: "According to [source]..." or "Research by [source] shows..."
+4. **CRITICAL CITATION FORMAT**: Use clickable citation links like [[1]](url), [[2]](url) at the END of sentences
+   - Example: "Clash Royale generated over $4 billion in lifetime revenue[[3]](https://example.com/source)."
+   - Place citation AFTER the period/punctuation
+   - Use the actual source URLs from the numbered sources above
+5. CITE ALL FACTS: Every statistic, data point, or claim needs a [[n]](url) citation
 6. NO personal opinions, contractions, or phrases like "honestly", "let me tell you"
-7. Every claim must be backed by source material
+7. Every claim must be backed by source material with proper citation links
 8. **CRITICAL: 400-500 words MAXIMUM - be concise and focused**
 9. Include concrete examples and case studies from sources
+10. Use at least 3-5 [[n]](url) citations throughout the section
 
-Write the complete section in Markdown with proper citations."""
+Write the complete section in Markdown with proper [[n]](url) citations."""
 
         response = self._call_openrouter(prompt, max_tokens=1200)
         return response.strip()
@@ -205,7 +214,7 @@ KEY FINDINGS FROM ARTICLE:
 REQUIREMENTS:
 1. Professional, authoritative tone
 2. Synthesize the main insights covered
-3. NO new information or sources
+3. NO new citations needed in conclusion (summary only)
 4. Look forward to future trends/implications
 5. End with a clear takeaway
 6. **CRITICAL: 150-200 words MAXIMUM**
@@ -216,8 +225,21 @@ Write ONLY the conclusion text."""
         response = self._call_openrouter(prompt, max_tokens=500)
         return response.strip()
 
-    def _compile_article(self, title: str, intro: str, sections: List[str], conclusion: str) -> str:
-        """Compile all parts into final article"""
+    def _generate_sources_section(self, sources: List[Dict]) -> str:
+        """Generate the Sources section with numbered citations"""
+        sources_lines = ["## Sources", ""]
+
+        for i, source in enumerate(sources, 1):
+            title = source.get('title', 'Source')
+            url = source.get('url', '')
+
+            # Format: [1] Title - URL
+            sources_lines.append(f"[{i}] {title} - {url}")
+
+        return "\n".join(sources_lines)
+
+    def _compile_article(self, title: str, intro: str, sections: List[str], conclusion: str, sources: List[Dict] = None) -> str:
+        """Compile all parts into final article with sources section"""
 
         parts = [
             f"# {title}",
@@ -233,6 +255,13 @@ Write ONLY the conclusion text."""
         parts.append("## Conclusion")
         parts.append("")
         parts.append(conclusion)
+
+        # Add Sources section if sources provided
+        if sources:
+            parts.append("")
+            parts.append("")
+            sources_section = self._generate_sources_section(sources)
+            parts.append(sources_section)
 
         return "\n".join(parts)
 
