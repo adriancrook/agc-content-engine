@@ -130,17 +130,25 @@ AVAILABLE SOURCES (numbered for citation):
 REQUIREMENTS:
 1. Professional, authoritative tone (NOT casual or conversational)
 2. Start with a compelling hook using a specific statistic or fact
+
 3. **CRITICAL CITATION FORMAT**: Use clickable citation links like [[1]]({sources[0].get('url', '')}) at the END of sentences
    - Example: "The mobile gaming market reached $100 billion in 2024[[1]](https://example.com/source)."
    - Place citation AFTER the period/punctuation
    - Use the actual source URL from the numbered sources above
-4. NO personal opinions or phrases like "I think", "Let's be honest", "Here's the thing"
-5. Focus on factual, data-driven insights
-6. **CRITICAL: 200-250 words MAXIMUM - be concise**
-7. Preview the key insights the article will cover
-8. Cite at least 2-3 sources using the [[n]](url) format
 
-Write ONLY the introduction text with proper [[n]](url) citations."""
+4. **CRITICAL GAME/COMPANY HYPERLINKS**: When mentioning mobile games or companies, hyperlink them
+   - Games: [Clash Royale](https://supercell.com/en/games/clashroyale/)
+   - Companies: [Supercell](https://supercell.com/)
+   - Common games: Clash Royale, Candy Crush, Pokémon GO, Genshin Impact, etc.
+   - Common companies: Supercell, King, Niantic, Riot Games, Tencent, etc.
+
+5. NO personal opinions or phrases like "I think", "Let's be honest", "Here's the thing"
+6. Focus on factual, data-driven insights
+7. **CRITICAL: 200-250 words MAXIMUM - be concise**
+8. Preview the key insights the article will cover
+9. Cite at least 2-3 sources using the [[n]](url) format
+
+Write ONLY the introduction text with proper [[n]](url) citations and game/company hyperlinks."""
 
         response = self._call_openrouter(prompt, max_tokens=600)
         return response.strip()
@@ -158,9 +166,22 @@ Write ONLY the introduction text with proper [[n]](url) citations."""
             source_context += f"\n[{i}] {s.get('title', '')}\n"
             source_context += f"URL: {s.get('url', '')}\n"
             for stat in s.get('key_stats', [])[:3]:
-                source_context += f"  • {stat}\n"
+                source_context += f"  • Stat: {stat}\n"
+
+            # Handle structured quotes (new format)
             for quote in s.get('key_quotes', [])[:2]:
-                source_context += f"  • \"{quote}\"\n"
+                if isinstance(quote, dict):
+                    quote_text = quote.get('text', '')
+                    author = quote.get('author', '')
+                    author_title = quote.get('author_title', '')
+                    source_context += f"  • Quote: \"{quote_text}\"\n"
+                    source_context += f"    Author: {author}"
+                    if author_title:
+                        source_context += f", {author_title}"
+                    source_context += "\n"
+                else:
+                    # Fallback for old string format
+                    source_context += f"  • Quote: \"{quote}\"\n"
 
         prompt = f"""Write a professional article section for: "{topic}"
 
@@ -179,18 +200,35 @@ REQUIREMENTS:
 1. Professional, authoritative tone - NO casual language
 2. Use ## {h2} for main header
 3. Use ### for subsections from the list above
+
 4. **CRITICAL CITATION FORMAT**: Use clickable citation links like [[1]](url), [[2]](url) at the END of sentences
    - Example: "Clash Royale generated over $4 billion in lifetime revenue[[3]](https://example.com/source)."
    - Place citation AFTER the period/punctuation
    - Use the actual source URLs from the numbered sources above
-5. CITE ALL FACTS: Every statistic, data point, or claim needs a [[n]](url) citation
-6. NO personal opinions, contractions, or phrases like "honestly", "let me tell you"
-7. Every claim must be backed by source material with proper citation links
-8. **CRITICAL: 400-500 words MAXIMUM - be concise and focused**
-9. Include concrete examples and case studies from sources
-10. Use at least 3-5 [[n]](url) citations throughout the section
 
-Write the complete section in Markdown with proper [[n]](url) citations."""
+5. **CRITICAL EXPERT QUOTE FORMAT**: Format quotes as blockquotes with attribution and citation
+   - Use markdown blockquote syntax (lines starting with >)
+   - Include attribution on a second line with — (em dash)
+   - Include citation link after attribution
+   - Example format:
+     > "Users should do something fun as soon as they open your mobile game"
+     > — GameAnalytics[[5]](https://gameanalytics.com/blog)
+
+6. **CRITICAL GAME/COMPANY HYPERLINKS**: When mentioning mobile games or companies, hyperlink them on FIRST mention
+   - Games: [Clash Royale](https://supercell.com/en/games/clashroyale/)
+   - Companies: [Supercell](https://supercell.com/)
+   - Only hyperlink the FIRST mention in each section
+   - Common games to link: Clash Royale, Candy Crush, Pokémon GO, Genshin Impact, PUBG Mobile, etc.
+   - Common companies to link: Supercell, King, Niantic, Riot Games, Tencent, etc.
+
+7. CITE ALL FACTS: Every statistic, data point, or claim needs a [[n]](url) citation
+8. NO personal opinions, contractions, or phrases like "honestly", "let me tell you"
+9. Every claim must be backed by source material with proper citation links
+10. **CRITICAL: 400-500 words MAXIMUM - be concise and focused**
+11. Include at least 1 expert quote in blockquote format per section (if available in sources)
+12. Use at least 3-5 [[n]](url) citations throughout the section
+
+Write the complete section in Markdown with proper [[n]](url) citations, blockquoted expert quotes, and game/company hyperlinks."""
 
         response = self._call_openrouter(prompt, max_tokens=1200)
         return response.strip()
