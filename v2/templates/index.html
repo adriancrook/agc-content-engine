@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGC v2 - Content Engine</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #1e293b;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            text-align: center;
+        }
+
+        .stat-card .number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .label {
+            color: #94a3b8;
+            text-transform: uppercase;
+            font-size: 0.875rem;
+            letter-spacing: 0.05em;
+        }
+
+        .filters {
+            background: #1e293b;
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            margin-bottom: 2rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filters label {
+            color: #94a3b8;
+            font-weight: 500;
+        }
+
+        .filters select, .filters input {
+            background: #0f172a;
+            color: #e2e8f0;
+            border: 1px solid #334155;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .articles-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .article-card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .article-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+        }
+
+        .article-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+        }
+
+        .state-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .state-ready { background: #10b981; color: white; }
+        .state-enriching { background: #f59e0b; color: white; }
+        .state-writing { background: #3b82f6; color: white; }
+        .state-researching { background: #8b5cf6; color: white; }
+        .state-revising { background: #ec4899; color: white; }
+        .state-failed { background: #ef4444; color: white; }
+        .state-fact_checking { background: #06b6d4; color: white; }
+
+        .article-meta {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            color: #94a3b8;
+            font-size: 0.875rem;
+        }
+
+        .article-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .enrichment-preview {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #334155;
+            display: flex;
+            gap: 2rem;
+            font-size: 0.875rem;
+        }
+
+        .enrichment-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .enrichment-item .icon {
+            font-size: 1.2rem;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #94a3b8;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            border: 4px solid #334155;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚀 AGC v2 Content Engine</h1>
+        <p>AI-Powered Article Generation Pipeline</p>
+    </div>
+
+    <div class="container">
+        <div class="stats" id="stats"></div>
+
+        <div class="filters">
+            <label>Filter by state:</label>
+            <select id="stateFilter" onchange="loadArticles()">
+                <option value="">All States</option>
+                <option value="researching">🔍 Researching</option>
+                <option value="writing">📝 Writing</option>
+                <option value="enriching">✨ Enriching</option>
+                <option value="revising">✏️ Revising</option>
+                <option value="fact_checking">✅ Fact Checking</option>
+                <option value="seo_optimizing">🎯 SEO Optimizing</option>
+                <option value="ready">🎉 Ready</option>
+                <option value="failed">❌ Failed</option>
+            </select>
+
+            <input type="text" id="searchBox" placeholder="Search articles..." oninput="filterArticles()" />
+        </div>
+
+        <div class="articles-grid" id="articles">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading articles...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let allArticles = [];
+
+        async function loadStats() {
+            const response = await fetch('/status');
+            const data = await response.json();
+
+            const statsHTML = `
+                <div class="stat-card">
+                    <div class="number">${data.total}</div>
+                    <div class="label">Total Articles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${data.articles.ready || 0}</div>
+                    <div class="label">Ready</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${data.articles.enriching || 0}</div>
+                    <div class="label">Enriching</div>
+                </div>
+                <div class="stat-card">
+                    <div class="number">${data.articles.writing || 0}</div>
+                    <div class="label">Writing</div>
+                </div>
+            `;
+
+            document.getElementById('stats').innerHTML = statsHTML;
+        }
+
+        async function loadArticles() {
+            const state = document.getElementById('stateFilter').value;
+            const url = state ? `/articles?state=${state}` : '/articles';
+
+            const response = await fetch(url);
+            allArticles = await response.json();
+
+            filterArticles();
+        }
+
+        function filterArticles() {
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
+            const filtered = allArticles.filter(article =>
+                article.title.toLowerCase().includes(searchTerm)
+            );
+
+            renderArticles(filtered);
+        }
+
+        function renderArticles(articles) {
+            if (articles.length === 0) {
+                document.getElementById('articles').innerHTML = '<div class="loading"><p>No articles found</p></div>';
+                return;
+            }
+
+            const articlesHTML = articles.map(article => `
+                <div class="article-card" onclick="viewArticle('${article.id}')">
+                    <div class="article-header">
+                        <div>
+                            <div class="article-title">${article.title}</div>
+                            <div class="article-meta">
+                                <span>📅 ${new Date(article.created_at).toLocaleDateString()}</span>
+                                <span>🆔 ${article.id.substring(0, 8)}</span>
+                            </div>
+                        </div>
+                        <span class="state-badge state-${article.state}">${article.state}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('articles').innerHTML = articlesHTML;
+        }
+
+        function viewArticle(id) {
+            window.location.href = `/article/${id}`;
+        }
+
+        // Load data on page load
+        loadStats();
+        loadArticles();
+
+        // Refresh every 10 seconds
+        setInterval(() => {
+            loadStats();
+            loadArticles();
+        }, 10000);
+    </script>
+</body>
+</html>

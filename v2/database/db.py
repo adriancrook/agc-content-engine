@@ -55,6 +55,8 @@ class Database:
                 ArticleState.PENDING,
                 ArticleState.RESEARCHING,
                 ArticleState.WRITING,
+                ArticleState.ENRICHING,
+                ArticleState.REVISING,
                 ArticleState.FACT_CHECKING,
                 ArticleState.SEO_OPTIMIZING,
                 ArticleState.HUMANIZING,

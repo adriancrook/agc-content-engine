@@ -97,34 +97,49 @@ class DataEnrichmentAgent(BaseAgent):
 
         try:
             # 1. Analyze draft for enrichment opportunities
-            logger.info("Analyzing draft for enrichment needs...")
+            step_start = time.time()
+            logger.info("STEP 1/6: Analyzing draft for enrichment needs...")
             enrichment_needs = self._analyze_draft(draft_for_analysis, topic)
+            logger.info(f"✓ Draft analysis complete in {time.time() - step_start:.1f}s - "
+                       f"Found {len(enrichment_needs.get('claims', []))} claims, "
+                       f"{len(enrichment_needs.get('examples', []))} examples, "
+                       f"{len(enrichment_needs.get('sections', []))} sections")
 
             # 2. Find citations
-            logger.info(f"Finding citations for {len(enrichment_needs['claims'])} claims...")
+            step_start = time.time()
+            logger.info(f"STEP 2/6: Finding citations for {len(enrichment_needs['claims'])} claims...")
             citations = self._find_citations(enrichment_needs['claims'])
+            logger.info(f"✓ Citations complete in {time.time() - step_start:.1f}s - Found {len(citations)} citations")
 
             # 3. Find metrics (placeholder for now)
-            logger.info("Finding metrics...")
+            step_start = time.time()
+            logger.info(f"STEP 3/6: Finding metrics for {len(enrichment_needs['examples'])} examples...")
             metrics = self._find_metrics(enrichment_needs['examples'])
+            logger.info(f"✓ Metrics complete in {time.time() - step_start:.1f}s - Found {len(metrics)} metrics")
 
             # 4. Match testimonials
-            logger.info("Matching testimonials...")
+            step_start = time.time()
+            logger.info("STEP 4/6: Matching testimonials...")
             testimonials = self._match_testimonials(topic, enrichment_needs['sections'])
+            logger.info(f"✓ Testimonials complete in {time.time() - step_start:.1f}s - Found {len(testimonials)} testimonials")
 
             # 5. Find media links (placeholder)
-            logger.info("Finding media links...")
+            step_start = time.time()
+            logger.info("STEP 5/6: Finding media links...")
             media = self._find_media_links(topic)
+            logger.info(f"✓ Media links complete in {time.time() - step_start:.1f}s - Found {len(media)} media links")
 
             # 6. Create integration guide
-            logger.info("Creating integration guide...")
+            step_start = time.time()
+            logger.info("STEP 6/6: Creating integration guide...")
             integration_guide = self._create_integration_guide(
                 draft, citations, metrics, testimonials, media
             )
+            logger.info(f"✓ Integration guide complete in {time.time() - step_start:.1f}s")
 
             duration = time.time() - start_time
 
-            logger.info(f"Enrichment complete: {len(citations)} citations, "
+            logger.info(f"🎉 ENRICHMENT COMPLETE in {duration:.1f}s: {len(citations)} citations, "
                        f"{len(metrics)} metrics, {len(testimonials)} testimonials")
 
             return AgentResult(
@@ -134,9 +149,9 @@ class DataEnrichmentAgent(BaseAgent):
                         "citations": citations,
                         "metrics": metrics,
                         "testimonials": testimonials,
-                        "media": media
-                    },
-                    "integration_guide": integration_guide
+                        "media": media,
+                        "integration_guide": integration_guide
+                    }
                 },
                 cost=self._estimate_cost(draft),
                 tokens=int(len(draft.split()) * 1.5)
@@ -154,6 +169,7 @@ class DataEnrichmentAgent(BaseAgent):
         """
         Analyze draft to identify enrichment opportunities using Claude
         """
+        logger.info(f"  → Calling Claude API to analyze {len(draft)} chars...")
         prompt = f"""Analyze this article draft to identify enrichment opportunities.
 
 ARTICLE TOPIC: {topic}
@@ -182,6 +198,7 @@ Return JSON format:
 Return ONLY valid JSON, no other text."""
 
         response = self._call_openrouter(prompt)
+        logger.info(f"  ✓ Claude API returned {len(response)} chars")
 
         try:
             # Strip markdown code blocks if present
@@ -212,7 +229,9 @@ Return ONLY valid JSON, no other text."""
             try:
                 # Search for sources
                 search_query = f"{claim['text']} mobile gaming statistics data"
+                logger.info(f"  → Brave Search {i+1}/{min(len(claims), 5)}: {claim['text'][:50]}...")
                 results = self._search_brave(search_query)
+                logger.info(f"  ✓ Found {len(results)} results")
 
                 if results:
                     # Use first relevant result
@@ -269,8 +288,14 @@ Return ONLY valid JSON, no other text."""
 
             return results
 
+        except requests.exceptions.Timeout as e:
+            logger.warning(f"⚠️ Brave Search TIMEOUT after 10s: {e}")
+            return []
+        except requests.exceptions.RequestException as e:
+            logger.warning(f"⚠️ Brave Search request failed: {e}")
+            return []
         except Exception as e:
-            logger.error(f"Brave search failed: {e}")
+            logger.error(f"❌ Brave search failed: {e}")
             return []
 
     def _extract_domain(self, url: str) -> str:
@@ -540,12 +565,21 @@ IMPORTANT:
         }
 
         try:
+            logger.info(f"  → Calling OpenRouter API (timeout: 120s)...")
             response = requests.post(url, json=payload, headers=headers, timeout=120)
             response.raise_for_status()
             data = response.json()
 
-            return data["choices"][0]["message"]["content"]
+            content = data["choices"][0]["message"]["content"]
+            logger.info(f"  ✓ OpenRouter API returned {len(content)} chars")
+            return content
 
+        except requests.exceptions.Timeout as e:
+            logger.error(f"⚠️ OpenRouter API TIMEOUT after 120s: {e}")
+            raise
+        except requests.exceptions.RequestException as e:
+            logger.error(f"❌ OpenRouter API request failed: {e}")
+            raise
         except Exception as e:
-            logger.error(f"OpenRouter API call failed: {e}")
+            logger.error(f"❌ OpenRouter API call failed: {e}")
             raise

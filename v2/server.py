@@ -10,8 +10,10 @@ from contextlib import asynccontextmanager
 from typing import List
 
 from dotenv import load_dotenv
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
-from fastapi.responses import JSONResponse
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
+from fastapi.responses import JSONResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 
 # Load .env file
@@ -132,6 +134,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="AGC v2", lifespan=lifespan)
 
+# Mount static files and templates
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
+
 
 # Pydantic models for API
 class TopicCreate(BaseModel):
@@ -150,9 +156,30 @@ class ArticleResponse(BaseModel):
         from_attributes = True
 
 
+# Web UI Endpoints
+
+@app.get("/", response_class=HTMLResponse)
+async def dashboard(request: Request):
+    """Web dashboard"""
+    return templates.TemplateResponse("index.html", {"request": request})
+
+
+@app.get("/article/{article_id}", response_class=HTMLResponse)
+async def view_article_page(request: Request, article_id: str):
+    """Article detail page"""
+    article = state_machine.db.get_article(article_id)
+    if not article:
+        return HTMLResponse(content="<h1>Article not found</h1>", status_code=404)
+
+    return templates.TemplateResponse("article.html", {
+        "request": request,
+        "article": article
+    })
+
+
 # REST API Endpoints
 
-@app.get("/")
+@app.get("/api")
 async def root():
     return {"status": "ok", "version": "2.0"}
 
