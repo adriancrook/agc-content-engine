@@ -208,6 +208,144 @@
         .tab-content.active {
             display: block;
         }
+
+        .export-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .export-title {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #667eea;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quality-checklist {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .quality-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            color: white;
+        }
+
+        .quality-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .quality-icon {
+            font-size: 1.25rem;
+            min-width: 1.5rem;
+        }
+
+        .quality-pass { color: #10b981; }
+        .quality-fail { color: #fbbf24; }
+
+        .metadata-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .metadata-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .metadata-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-bottom: 0.25rem;
+        }
+
+        .metadata-value {
+            font-weight: 600;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #10b981;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -224,6 +362,87 @@
     </div>
 
     <div class="container">
+        {% if article.state == 'ready' and article.wordpress_content %}
+        <div class="export-section">
+            <h2 class="export-title">🚀 WordPress Export</h2>
+
+            <div class="export-buttons">
+                <button class="btn btn-primary" onclick="copyToClipboard()">
+                    📋 Copy for WordPress
+                </button>
+                <button class="btn btn-secondary" onclick="downloadMarkdown()">
+                    ⬇️ Download .md
+                </button>
+                <button class="btn btn-secondary" onclick="showMetadata()">
+                    🏷️ View Metadata
+                </button>
+            </div>
+
+            <div class="quality-checklist">
+                <h3 style="margin-bottom: 1rem; color: white;">Quality Checklist</h3>
+
+                {% if article.wordpress_export_ready %}
+                <div class="quality-item">
+                    <span class="quality-icon quality-pass">✅</span>
+                    <span>Export Ready - All checks passed!</span>
+                </div>
+                {% else %}
+                <div class="quality-item">
+                    <span class="quality-icon quality-fail">⚠️</span>
+                    <span>Export has {{ article.wordpress_validation_issues|length }} issue(s)</span>
+                </div>
+                {% endif %}
+
+                {% if article.wordpress_metadata %}
+                <div class="quality-item">
+                    <span class="quality-icon quality-pass">✅</span>
+                    <span>SEO Metadata: {{ article.wordpress_metadata.categories|length }} categories, {{ article.wordpress_metadata.tags|length }} tags</span>
+                </div>
+                {% endif %}
+
+                {% if article.final_content %}
+                <div class="quality-item">
+                    <span class="quality-icon {% if article.final_content.split()|length >= 2000 %}quality-pass{% else %}quality-fail{% endif %}">
+                        {% if article.final_content.split()|length >= 2000 %}✅{% else %}⚠️{% endif %}
+                    </span>
+                    <span>Word Count: {{ article.final_content.split()|length }} words</span>
+                </div>
+                {% endif %}
+
+                {% if article.media and article.media.featured_image %}
+                <div class="quality-item">
+                    <span class="quality-icon quality-pass">✅</span>
+                    <span>Featured Image Generated</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <div id="metadata-view" style="display: none; margin-top: 1.5rem;">
+                <h3 style="margin-bottom: 1rem; color: white;">SEO Metadata</h3>
+                <div class="metadata-grid">
+                    {% if article.wordpress_metadata %}
+                    <div class="metadata-item">
+                        <div class="metadata-label">SEO Title</div>
+                        <div class="metadata-value">{{ article.wordpress_metadata.seo_title }}</div>
+                    </div>
+                    <div class="metadata-item" style="grid-column: span 2;">
+                        <div class="metadata-label">Meta Description</div>
+                        <div class="metadata-value">{{ article.wordpress_metadata.meta_description }}</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Categories</div>
+                        <div class="metadata-value">{{ article.wordpress_metadata.categories|join(', ') }}</div>
+                    </div>
+                    <div class="metadata-item">
+                        <div class="metadata-label">Tags</div>
+                        <div class="metadata-value">{{ article.wordpress_metadata.tags|join(', ') }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
         {% if article.enrichment %}
         <div class="section">
             <h2>✨ Enrichment Data</h2>
@@ -323,6 +542,8 @@
         {% endif %}
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
         function showTab(tabName) {
             // Hide all tabs
@@ -332,6 +553,61 @@
             // Show selected tab
             document.getElementById(tabName).classList.add('active');
             event.target.classList.add('active');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        async function copyToClipboard() {
+            try {
+                const response = await fetch('/articles/{{ article.id }}/wordpress');
+                const data = await response.json();
+
+                await navigator.clipboard.writeText(data.wordpress_content);
+                showToast('✅ Copied to clipboard! Ready to paste in WordPress.');
+            } catch (error) {
+                console.error('Copy failed:', error);
+                showToast('❌ Failed to copy. Please try again.');
+            }
+        }
+
+        async function downloadMarkdown() {
+            try {
+                const response = await fetch('/articles/{{ article.id }}/wordpress');
+                const data = await response.json();
+
+                const blob = new Blob([data.wordpress_content], { type: 'text/markdown' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = '{{ article.title|replace(" ", "_") }}.md';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                showToast('✅ Downloaded markdown file!');
+            } catch (error) {
+                console.error('Download failed:', error);
+                showToast('❌ Failed to download. Please try again.');
+            }
+        }
+
+        function showMetadata() {
+            const metadataView = document.getElementById('metadata-view');
+            if (metadataView.style.display === 'none') {
+                metadataView.style.display = 'block';
+                event.target.textContent = '🏷️ Hide Metadata';
+            } else {
+                metadataView.style.display = 'none';
+                event.target.textContent = '🏷️ View Metadata';
+            }
         }
     </script>
 </body>

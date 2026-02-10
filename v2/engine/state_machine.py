@@ -28,8 +28,10 @@ class StateMachineEngine:
         ArticleState.REVISING: ArticleState.FACT_CHECKING,
         ArticleState.FACT_CHECKING: ArticleState.SEO_OPTIMIZING,
         ArticleState.SEO_OPTIMIZING: ArticleState.HUMANIZING,
-        ArticleState.HUMANIZING: ArticleState.MEDIA_GENERATING,
-        ArticleState.MEDIA_GENERATING: ArticleState.READY,
+        ArticleState.HUMANIZING: ArticleState.INTERNAL_LINKING,
+        ArticleState.INTERNAL_LINKING: ArticleState.MEDIA_GENERATING,
+        ArticleState.MEDIA_GENERATING: ArticleState.WORDPRESS_FORMATTING,
+        ArticleState.WORDPRESS_FORMATTING: ArticleState.READY,
         ArticleState.READY: ArticleState.PUBLISHED,
     }
 

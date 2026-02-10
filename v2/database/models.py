@@ -24,7 +24,9 @@ class ArticleState(str, Enum):
     FACT_CHECKING = "fact_checking"
     SEO_OPTIMIZING = "seo_optimizing"
     HUMANIZING = "humanizing"
+    INTERNAL_LINKING = "internal_linking"  # Add internal links to adriancrook.com articles
     MEDIA_GENERATING = "media_generating"
+    WORDPRESS_FORMATTING = "wordpress_formatting"  # Generate WordPress metadata and format
     READY = "ready"
     PUBLISHED = "published"
     FAILED = "failed"
@@ -64,6 +66,10 @@ class Article(Base):
     seo = Column(JSON)                 # {keyword: "", meta: {}, score: 0}
     final_content = Column(Text)       # After humanization
     media = Column(JSON)               # {featured_image: "", inline: []}
+    wordpress_content = Column(Text)   # WordPress-ready content with frontmatter
+    wordpress_metadata = Column(JSON)  # {seo_title, meta_description, keywords, categories, tags}
+    wordpress_export_ready = Column(Boolean, default=False)  # Ready for export
+    wordpress_validation_issues = Column(JSON)  # List of validation issues
 
     # Metadata
     retry_count = Column(Integer, default=0)

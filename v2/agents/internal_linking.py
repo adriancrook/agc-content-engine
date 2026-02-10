@@ -62,7 +62,7 @@ class InternalLinkingAgent(BaseAgent):
             return AgentResult(
                 success=success,
                 data={
-                    "draft_with_links": updated_draft,
+                    "final_content": updated_draft,  # Update final_content with links
                     "internal_links_added": link_count,
                     "suggested_articles": [{"title": a['title'], "url": a['url']} for a in relevant_articles]
                 },

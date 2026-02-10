@@ -29,7 +29,9 @@ from agents.data_enrichment import DataEnrichmentAgent
 from agents.fact_checker import FactCheckerAgent
 from agents.seo import SEOAgent
 from agents.humanizer import HumanizerAgent
+from agents.internal_linking import InternalLinkingAgent
 from agents.media import MediaAgent
+from agents.wordpress_formatter import WordPressFormatterAgent
 
 # Setup logging
 logging.basicConfig(
@@ -76,30 +78,24 @@ async def lifespan(app: FastAPI):
             ArticleState.REVISING: WriterAgent({"openrouter_api_key": openrouter_api_key, "pass_type": "revision"}),
             ArticleState.FACT_CHECKING: FactCheckerAgent({"openrouter_api_key": openrouter_api_key}),
             ArticleState.SEO_OPTIMIZING: SEOAgent({"openrouter_api_key": openrouter_api_key}),
+            ArticleState.HUMANIZING: HumanizerAgent({"openrouter_api_key": openrouter_api_key}),
+            ArticleState.INTERNAL_LINKING: InternalLinkingAgent({}),  # No API key needed
+            ArticleState.WORDPRESS_FORMATTING: WordPressFormatterAgent({}),  # No API key needed
         }
 
-        # Paid agents (optional)
-        if openrouter_api_key:
-            agents[ArticleState.SEO_OPTIMIZING] = HumanizerAgent({"openrouter_api_key": openrouter_api_key})
-            logger.info("  + HumanizeAgent (Claude via OpenRouter)")
-        else:
-            agents[ArticleState.SEO_OPTIMIZING] = MockAgent()
-            logger.info("  - HumanizeAgent (no OpenRouter key)")
-
+        # Optional paid agents
         if google_api_key:
-            agents[ArticleState.HUMANIZING] = MediaAgent({"google_api_key": google_api_key})
+            agents[ArticleState.MEDIA_GENERATING] = MediaAgent({"google_api_key": google_api_key})
             logger.info("  + MediaAgent (Gemini)")
         else:
-            agents[ArticleState.HUMANIZING] = MockAgent()
+            agents[ArticleState.MEDIA_GENERATING] = MockAgent()
             logger.info("  - MediaAgent (no Google key)")
-
-        agents[ArticleState.MEDIA_GENERATING] = MockAgent()
 
         # Count paid agents: Writer + FactChecker + SEO + Humanizer + Media (if Gemini)
         paid_count = 4  # Writer + FactChecker + SEO + Humanizer (all Claude)
         if google_api_key:
             paid_count += 1
-        logger.info(f"✓ Agents ready: Research (Brave) + Writer (Claude Sonnet) + FactChecker (Claude Haiku) + SEO (Claude Haiku) + Humanizer (Claude Sonnet) + Media ({'Gemini' if google_api_key else 'Mock'})")
+        logger.info(f"✓ Agents ready: Research (Brave) + Writer (Claude Sonnet) + FactChecker (Claude Haiku) + SEO (Claude Haiku) + Humanizer (Claude Sonnet) + InternalLinking (no API) + Media ({'Gemini' if google_api_key else 'Mock'}) + WordPress (no API)")
         logger.info(f"✓ NO OLLAMA DEPENDENCY - All agents use cloud APIs")
     else:
         # Mock agents for testing
@@ -111,7 +107,9 @@ async def lifespan(app: FastAPI):
             ArticleState.FACT_CHECKING: MockAgent(),
             ArticleState.SEO_OPTIMIZING: MockAgent(),
             ArticleState.HUMANIZING: MockAgent(),
+            ArticleState.INTERNAL_LINKING: MockAgent(),
             ArticleState.MEDIA_GENERATING: MockAgent(),
+            ArticleState.WORDPRESS_FORMATTING: MockAgent(),
         }
         logger.info("✓ Mock agents initialized (set USE_REAL_AGENTS=true for real LLMs)")
 
@@ -237,10 +235,35 @@ async def get_article(article_id: str):
         "seo": article.seo,
         "final_content": article.final_content,
         "media": article.media,
+        "wordpress_content": article.wordpress_content if hasattr(article, 'wordpress_content') else None,
+        "wordpress_metadata": article.wordpress_metadata if hasattr(article, 'wordpress_metadata') else None,
+        "wordpress_export_ready": article.wordpress_export_ready if hasattr(article, 'wordpress_export_ready') else False,
+        "wordpress_validation_issues": article.wordpress_validation_issues if hasattr(article, 'wordpress_validation_issues') else [],
         "retry_count": article.retry_count,
         "error": article.error,
         "created_at": article.created_at.isoformat(),
         "updated_at": article.updated_at.isoformat()
+    }
+
+
+@app.get("/articles/{article_id}/wordpress")
+async def get_wordpress_content(article_id: str):
+    """Get WordPress-formatted content for export"""
+    article = state_machine.db.get_article(article_id)
+    if not article:
+        return JSONResponse(status_code=404, content={"error": "Article not found"})
+
+    if not hasattr(article, 'wordpress_content') or not article.wordpress_content:
+        return JSONResponse(
+            status_code=400,
+            content={"error": "WordPress content not generated yet. Article must reach 'ready' state."}
+        )
+
+    return {
+        "wordpress_content": article.wordpress_content,
+        "metadata": article.wordpress_metadata if hasattr(article, 'wordpress_metadata') else {},
+        "export_ready": article.wordpress_export_ready if hasattr(article, 'wordpress_export_ready') else False,
+        "validation_issues": article.wordpress_validation_issues if hasattr(article, 'wordpress_validation_issues') else []
     }
 
 

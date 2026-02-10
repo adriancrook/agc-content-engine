@@ -21,13 +21,13 @@ logger = logging.getLogger(__name__)
 class MediaAgent(BaseAgent):
     """
     Media agent using Google Gemini API
-    Generates header images for articles using Gemini 2.5 Flash Image
+    Generates header images for articles using Gemini 3 Pro Image Preview
     """
 
     def __init__(self, config: Dict = None):
         super().__init__(config)
         self.google_api_key = config.get("google_api_key") if config else None
-        self.model = "gemini-2.5-flash-image"  # Google's image generation model
+        self.model = "gemini-3-pro-image-preview"  # Google's Gemini 3 image generation model
         self.output_dir = config.get("output_dir", "generated_images")
 
         if not self.google_api_key:
