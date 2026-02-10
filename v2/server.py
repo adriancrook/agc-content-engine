@@ -213,14 +213,26 @@ async def get_article(article_id: str):
     if not article:
         return JSONResponse(status_code=404, content={"error": "Not found"})
 
+    # Build progress info based on current state and data
+    progress = {
+        "research": {"complete": bool(article.research), "count": len(article.research.get("sources", [])) if article.research else 0},
+        "draft": {"complete": bool(article.draft), "words": len(article.draft.split()) if article.draft else 0},
+        "enrichment": {"complete": bool(article.enrichment), "citations": len(article.enrichment.get("citations", [])) if article.enrichment else 0},
+        "revision": {"complete": bool(article.revised_draft), "words": len(article.revised_draft.split()) if article.revised_draft else 0},
+        "fact_check": {"complete": bool(article.fact_check), "verified": article.fact_check.get("verified", False) if article.fact_check else False},
+        "seo": {"complete": bool(article.seo), "score": article.seo.get("seo_score", 0) if article.seo else 0},
+        "final": {"complete": bool(article.final_content), "words": len(article.final_content.split()) if article.final_content else 0},
+    }
+
     return {
         "id": article.id,
         "title": article.title,
         "state": article.state,
+        "progress": progress,
         "research": article.research,
         "draft": article.draft,
-        "enrichment": article.enrichment,  # Added for DataEnrichment
-        "revised_draft": article.revised_draft,  # Added for Writer Pass 2
+        "enrichment": article.enrichment,
+        "revised_draft": article.revised_draft,
         "fact_check": article.fact_check,
         "seo": article.seo,
         "final_content": article.final_content,
