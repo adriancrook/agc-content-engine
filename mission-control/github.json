@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-10T00:07:04Z",
-  "lastUpdateHuman": "2026-02-09 16:07 Pacific",
+  "lastUpdate": "2026-02-10T00:12:19Z",
+  "lastUpdateHuman": "2026-02-09 16:12 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,38 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12961,
+      "title": "[Bug]: invalid response structure for grok web search",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12961",
+      "author": "ereid7",
+      "createdAt": "2026-02-10T00:10:31Z",
+      "labels": [
+        "bug"
+      ],
+      "isNew": true
+    },
+    {
+      "number": 12960,
+      "title": "Narration/thinking text leaks to messaging channels between tool calls",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12960",
+      "author": "claudia-patel",
+      "createdAt": "2026-02-10T00:07:19Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12959,
+      "title": "📱 Request iOS TestFlight Access - @Whisky-titan",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12959",
+      "author": "Whisky-titan",
+      "createdAt": "2026-02-10T00:07:11Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12957,
       "title": "[Bug]: Slack channel replies arrive out of order — narration/tool-result segment...",
@@ -60,41 +92,25 @@
       "createdAt": "2026-02-09T23:58:31Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12947,
-      "title": "[Bug]: Store Separation: Fix Context Overflow Under Model Routing",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12947",
-      "author": "mczimmer",
-      "createdAt": "2026-02-09T23:54:43Z",
-      "labels": [
-        "bug"
-      ],
-      "isNew": true
-    },
-    {
-      "number": 12944,
-      "title": "🍎 iOS TestFlight Access Request",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12944",
-      "author": "villarrealwesley79-del",
-      "createdAt": "2026-02-09T23:52:42Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12943,
-      "title": "replyToMode: \"off\" bypassed in Discord threads - messageReference still added",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12943",
-      "author": "garenfeather",
-      "createdAt": "2026-02-09T23:51:58Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12964,
+      "title": "fix(venice): add Kimi K2.5 + missing models, set as default,...",
+      "url": "https://github.com/openclaw/openclaw/pull/12964",
+      "author": "sabrinaaquino",
+      "isDraft": false,
+      "createdAt": "2026-02-10T00:12:10Z"
+    },
+    {
+      "number": 12962,
+      "title": "feat(context): improve context management with better edge c...",
+      "url": "https://github.com/openclaw/openclaw/pull/12962",
+      "author": "varunmehra5",
+      "isDraft": false,
+      "createdAt": "2026-02-10T00:11:13Z"
+    },
     {
       "number": 12958,
       "title": "fix: block agent read access to sensitive config and credent...",
@@ -118,22 +134,6 @@
       "author": "trevorgordon981",
       "isDraft": false,
       "createdAt": "2026-02-10T00:02:02Z"
-    },
-    {
-      "number": 12953,
-      "title": "fix: defer gateway restart until all replies are sent",
-      "url": "https://github.com/openclaw/openclaw/pull/12953",
-      "author": "zoskebutler",
-      "isDraft": false,
-      "createdAt": "2026-02-10T00:01:50Z"
-    },
-    {
-      "number": 12950,
-      "title": "feat: add Telegram pin/unpin message support",
-      "url": "https://github.com/openclaw/openclaw/pull/12950",
-      "author": "alex-muradov",
-      "isDraft": false,
-      "createdAt": "2026-02-09T23:59:46Z"
     }
   ],
   "myPrs": [
@@ -180,9 +180,9 @@
     }
   ],
   "lastCommit": {
-    "sha": "fa21050",
-    "message": "chore: Update deps.",
-    "date": "2026-02-09T23:52:07Z",
-    "author": "cpojer"
+    "sha": "a97db0c",
+    "message": "docs: add changelog entry for #9564 (#12963)",
+    "date": "2026-02-10T00:11:52Z",
+    "author": "George Pickett"
   }
 }
