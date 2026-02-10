@@ -1,6 +1,6 @@
 """
-ResearchAgent for v2 - Adapted from v1
-Gathers web sources and creates research bundle using local LLM
+ResearchAgent for v2 - Cloud-ready version
+Gathers web sources and creates research bundle using Claude Haiku
 """
 
 import json
@@ -43,17 +43,18 @@ class Source:
 
 class ResearchAgent(BaseAgent):
     """
-    Research agent using Brave Search + Local LLM (qwen2.5:14b)
+    Research agent using Brave Search + Claude 3.5 Haiku via OpenRouter
     """
 
     def __init__(self, config: Dict = None):
         super().__init__(config)
         self.brave_api_key = config.get("brave_api_key") if config else None
-        self.ollama_url = config.get("ollama_url", "http://localhost:11434") if config else "http://localhost:11434"
-        self.model = config.get("model", "qwen2.5:14b") if config else "qwen2.5:14b"
+        self.openrouter_api_key = config.get("openrouter_api_key") if config else None
 
         if not self.brave_api_key:
             raise ValueError("Brave API key required for research agent")
+        if not self.openrouter_api_key:
+            raise ValueError("OpenRouter API key required for research agent")
 
     async def run(self, article) -> AgentResult:
         """
@@ -83,11 +84,11 @@ class ResearchAgent(BaseAgent):
 
             logger.info(f"Found {len(unique_sources)} unique sources")
 
-            # Step 2: Analyze sources with LLM
+            # Step 2: Analyze sources with Claude
             analyzed_sources = []
             for source in unique_sources[:20]:  # Limit to 20 sources
                 try:
-                    analyzed = self._analyze_source(source, topic)
+                    analyzed = await self._analyze_source(source, topic)
                     analyzed_sources.append(analyzed)
                 except Exception as e:
                     logger.warning(f"Failed to analyze {source.url}: {e}")
@@ -116,10 +117,10 @@ class ResearchAgent(BaseAgent):
             logger.info(f"Selected {len(final_sources)} sources ({len(recent_sources)} recent)")
 
             # Step 4: Generate outline
-            outline = self._generate_outline(topic, final_sources)
+            outline = await self._generate_outline(topic, final_sources)
 
             # Step 5: Identify gaps
-            gaps = self._identify_gaps(topic, final_sources)
+            gaps = await self._identify_gaps(topic, final_sources)
 
             duration = time.time() - start_time
 
@@ -140,11 +141,17 @@ class ResearchAgent(BaseAgent):
             if not success:
                 error_msg = f"Insufficient sources: {len(final_sources)} total, {len(recent_sources)} recent"
 
+            # Estimate cost (Claude Haiku: $0.25/M input, $1.25/M output)
+            # 20 sources * 200 tokens each = 4000 tokens input, ~500 tokens output
+            input_tokens = len(final_sources) * 200
+            output_tokens = 500
+            cost = (input_tokens / 1_000_000 * 0.25) + (output_tokens / 1_000_000 * 1.25)
+
             return AgentResult(
                 success=success,
                 data={"research": research_data},
-                cost=0.0,  # Local LLM
-                tokens=0,
+                cost=cost,
+                tokens=input_tokens + output_tokens,
                 error=error_msg
             )
 
@@ -192,8 +199,8 @@ class ResearchAgent(BaseAgent):
             logger.error(f"Web search failed: {e}")
             return []
 
-    def _analyze_source(self, source: Source, topic: str) -> Source:
-        """Use LLM to extract key information from source"""
+    async def _analyze_source(self, source: Source, topic: str) -> Source:
+        """Use Claude to extract key information from source"""
         prompt = f"""Analyze this source for an article about "{topic}".
 
 Source URL: {source.url}
@@ -205,7 +212,7 @@ Extract:
 2. Notable quotes from experts
 3. Relevance score (0.0 to 1.0) for the topic
 
-Respond in JSON format:
+Respond ONLY with valid JSON (no markdown, no explanations):
 {{
     "key_stats": ["stat1", "stat2"],
     "key_quotes": ["quote1", "quote2"],
@@ -214,7 +221,7 @@ Respond in JSON format:
 }}"""
 
         try:
-            response = self._call_ollama(prompt)
+            response = await self._call_claude(prompt)
 
             # Clean up response
             if "```json" in response:
@@ -223,20 +230,8 @@ Respond in JSON format:
                 response = response.split("```")[1].split("```")[0]
 
             response = response.strip()
-            response = response.replace(",}", "}").replace(",]", "]")
 
-            # Fix unquoted keys
-            response = re.sub(r'([{,]\s*)(\w+)(\s*:)', r'\1"\2"\3', response)
-
-            try:
-                data = json.loads(response)
-            except json.JSONDecodeError:
-                # Try extracting JSON object
-                json_match = re.search(r'\{.*\}', response, re.DOTALL)
-                if json_match:
-                    data = json.loads(json_match.group())
-                else:
-                    raise
+            data = json.loads(response)
 
             source.key_stats = data.get("key_stats", [])
             source.key_quotes = data.get("key_quotes", [])
@@ -246,12 +241,12 @@ Respond in JSON format:
                 source.published_date = data["estimated_date"]
 
         except Exception as e:
-            logger.warning(f"Failed to parse LLM response: {e}")
+            logger.warning(f"Failed to parse Claude response: {e}")
             source.relevance_score = 0.5
 
         return source
 
-    def _generate_outline(self, topic: str, sources: List[Source]) -> Dict:
+    async def _generate_outline(self, topic: str, sources: List[Source]) -> Dict:
         """Generate article outline from sources"""
 
         # Compile key information
@@ -275,7 +270,7 @@ Create a comprehensive outline with:
 - 2-3 H3 subsections per H2
 - Key points for each section
 
-Respond in JSON:
+Respond ONLY with valid JSON (no markdown, no explanations):
 {{
     "title": "Article Title",
     "sections": [
@@ -288,7 +283,7 @@ Respond in JSON:
 }}"""
 
         try:
-            response = self._call_ollama(prompt)
+            response = await self._call_claude(prompt)
 
             if "```json" in response:
                 response = response.split("```json")[1].split("```")[0]
@@ -301,7 +296,7 @@ Respond in JSON:
             logger.error(f"Failed to generate outline: {e}")
             return {"title": topic, "sections": []}
 
-    def _identify_gaps(self, topic: str, sources: List[Source]) -> List[str]:
+    async def _identify_gaps(self, topic: str, sources: List[Source]) -> List[str]:
         """Identify content gaps vs competitors"""
 
         titles = [s.title for s in sources[:10]]
@@ -313,11 +308,11 @@ Respond in JSON:
 What content gaps exist? What angles are competitors NOT covering?
 List 3-5 unique angles we could take.
 
-Respond as a JSON array:
+Respond ONLY as a JSON array (no markdown, no explanations):
 ["gap 1", "gap 2", "gap 3"]"""
 
         try:
-            response = self._call_ollama(prompt)
+            response = await self._call_claude(prompt)
 
             if "```json" in response:
                 response = response.split("```json")[1].split("```")[0]
@@ -330,25 +325,26 @@ Respond as a JSON array:
             logger.error(f"Failed to identify gaps: {e}")
             return []
 
-    def _call_ollama(self, prompt: str) -> str:
-        """Call local Ollama model"""
-        url = f"{self.ollama_url}/api/generate"
+    async def _call_claude(self, prompt: str) -> str:
+        """Call Claude Haiku via OpenRouter"""
+        url = "https://openrouter.ai/api/v1/chat/completions"
+
+        headers = {
+            "Authorization": f"Bearer {self.openrouter_api_key}",
+            "Content-Type": "application/json",
+        }
 
         payload = {
-            "model": self.model,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": 0.7,
-                "num_predict": 4096,
-            }
+            "model": "anthropic/claude-3.5-haiku",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.7,
         }
 
         try:
-            response = requests.post(url, json=payload, timeout=300)
+            response = requests.post(url, headers=headers, json=payload, timeout=60)
             response.raise_for_status()
-            result = response.json()
-            return result.get("response", "")
+            data = response.json()
+            return data["choices"][0]["message"]["content"]
         except Exception as e:
-            logger.error(f"Ollama call failed: {e}")
+            logger.error(f"Claude API call failed: {e}")
             raise

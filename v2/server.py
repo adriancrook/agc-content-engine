@@ -68,9 +68,9 @@ async def lifespan(app: FastAPI):
         # Real agents configuration (requires Brave + OpenRouter)
         logger.info("Initializing REAL agents...")
 
-        # Core agents (ALL using cloud APIs - no Ollama dependency)
+        # Core agents (ALL using cloud APIs - NO OLLAMA!)
         agents = {
-            ArticleState.RESEARCHING: ResearchAgent({"brave_api_key": brave_api_key}),
+            ArticleState.RESEARCHING: ResearchAgent({"brave_api_key": brave_api_key, "openrouter_api_key": openrouter_api_key}),
             ArticleState.WRITING: WriterAgent({"openrouter_api_key": openrouter_api_key, "pass_type": "draft"}),
             ArticleState.ENRICHING: DataEnrichmentAgent({"brave_api_key": brave_api_key, "openrouter_api_key": openrouter_api_key}),
             ArticleState.REVISING: WriterAgent({"openrouter_api_key": openrouter_api_key, "pass_type": "revision"}),
