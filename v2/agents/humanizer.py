@@ -100,7 +100,19 @@ class HumanizerAgent(BaseAgent):
         if current_section:
             sections.append('\n'.join(current_section))
 
-        return sections
+        # Filter out empty or header-only sections
+        filtered_sections = []
+        for section in sections:
+            # Count non-empty, non-header lines
+            content_lines = [line for line in section.split('\n')
+                           if line.strip() and not line.startswith('#')]
+            # Only keep sections with actual content (at least 2 lines)
+            if len(content_lines) >= 2:
+                filtered_sections.append(section)
+            else:
+                logger.warning(f"Skipping empty/incomplete section: {section[:50]}...")
+
+        return filtered_sections
 
     def _humanize_section(self, section: str) -> str:
         """Polish and refine a single section with Claude"""
