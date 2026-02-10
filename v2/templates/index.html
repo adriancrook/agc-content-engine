@@ -295,6 +295,78 @@
         .spacer {
             flex: 1;
         }
+
+        .topic-card {
+            background: #0f172a;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .topic-card:hover {
+            border-color: #667eea;
+        }
+
+        .topic-card.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .topic-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 0.75rem;
+        }
+
+        .topic-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #e2e8f0;
+        }
+
+        .topic-score {
+            background: #667eea;
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .topic-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+            font-size: 0.875rem;
+        }
+
+        .topic-keyword {
+            color: #94a3b8;
+        }
+
+        .topic-type {
+            padding: 0.15rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .type-trending { background: #f59e0b; color: white; }
+        .type-evergreen { background: #10b981; color: white; }
+        .type-gap { background: #8b5cf6; color: white; }
+        .type-seasonal { background: #ec4899; color: white; }
+
+        .topic-reasoning {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
     </style>
 </head>
 <body>
@@ -335,24 +407,38 @@
         </div>
     </div>
 
-    <!-- New Article Modal -->
+    <!-- Topic Discovery Modal -->
     <div class="modal" id="createModal">
-        <div class="modal-content">
-            <div class="modal-header">Create New Article</div>
-            <form id="createForm" onsubmit="createArticle(event)">
-                <div class="form-group">
-                    <label>Article Title *</label>
-                    <input type="text" id="articleTitle" required placeholder="e.g. The Future of AI in Healthcare">
+        <div class="modal-content" style="max-width: 800px;">
+            <div id="discoveryStep">
+                <div class="modal-header">🔍 Discover Article Topics</div>
+                <div style="color: #94a3b8; margin-bottom: 1.5rem;">
+                    AI will analyze trending topics, evergreen opportunities, and content gaps to suggest high-value article ideas.
                 </div>
-                <div class="form-group">
-                    <label>Primary Keyword *</label>
-                    <input type="text" id="articleKeyword" required placeholder="e.g. AI healthcare technology">
-                </div>
+                <form id="discoverForm" onsubmit="discoverTopics(event)">
+                    <div class="form-group">
+                        <label>Number of Topics</label>
+                        <select id="topicCount" style="width: 100%;">
+                            <option value="5">5 topics</option>
+                            <option value="10" selected>10 topics</option>
+                            <option value="20">20 topics</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn-secondary" onclick="hideCreateModal()">Cancel</button>
+                        <button type="submit" class="btn" id="discoverBtn">🔍 Discover Topics</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="topicsStep" style="display: none;">
+                <div class="modal-header">Select Topics to Create</div>
+                <div id="topicsList" style="max-height: 500px; overflow-y: auto; margin-bottom: 1rem;"></div>
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" onclick="hideCreateModal()">Cancel</button>
-                    <button type="submit" class="btn">Create & Start Pipeline</button>
+                    <button type="button" class="btn" onclick="approveSelectedTopics()">Create Selected Articles</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
@@ -432,56 +518,119 @@
             window.location.href = `/article/${id}`;
         }
 
+        let discoveredTopics = [];
+
         function showCreateModal() {
+            // Reset to discovery step
+            document.getElementById('discoveryStep').style.display = 'block';
+            document.getElementById('topicsStep').style.display = 'none';
             document.getElementById('createModal').classList.add('active');
         }
 
         function hideCreateModal() {
             document.getElementById('createModal').classList.remove('active');
-            document.getElementById('createForm').reset();
+            document.getElementById('discoverForm').reset();
+            discoveredTopics = [];
         }
 
-        async function createArticle(event) {
+        async function discoverTopics(event) {
             event.preventDefault();
 
-            const title = document.getElementById('articleTitle').value;
-            const keyword = document.getElementById('articleKeyword').value;
+            const count = parseInt(document.getElementById('topicCount').value);
+            const discoverBtn = document.getElementById('discoverBtn');
+
+            // Show loading state
+            discoverBtn.textContent = '🔍 Discovering...';
+            discoverBtn.disabled = true;
 
             try {
-                // Step 1: Create the topic
-                const createResponse = await fetch('/topics', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title, keyword })
-                });
-
-                if (!createResponse.ok) {
-                    alert('Failed to create article');
-                    return;
-                }
-
-                const topicData = await createResponse.json();
-                const topicId = topicData.id;
-
-                // Step 2: Auto-approve to start the pipeline
-                const approveResponse = await fetch(`/topics/${topicId}/approve`, {
+                const response = await fetch(`/topics/discover?max_topics=${count}`, {
                     method: 'POST'
                 });
 
-                if (!approveResponse.ok) {
-                    alert('Article created but failed to start pipeline');
+                if (!response.ok) {
+                    alert('Topic discovery failed. Check API keys and try again.');
                     return;
                 }
 
-                // Success! Close modal and refresh
-                hideCreateModal();
-                alert(`Article "${title}" created successfully! Pipeline starting...`);
-                loadStats();
-                loadArticles();
+                const data = await response.json();
+                discoveredTopics = data.topics;
+
+                // Show topics list
+                renderTopics(discoveredTopics);
+
+                // Switch to topics step
+                document.getElementById('discoveryStep').style.display = 'none';
+                document.getElementById('topicsStep').style.display = 'block';
+
             } catch (error) {
-                console.error('Error creating article:', error);
-                alert('Failed to create article. Please try again.');
+                console.error('Error discovering topics:', error);
+                alert('Failed to discover topics. Please try again.');
+            } finally {
+                discoverBtn.textContent = '🔍 Discover Topics';
+                discoverBtn.disabled = false;
             }
+        }
+
+        function renderTopics(topics) {
+            const html = topics.map(topic => `
+                <div class="topic-card" onclick="toggleTopic('${topic.id}')">
+                    <div class="topic-card-header">
+                        <div class="topic-title">${topic.title}</div>
+                        <div class="topic-score">${Math.round(topic.opportunity_score)}</div>
+                    </div>
+                    <div class="topic-meta">
+                        <span class="topic-keyword">🔑 ${topic.keyword}</span>
+                        <span class="topic-type type-${topic.topic_type}">${topic.topic_type}</span>
+                        ${topic.urgency === 'high' ? '<span style="color: #f59e0b;">⚡ Urgent</span>' : ''}
+                    </div>
+                    <div class="topic-reasoning">${topic.reasoning}</div>
+                </div>
+            `).join('');
+
+            document.getElementById('topicsList').innerHTML = html;
+        }
+
+        function toggleTopic(topicId) {
+            const card = event.currentTarget;
+            card.classList.toggle('selected');
+        }
+
+        async function approveSelectedTopics() {
+            const selectedCards = document.querySelectorAll('.topic-card.selected');
+
+            if (selectedCards.length === 0) {
+                alert('Please select at least one topic');
+                return;
+            }
+
+            const selectedIds = Array.from(selectedCards).map(card => {
+                const title = card.querySelector('.topic-title').textContent;
+                const topic = discoveredTopics.find(t => t.title === title);
+                return topic.id;
+            });
+
+            // Approve each topic
+            let successCount = 0;
+            for (const topicId of selectedIds) {
+                try {
+                    const response = await fetch(`/topics/${topicId}/approve`, {
+                        method: 'POST'
+                    });
+
+                    if (response.ok) {
+                        successCount++;
+                    }
+                } catch (error) {
+                    console.error(`Failed to approve topic ${topicId}:`, error);
+                }
+            }
+
+            // Close modal and refresh
+            hideCreateModal();
+            alert(`Created ${successCount} article(s)! Pipeline starting...`);
+            loadStats();
+            loadArticles();
         }
 
         // Load data on page load

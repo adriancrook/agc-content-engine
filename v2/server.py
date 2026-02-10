@@ -264,6 +264,87 @@ async def approve_topic(topic_id: str):
     return {"article_id": article.id, "state": article.state}
 
 
+@app.post("/topics/discover")
+async def discover_topics(max_topics: int = 10):
+    """
+    Discover article topics using AI
+
+    Uses Topic Discovery agent to find:
+    - Trending topics
+    - Evergreen opportunities
+    - Competitor content gaps
+    - Seasonal/timely topics
+    """
+    from agents.topic_discovery import TopicDiscoveryAgent
+
+    # Get API keys
+    brave_api_key = os.getenv("BRAVE_API_KEY")
+    openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+
+    if not brave_api_key or not openrouter_api_key:
+        return JSONResponse(
+            status_code=500,
+            content={"error": "BRAVE_API_KEY and OPENROUTER_API_KEY required for topic discovery"}
+        )
+
+    # Get existing article titles to avoid duplicates
+    existing_articles = []
+    with state_machine.db.SessionLocal() as session:
+        articles = session.query(Article).all()
+        existing_articles = [a.title for a in articles if a.title]
+
+    # Initialize and run discovery agent
+    agent = TopicDiscoveryAgent(
+        brave_api_key=brave_api_key,
+        openrouter_api_key=openrouter_api_key,
+        niche="mobile gaming, game design, and game monetization",
+        blog_url="https://adriancrook.com"
+    )
+
+    result = await agent.discover_topics(
+        existing_articles=existing_articles,
+        max_topics=max_topics
+    )
+
+    if not result.get("success"):
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Topic discovery failed to find enough topics"}
+        )
+
+    # Save topics to database as unapproved
+    from database.models import Topic
+    saved_topics = []
+
+    with state_machine.db.SessionLocal() as session:
+        for topic_data in result["topics"]:
+            new_topic = Topic(
+                title=topic_data["title"],
+                keyword=topic_data["primary_keyword"],
+                approved=False
+            )
+            session.add(new_topic)
+            session.commit()
+            session.refresh(new_topic)
+
+            saved_topics.append({
+                "id": new_topic.id,
+                "title": new_topic.title,
+                "keyword": new_topic.keyword,
+                "secondary_keywords": topic_data.get("secondary_keywords", []),
+                "opportunity_score": topic_data.get("opportunity_score", 0),
+                "reasoning": topic_data.get("reasoning", ""),
+                "topic_type": topic_data.get("topic_type", ""),
+                "urgency": topic_data.get("urgency", ""),
+            })
+
+    return {
+        "topics": saved_topics,
+        "count": len(saved_topics),
+        "duration_seconds": result.get("duration_seconds", 0)
+    }
+
+
 # WebSocket for real-time updates
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
