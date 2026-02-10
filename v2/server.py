@@ -134,8 +134,10 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="AGC v2", lifespan=lifespan)
 
-# Mount static files and templates
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# Mount static files and templates (only if directories exist)
+import os
+if os.path.exists("static"):
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
