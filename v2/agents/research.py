@@ -15,6 +15,20 @@ import requests
 
 from .base import BaseAgent, AgentResult
 
+# Import trusted sources database
+try:
+    from data.trusted_sources import (
+        get_tier1_domains,
+        get_all_domains,
+        format_brave_search_query,
+        get_source_info,
+        DOMAIN_MAP
+    )
+    HAS_TRUSTED_SOURCES = True
+except ImportError:
+    logger.warning("Trusted sources database not found, using default search")
+    HAS_TRUSTED_SOURCES = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -67,12 +81,22 @@ class ResearchAgent(BaseAgent):
         logger.info(f"Researching: {topic}")
 
         try:
-            # Step 1: Web search
+            # Step 1: Web search with priority sources
             all_sources = []
 
-            # Search main topic
-            sources = self._web_search(topic, count=15)
-            all_sources.extend(sources)
+            # First: Search trusted sources (Tier 1 competitor blogs)
+            if HAS_TRUSTED_SOURCES:
+                logger.info("Searching trusted sources first...")
+                trusted_sources = self._web_search_trusted(topic, count=10)
+                all_sources.extend(trusted_sources)
+                logger.info(f"Found {len(trusted_sources)} results from trusted sources")
+
+            # Second: General search to fill remaining slots
+            general_count = 15 - len(all_sources)
+            if general_count > 0:
+                logger.info(f"Searching general sources...")
+                sources = self._web_search(topic, count=general_count)
+                all_sources.extend(sources)
 
             # Deduplicate by URL
             seen_urls = set()
@@ -111,8 +135,22 @@ class ResearchAgent(BaseAgent):
                 else:
                     older_sources.append(source)
 
-            # Combine: prioritize recent
-            final_sources = recent_sources + older_sources[:20 - len(recent_sources)]
+            # Boost relevance for trusted sources
+            if HAS_TRUSTED_SOURCES:
+                for source in analyzed_sources:
+                    # Check if source is from a trusted domain
+                    for domain in get_all_domains():
+                        if domain in source.url:
+                            source.relevance_score = min(1.0, source.relevance_score + 0.2)
+                            logger.info(f"Boosted trusted source: {domain}")
+                            break
+
+            # Sort by relevance score
+            analyzed_sources.sort(key=lambda s: s.relevance_score, reverse=True)
+
+            # Combine: prioritize high relevance and recent
+            final_sources = recent_sources[:12] + older_sources[:8]  # Prioritize recent
+            final_sources = sorted(final_sources, key=lambda s: s.relevance_score, reverse=True)[:20]
 
             logger.info(f"Selected {len(final_sources)} sources ({len(recent_sources)} recent)")
 
@@ -162,6 +200,53 @@ class ResearchAgent(BaseAgent):
                 data={},
                 error=str(e)
             )
+
+    def _web_search_trusted(self, query: str, count: int = 10) -> List[Source]:
+        """Search trusted sources using Brave API with site: filters"""
+        if not HAS_TRUSTED_SOURCES:
+            return []
+
+        # Format query with trusted domains
+        tier1_domains = get_tier1_domains()
+        formatted_query = format_brave_search_query(query, tier1_domains)
+
+        logger.info(f"Searching: {formatted_query}")
+
+        url = "https://api.search.brave.com/res/v1/web/search"
+
+        headers = {
+            "Accept": "application/json",
+            "X-Subscription-Token": self.brave_api_key,
+        }
+
+        params = {
+            "q": formatted_query,
+            "count": count,
+            "freshness": "py",  # Past year
+        }
+
+        try:
+            response = requests.get(url, headers=headers, params=params, timeout=30)
+            response.raise_for_status()
+            data = response.json()
+
+            sources = []
+            for result in data.get("web", {}).get("results", []):
+                source = Source(
+                    url=result.get("url", ""),
+                    title=result.get("title", ""),
+                    snippet=result.get("description", ""),
+                    published_date=result.get("age"),
+                )
+                # Mark as high relevance since it's from trusted source
+                source.relevance_score = 0.9  # High default for trusted sources
+                sources.append(source)
+
+            return sources
+
+        except Exception as e:
+            logger.error(f"Trusted source search failed: {e}")
+            return []
 
     def _web_search(self, query: str, count: int = 10) -> List[Source]:
         """Search web using Brave API"""
