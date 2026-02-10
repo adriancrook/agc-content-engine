@@ -9,8 +9,14 @@ anthropic>=0.40.0
 # Google AI (for image generation)
 google-generativeai>=0.8.0
 
-# Web interface
+# Web interface (v1 - legacy)
 flask>=3.0.0
+
+# Web interface (v2 - FastAPI)
+fastapi>=0.104.0
+uvicorn>=0.24.0
+jinja2>=3.1.0
+python-multipart>=0.0.6
 
 # Utilities
 python-dotenv>=1.0.0

@@ -1,1 +1,1 @@
-web: python web/app_minimal.py
+web: cd v2 && uvicorn server:app --host 0.0.0.0 --port $PORT
