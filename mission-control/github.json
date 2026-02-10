@@ -1,6 +1,6 @@
 {
-  "lastUpdate": "2026-02-10T00:01:47Z",
-  "lastUpdateHuman": "2026-02-09 16:01 Pacific",
+  "lastUpdate": "2026-02-10T00:07:04Z",
+  "lastUpdateHuman": "2026-02-09 16:07 Pacific",
   "repo": "clawdbot/clawdbot",
   "summary": {
     "openIssues": 1000,
@@ -9,6 +9,26 @@
     "trend": 0
   },
   "issues": [
+    {
+      "number": 12957,
+      "title": "[Bug]: Slack channel replies arrive out of order — narration/tool-result segment...",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12957",
+      "author": "kitadesign",
+      "createdAt": "2026-02-10T00:04:57Z",
+      "labels": [],
+      "isNew": true
+    },
+    {
+      "number": 12955,
+      "title": "📱 Request iOS TestFlight Beta Access - @issaba1",
+      "state": "OPEN",
+      "url": "https://github.com/openclaw/openclaw/issues/12955",
+      "author": "issaba1",
+      "createdAt": "2026-02-10T00:02:49Z",
+      "labels": [],
+      "isNew": true
+    },
     {
       "number": 12952,
       "title": "\"at\" schedule jobs enter infinite spin loop after firing",
@@ -72,29 +92,41 @@
       "createdAt": "2026-02-09T23:51:58Z",
       "labels": [],
       "isNew": true
-    },
-    {
-      "number": 12940,
-      "title": "Context overflow error should suggest /clear as recovery option",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12940",
-      "author": "ts232",
-      "createdAt": "2026-02-09T23:50:25Z",
-      "labels": [],
-      "isNew": true
-    },
-    {
-      "number": 12938,
-      "title": "Feature: Skill Tree Visualization for Agent Capabilities",
-      "state": "OPEN",
-      "url": "https://github.com/openclaw/openclaw/issues/12938",
-      "author": "FelipeLVieira",
-      "createdAt": "2026-02-09T23:48:12Z",
-      "labels": [],
-      "isNew": true
     }
   ],
   "prs": [
+    {
+      "number": 12958,
+      "title": "fix: block agent read access to sensitive config and credent...",
+      "url": "https://github.com/openclaw/openclaw/pull/12958",
+      "author": "000boil",
+      "isDraft": false,
+      "createdAt": "2026-02-10T00:05:29Z"
+    },
+    {
+      "number": 12956,
+      "title": "fix: guard .trim() calls on potentially undefined workspaceD...",
+      "url": "https://github.com/openclaw/openclaw/pull/12956",
+      "author": "omair445",
+      "isDraft": false,
+      "createdAt": "2026-02-10T00:04:24Z"
+    },
+    {
+      "number": 12954,
+      "title": "feat(slack): Add channel name resolution with TTL cache",
+      "url": "https://github.com/openclaw/openclaw/pull/12954",
+      "author": "trevorgordon981",
+      "isDraft": false,
+      "createdAt": "2026-02-10T00:02:02Z"
+    },
+    {
+      "number": 12953,
+      "title": "fix: defer gateway restart until all replies are sent",
+      "url": "https://github.com/openclaw/openclaw/pull/12953",
+      "author": "zoskebutler",
+      "isDraft": false,
+      "createdAt": "2026-02-10T00:01:50Z"
+    },
     {
       "number": 12950,
       "title": "feat: add Telegram pin/unpin message support",
@@ -102,38 +134,6 @@
       "author": "alex-muradov",
       "isDraft": false,
       "createdAt": "2026-02-09T23:59:46Z"
-    },
-    {
-      "number": 12949,
-      "title": "fix(bedrock): sanitize tool names for Bedrock Converse API c...",
-      "url": "https://github.com/openclaw/openclaw/pull/12949",
-      "author": "omair445",
-      "isDraft": false,
-      "createdAt": "2026-02-09T23:59:05Z"
-    },
-    {
-      "number": 12946,
-      "title": "fix(telegram): reduce false positives billing error detectio...",
-      "url": "https://github.com/openclaw/openclaw/pull/12946",
-      "author": "jabezborja",
-      "isDraft": false,
-      "createdAt": "2026-02-09T23:54:04Z"
-    },
-    {
-      "number": 12945,
-      "title": "fix(web_search): remove unsupported include param from Grok ...",
-      "url": "https://github.com/openclaw/openclaw/pull/12945",
-      "author": "omair445",
-      "isDraft": false,
-      "createdAt": "2026-02-09T23:53:00Z"
-    },
-    {
-      "number": 12942,
-      "title": "fix(providers): preserve openrouter/ prefix for native model...",
-      "url": "https://github.com/openclaw/openclaw/pull/12942",
-      "author": "omair445",
-      "isDraft": false,
-      "createdAt": "2026-02-09T23:51:32Z"
     }
   ],
   "myPrs": [
