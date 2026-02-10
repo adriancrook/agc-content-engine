@@ -1,11 +1,10 @@
 """
-FactCheckerAgent for v2 - Simplified from v1
-Verifies claims against research sources
+FactCheckerAgent for v2 - Cloud-ready version
+Verifies claims against research sources using Claude Haiku
 """
 
 import json
 import logging
-import re
 import time
 from typing import Dict, List
 
@@ -18,14 +17,15 @@ logger = logging.getLogger(__name__)
 
 class FactCheckerAgent(BaseAgent):
     """
-    Fact checker using local LLM
+    Fact checker using Claude 3.5 Haiku via OpenRouter
     Verifies article claims against research sources
     """
 
     def __init__(self, config: Dict = None):
         super().__init__(config)
-        self.ollama_url = config.get("ollama_url", "http://localhost:11434") if config else "http://localhost:11434"
-        self.model = config.get("model", "qwen2.5:14b") if config else "qwen2.5:14b"
+        self.openrouter_api_key = config.get("openrouter_api_key") if config else None
+        if not self.openrouter_api_key:
+            raise ValueError("FactCheckerAgent requires openrouter_api_key in config")
 
     async def run(self, article) -> AgentResult:
         """
@@ -56,8 +56,8 @@ class FactCheckerAgent(BaseAgent):
                 for quote in s.get("key_quotes", []):
                     source_facts.append(f'- "{quote}" (from {s.get("title", "source")})')
 
-            # Ask LLM to verify claims
-            verification = self._verify_claims(draft, source_facts)
+            # Ask Claude to verify claims
+            verification = await self._verify_claims(draft, source_facts)
 
             # Calculate accuracy
             total_claims = verification.get("total_claims", 0)
@@ -68,6 +68,11 @@ class FactCheckerAgent(BaseAgent):
 
             # Success if 85%+ accuracy
             success = accuracy >= 0.85
+
+            # Estimate cost (Claude Haiku: $0.25/M input, $1.25/M output)
+            input_tokens = len(draft.split()) * 1.3
+            output_tokens = 200
+            cost = (input_tokens / 1_000_000 * 0.25) + (output_tokens / 1_000_000 * 1.25)
 
             return AgentResult(
                 success=success,
@@ -80,8 +85,8 @@ class FactCheckerAgent(BaseAgent):
                         "verified": success
                     }
                 },
-                cost=0.0,
-                tokens=0,
+                cost=cost,
+                tokens=int(input_tokens + output_tokens),
                 error=None if success else f"Low accuracy: {accuracy:.0%}"
             )
 
@@ -93,7 +98,7 @@ class FactCheckerAgent(BaseAgent):
                 error=str(e)
             )
 
-    def _verify_claims(self, draft: str, source_facts: List[str]) -> Dict:
+    async def _verify_claims(self, draft: str, source_facts: List[str]) -> Dict:
         """Verify claims in draft against source facts"""
 
         prompt = f"""You are a fact checker. Verify the claims in this article draft against the provided source facts.
@@ -109,7 +114,7 @@ Task:
 2. Check if each claim is supported by the source facts
 3. List any unsupported or questionable claims
 
-Respond in JSON:
+Respond ONLY with valid JSON (no markdown, no explanations):
 {{
     "total_claims": 15,
     "verified_claims": 13,
@@ -120,7 +125,7 @@ Respond in JSON:
 }}"""
 
         try:
-            response = self._call_ollama(prompt)
+            response = await self._call_claude(prompt)
 
             # Parse JSON
             if "```json" in response:
@@ -139,25 +144,26 @@ Respond in JSON:
                 "issues": []
             }
 
-    def _call_ollama(self, prompt: str) -> str:
-        """Call local Ollama model"""
-        url = f"{self.ollama_url}/api/generate"
+    async def _call_claude(self, prompt: str) -> str:
+        """Call Claude Haiku via OpenRouter"""
+        url = "https://openrouter.ai/api/v1/chat/completions"
+
+        headers = {
+            "Authorization": f"Bearer {self.openrouter_api_key}",
+            "Content-Type": "application/json",
+        }
 
         payload = {
-            "model": self.model,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": 0.1,  # Low temp for factual reasoning
-                "num_predict": 2048,
-            }
+            "model": "anthropic/claude-3.5-haiku",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.1,  # Low temp for factual reasoning
         }
 
         try:
-            response = requests.post(url, json=payload, timeout=300)
+            response = requests.post(url, headers=headers, json=payload, timeout=60)
             response.raise_for_status()
-            result = response.json()
-            return result.get("response", "")
+            data = response.json()
+            return data["choices"][0]["message"]["content"]
         except Exception as e:
-            logger.error(f"Ollama call failed: {e}")
+            logger.error(f"Claude API call failed: {e}")
             raise

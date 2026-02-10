@@ -68,14 +68,14 @@ async def lifespan(app: FastAPI):
         # Real agents configuration (requires Brave + OpenRouter)
         logger.info("Initializing REAL agents...")
 
-        # Core agents (Brave for research, Claude for writing, enrichment, revision)
+        # Core agents (ALL using cloud APIs - no Ollama dependency)
         agents = {
             ArticleState.RESEARCHING: ResearchAgent({"brave_api_key": brave_api_key}),
             ArticleState.WRITING: WriterAgent({"openrouter_api_key": openrouter_api_key, "pass_type": "draft"}),
             ArticleState.ENRICHING: DataEnrichmentAgent({"brave_api_key": brave_api_key, "openrouter_api_key": openrouter_api_key}),
             ArticleState.REVISING: WriterAgent({"openrouter_api_key": openrouter_api_key, "pass_type": "revision"}),
-            ArticleState.FACT_CHECKING: FactCheckerAgent(),
-            ArticleState.SEO_OPTIMIZING: SEOAgent(),
+            ArticleState.FACT_CHECKING: FactCheckerAgent({"openrouter_api_key": openrouter_api_key}),
+            ArticleState.SEO_OPTIMIZING: SEOAgent({"openrouter_api_key": openrouter_api_key}),
         }
 
         # Paid agents (optional)
@@ -95,11 +95,12 @@ async def lifespan(app: FastAPI):
 
         agents[ArticleState.MEDIA_GENERATING] = MockAgent()
 
-        # Count paid agents: Writer (Claude) + Humanizer (Claude) + Media (Gemini if available)
-        paid_count = 2  # Writer + Humanizer
+        # Count paid agents: Writer + FactChecker + SEO + Humanizer + Media (if Gemini)
+        paid_count = 4  # Writer + FactChecker + SEO + Humanizer (all Claude)
         if google_api_key:
             paid_count += 1
-        logger.info(f"✓ Agents ready: Research (Brave) + Writer (Claude) + Fact/SEO (Ollama) + Humanizer (Claude) + Media ({'Gemini' if google_api_key else 'Mock'})")
+        logger.info(f"✓ Agents ready: Research (Brave) + Writer (Claude Sonnet) + FactChecker (Claude Haiku) + SEO (Claude Haiku) + Humanizer (Claude Sonnet) + Media ({'Gemini' if google_api_key else 'Mock'})")
+        logger.info(f"✓ NO OLLAMA DEPENDENCY - All agents use cloud APIs")
     else:
         # Mock agents for testing
         agents = {

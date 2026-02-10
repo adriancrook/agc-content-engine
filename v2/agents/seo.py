@@ -1,6 +1,6 @@
 """
-SEOAgent for v2 - Simplified from v1
-Optimizes article for search engines
+SEOAgent for v2 - Cloud-ready version
+Optimizes article for search engines using Claude Haiku
 """
 
 import json
@@ -18,14 +18,15 @@ logger = logging.getLogger(__name__)
 
 class SEOAgent(BaseAgent):
     """
-    SEO optimizer using local LLM
+    SEO optimizer using Claude 3.5 Haiku via OpenRouter
     Generates meta description, optimizes content
     """
 
     def __init__(self, config: Dict = None):
         super().__init__(config)
-        self.ollama_url = config.get("ollama_url", "http://localhost:11434") if config else "http://localhost:11434"
-        self.model = config.get("model", "qwen2.5:14b") if config else "qwen2.5:14b"
+        self.openrouter_api_key = config.get("openrouter_api_key") if config else None
+        if not self.openrouter_api_key:
+            raise ValueError("SEOAgent requires openrouter_api_key in config")
 
     async def run(self, article) -> AgentResult:
         """
@@ -53,34 +54,36 @@ class SEOAgent(BaseAgent):
         logger.info(f"SEO optimizing for keyword: {primary_keyword}")
 
         try:
-            # Step 1: Generate meta description
-            meta_description = self._generate_meta_description(draft, primary_keyword)
+            # Step 1: Generate meta description and analyze SEO
+            seo_analysis = await self._analyze_seo(draft, primary_keyword)
 
-            # Step 2: Calculate SEO score
-            seo_score = self._calculate_seo_score(draft, primary_keyword)
+            # Step 2: Calculate keyword density
+            keyword_density = self._calculate_keyword_density(draft, primary_keyword)
 
-            # Step 3: Generate suggestions
-            suggestions = self._generate_suggestions(draft, primary_keyword, seo_score)
+            logger.info(f"SEO complete: score {seo_analysis['seo_score']}/100")
 
-            logger.info(f"SEO complete: score {seo_score}/100")
+            # Success if score >= 35
+            success = seo_analysis['seo_score'] >= 35
 
-            # Success if score >= 35 (lowered threshold for v2 MVP)
-            success = seo_score >= 35
+            # Estimate cost (Claude Haiku: $0.25/M input, $1.25/M output)
+            input_tokens = len(draft.split()) * 1.3
+            output_tokens = 300
+            cost = (input_tokens / 1_000_000 * 0.25) + (output_tokens / 1_000_000 * 1.25)
 
             return AgentResult(
                 success=success,
                 data={
                     "seo": {
                         "primary_keyword": primary_keyword,
-                        "meta_description": meta_description,
-                        "seo_score": seo_score,
-                        "suggestions": suggestions,
-                        "keyword_density": self._calculate_keyword_density(draft, primary_keyword)
+                        "meta_description": seo_analysis['meta_description'],
+                        "seo_score": seo_analysis['seo_score'],
+                        "suggestions": seo_analysis['suggestions'],
+                        "keyword_density": keyword_density
                     }
                 },
-                cost=0.0,
-                tokens=0,
-                error=None if success else f"Low SEO score: {seo_score}/100"
+                cost=cost,
+                tokens=int(input_tokens + output_tokens),
+                error=None if success else f"Low SEO score: {seo_analysis['seo_score']}/100"
             )
 
         except Exception as e:
@@ -91,148 +94,89 @@ class SEOAgent(BaseAgent):
                 error=str(e)
             )
 
-    def _generate_meta_description(self, draft: str, keyword: str) -> str:
-        """Generate SEO meta description"""
+    async def _analyze_seo(self, draft: str, keyword: str) -> Dict:
+        """Use Claude to analyze SEO and generate meta description"""
 
-        # Extract first few paragraphs
-        paragraphs = []
-        for line in draft.split('\n'):
-            if line and not line.startswith('#'):
-                paragraphs.append(line)
-            if len(paragraphs) >= 3:
-                break
+        prompt = f"""You are an SEO expert. Analyze this article and provide SEO optimization recommendations.
 
-        content_preview = ' '.join(paragraphs)[:500]
+PRIMARY KEYWORD: {keyword}
 
-        prompt = f"""Write a compelling meta description for this article.
+ARTICLE (first 3000 chars):
+{draft[:3000]}
 
-Primary Keyword: {keyword}
+Tasks:
+1. Write a compelling meta description (150-160 characters) that includes the primary keyword
+2. Calculate an SEO score (0-100) based on:
+   - Keyword usage in title and headings
+   - Content quality and readability
+   - Proper heading structure
+   - Content length
+3. Provide 3-5 actionable suggestions to improve SEO
 
-Article Preview:
-{content_preview}
-
-Requirements:
-- 150-160 characters
-- Include primary keyword naturally
-- Compelling hook to increase click-through rate
-- Action-oriented
-
-Write ONLY the meta description (no quotes, no explanation)."""
+Respond ONLY with valid JSON (no markdown, no explanations):
+{{
+    "meta_description": "Compelling 150-160 char description with keyword",
+    "seo_score": 75,
+    "suggestions": [
+        "Add keyword to first paragraph",
+        "Include more subheadings",
+        "Add internal links"
+    ]
+}}"""
 
         try:
-            response = self._call_ollama(prompt)
-            meta = response.strip().strip('"')
+            response = await self._call_claude(prompt)
 
-            # Truncate to 160 chars
-            if len(meta) > 160:
-                meta = meta[:157] + "..."
+            # Parse JSON
+            if "```json" in response:
+                response = response.split("```json")[1].split("```")[0]
+            elif "```" in response:
+                response = response.split("```")[1].split("```")[0]
 
-            return meta
+            data = json.loads(response.strip())
+            return data
 
         except Exception as e:
-            logger.warning(f"Failed to generate meta description: {e}")
-            return f"Learn about {keyword} in this comprehensive guide."
+            logger.warning(f"Failed to parse SEO response: {e}")
+            return {
+                "meta_description": draft[:160],
+                "seo_score": 50,
+                "suggestions": ["Review keyword placement", "Improve heading structure"]
+            }
 
-    def _calculate_seo_score(self, draft: str, keyword: str) -> int:
-        """Calculate SEO score 0-100"""
-        score = 0
-
-        # Title includes keyword (+25 points)
-        title_match = re.search(r'^# (.+)$', draft, re.MULTILINE)
-        if title_match and keyword.lower() in title_match.group(1).lower():
-            score += 25
-
-        # First paragraph includes keyword (+20 points)
-        paragraphs = draft.split('\n\n')
-        for p in paragraphs[:3]:
-            if not p.startswith('#') and keyword.lower() in p.lower():
-                score += 20
-                break
-
-        # Has H2 headers (+15 points)
-        h2_count = draft.count('\n## ')
-        if h2_count >= 4:
-            score += 15
-
-        # Good length (+15 points)
-        word_count = len(draft.split())
-        if word_count >= 2000:
-            score += 15
-
-        # Keyword density is good (+15 points)
-        density = self._calculate_keyword_density(draft, keyword)
-        if 0.5 <= density <= 2.5:
-            score += 15
-
-        # Has internal structure (+10 points)
-        if '\n### ' in draft:  # Has H3 subsections
-            score += 10
-
-        return min(score, 100)
-
-    def _calculate_keyword_density(self, text: str, keyword: str) -> float:
-        """Calculate keyword density as percentage"""
-        text_lower = text.lower()
+    def _calculate_keyword_density(self, draft: str, keyword: str) -> float:
+        """Calculate keyword density"""
+        words = draft.lower().split()
         keyword_lower = keyword.lower()
-
-        keyword_count = text_lower.count(keyword_lower)
-        total_words = len(text.split())
+        keyword_count = words.count(keyword_lower)
+        total_words = len(words)
 
         if total_words == 0:
             return 0.0
 
-        return (keyword_count / total_words) * 100
+        density = (keyword_count / total_words) * 100
+        return round(density, 2)
 
-    def _generate_suggestions(self, draft: str, keyword: str, score: int) -> list:
-        """Generate SEO improvement suggestions"""
-        suggestions = []
+    async def _call_claude(self, prompt: str) -> str:
+        """Call Claude Haiku via OpenRouter"""
+        url = "https://openrouter.ai/api/v1/chat/completions"
 
-        if score < 70:
-            suggestions.append("Overall SEO score needs improvement")
-
-        # Check title
-        title_match = re.search(r'^# (.+)$', draft, re.MULTILINE)
-        if not title_match or keyword.lower() not in title_match.group(1).lower():
-            suggestions.append(f"Add '{keyword}' to article title")
-
-        # Check density
-        density = self._calculate_keyword_density(draft, keyword)
-        if density < 0.5:
-            suggestions.append(f"Increase keyword density (currently {density:.1f}%)")
-        elif density > 2.5:
-            suggestions.append(f"Reduce keyword density (currently {density:.1f}%)")
-
-        # Check length
-        word_count = len(draft.split())
-        if word_count < 2000:
-            suggestions.append(f"Increase content length (currently {word_count} words)")
-
-        # Check headers
-        h2_count = draft.count('\n## ')
-        if h2_count < 4:
-            suggestions.append("Add more H2 section headers")
-
-        return suggestions
-
-    def _call_ollama(self, prompt: str) -> str:
-        """Call local Ollama model"""
-        url = f"{self.ollama_url}/api/generate"
+        headers = {
+            "Authorization": f"Bearer {self.openrouter_api_key}",
+            "Content-Type": "application/json",
+        }
 
         payload = {
-            "model": self.model,
-            "prompt": prompt,
-            "stream": False,
-            "options": {
-                "temperature": 0.3,
-                "num_predict": 512,
-            }
+            "model": "anthropic/claude-3.5-haiku",
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.3,
         }
 
         try:
-            response = requests.post(url, json=payload, timeout=120)
+            response = requests.post(url, headers=headers, json=payload, timeout=60)
             response.raise_for_status()
-            result = response.json()
-            return result.get("response", "")
+            data = response.json()
+            return data["choices"][0]["message"]["content"]
         except Exception as e:
-            logger.error(f"Ollama call failed: {e}")
+            logger.error(f"Claude API call failed: {e}")
             raise
