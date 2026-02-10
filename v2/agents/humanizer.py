@@ -133,9 +133,10 @@ REFINEMENT GUIDELINES:
 8. **CRITICAL**: PRESERVE the ## Sources section exactly if present
 9. **CRITICAL**: PRESERVE all blockquote sections (lines starting with >) EXACTLY as written
 10. **CRITICAL**: PRESERVE all game/company hyperlinks like [Game Name](url) EXACTLY as written
-11. **CRITICAL**: PRESERVE the **Key Takeaways:** section with bullet points EXACTLY as written
-12. **CRITICAL**: PRESERVE the ## FAQs section with ### questions EXACTLY as written
-13. DO NOT add casual language, contractions, or personal opinions
+11. **CRITICAL**: PRESERVE all internal links to adriancrook.com EXACTLY as written
+12. **CRITICAL**: PRESERVE the **Key Takeaways:** section with bullet points EXACTLY as written
+13. **CRITICAL**: PRESERVE the ## FAQs section with ### questions EXACTLY as written
+14. DO NOT add casual language, contractions, or personal opinions
 
 IMPORTANT:
 - Keep the same H2/H3 headers exactly (including ## FAQs, ### questions)
