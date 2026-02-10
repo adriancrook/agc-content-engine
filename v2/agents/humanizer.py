@@ -133,20 +133,24 @@ REFINEMENT GUIDELINES:
 8. **CRITICAL**: PRESERVE the ## Sources section exactly if present
 9. **CRITICAL**: PRESERVE all blockquote sections (lines starting with >) EXACTLY as written
 10. **CRITICAL**: PRESERVE all game/company hyperlinks like [Game Name](url) EXACTLY as written
-11. DO NOT add casual language, contractions, or personal opinions
+11. **CRITICAL**: PRESERVE the **Key Takeaways:** section with bullet points EXACTLY as written
+12. **CRITICAL**: PRESERVE the ## FAQs section with ### questions EXACTLY as written
+13. DO NOT add casual language, contractions, or personal opinions
 
 IMPORTANT:
-- Keep the same H2/H3 headers exactly
+- Keep the same H2/H3 headers exactly (including ## FAQs, ### questions)
 - Maintain the same structure and organization
 - Preserve ALL factual content and citations
 - DO NOT modify, remove, or reformat [[n]](url) citations
 - DO NOT change URLs or citation numbers
 - DO NOT modify blockquote format or expert quote attributions
 - DO NOT change game/company hyperlinks [Name](url)
+- DO NOT modify Key Takeaways bullet format (keep ** bold markers)
+- DO NOT change FAQ questions or structure
 - The goal is polish and flow, not casualization
 - This should read like a high-quality professional blog post
 
-Write the refined version with ALL citation links, blockquotes, and hyperlinks preserved:"""
+Write the refined version with ALL citation links, blockquotes, hyperlinks, Key Takeaways, and FAQs preserved:"""
 
         response = self._call_openrouter(prompt)
         return response.strip()

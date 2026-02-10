@@ -65,8 +65,12 @@ class WriterAgent(BaseAgent):
         try:
             # Write article sections
             intro = self._write_introduction(topic, outline, sources)
-            sections = []
 
+            # Generate Key Takeaways
+            logger.info("Generating Key Takeaways")
+            key_takeaways = self._generate_key_takeaways(topic, outline, sources)
+
+            sections = []
             for section in outline.get("sections", []):
                 logger.info(f"Writing section: {section.get('h2', '')}")
                 section_content = self._write_section(topic, section, sources)
@@ -74,12 +78,18 @@ class WriterAgent(BaseAgent):
 
             conclusion = self._write_conclusion(topic, outline, sources)
 
-            # Compile full article with sources section
+            # Generate FAQ section
+            logger.info("Generating FAQ section")
+            faq = self._generate_faq(topic, outline, sources)
+
+            # Compile full article with all sections
             article_md = self._compile_article(
                 outline.get("title", topic),
                 intro,
+                key_takeaways,
                 sections,
                 conclusion,
+                faq,
                 sources  # Pass sources for citation list
             )
 
@@ -263,6 +273,102 @@ Write ONLY the conclusion text."""
         response = self._call_openrouter(prompt, max_tokens=500)
         return response.strip()
 
+    def _generate_key_takeaways(self, topic: str, outline: Dict, sources: List[Dict]) -> str:
+        """Generate Key Takeaways bullet list from article content"""
+
+        # Build context from outline and sources
+        section_summaries = []
+        for section in outline.get("sections", [])[:5]:
+            section_summaries.append(f"- {section.get('h2', '')}")
+
+        # Get key stats
+        key_stats = []
+        for s in sources[:5]:
+            for stat in s.get('key_stats', [])[:2]:
+                key_stats.append(stat)
+
+        prompt = f"""Generate Key Takeaways for an article titled: "{outline.get('title', topic)}"
+
+TOPIC: {topic}
+
+ARTICLE SECTIONS:
+{chr(10).join(section_summaries)}
+
+KEY STATISTICS:
+{chr(10).join(f"- {stat}" for stat in key_stats[:8])}
+
+REQUIREMENTS:
+1. Create 4-5 actionable key takeaways
+2. Format: **[Bold Action/Insight]:** Brief explanation (1 sentence)
+3. Each takeaway should be specific and data-driven
+4. Focus on practical insights readers can use
+5. Use strong action verbs (Leverage, Optimize, Implement, Focus on, etc.)
+6. Keep each takeaway to 15-25 words
+7. NO vague language - be specific
+
+EXACT FORMAT TO USE:
+**Key Takeaways:**
+- **[Action 1]:** Brief explanation with specific detail.
+- **[Action 2]:** Brief explanation with specific detail.
+- **[Action 3]:** Brief explanation with specific detail.
+- **[Action 4]:** Brief explanation with specific detail.
+
+EXAMPLE:
+**Key Takeaways:**
+- **Prioritize hybrid monetization:** Combine in-app purchases with rewarded video ads to maximize revenue across both paying and non-paying users.
+- **Target high-ARPU markets:** Focus on US, Japan, and China where mobile gamers spend $60+ annually per user.
+
+Write ONLY the Key Takeaways section (4-5 bullets) using the exact format above:"""
+
+        response = self._call_openrouter(prompt, max_tokens=400)
+        return response.strip()
+
+    def _generate_faq(self, topic: str, outline: Dict, sources: List[Dict]) -> str:
+        """Generate FAQ section with 3 questions"""
+
+        # Build context from outline
+        section_summaries = []
+        for section in outline.get("sections", []):
+            section_summaries.append(section.get('h2', ''))
+
+        prompt = f"""Generate an FAQ section for an article titled: "{outline.get('title', topic)}"
+
+TOPIC: {topic}
+
+ARTICLE COVERS:
+{chr(10).join(f"- {s}" for s in section_summaries)}
+
+REQUIREMENTS:
+1. Create exactly 3 frequently asked questions
+2. Questions should cover different aspects of the topic
+3. Answers should be concise (50-75 words each)
+4. Use ### for each question header
+5. Answer should be practical and specific
+6. NO sales language or calls to action
+
+EXACT FORMAT TO USE:
+## FAQs
+
+### [Question 1]?
+[Answer with specific details and insights]
+
+### [Question 2]?
+[Answer with specific details and insights]
+
+### [Question 3]?
+[Answer with specific details and insights]
+
+EXAMPLE:
+## FAQs
+
+### What is the most profitable mobile game monetization model?
+Hybrid monetization combining in-app purchases with rewarded video ads generates the highest revenue. This model caters to both paying users through IAP and non-paying users through ads, maximizing lifetime value across your entire player base.
+
+Write ONLY the FAQ section with exactly 3 questions using the format above:"""
+
+        response = self._call_openrouter(prompt, max_tokens=800)
+        return response.strip()
+
     def _generate_sources_section(self, sources: List[Dict]) -> str:
         """Generate the Sources section with numbered citations"""
         sources_lines = ["## Sources", ""]
@@ -276,13 +382,15 @@ Write ONLY the conclusion text."""
 
         return "\n".join(sources_lines)
 
-    def _compile_article(self, title: str, intro: str, sections: List[str], conclusion: str, sources: List[Dict] = None) -> str:
-        """Compile all parts into final article with sources section"""
+    def _compile_article(self, title: str, intro: str, key_takeaways: str, sections: List[str], conclusion: str, faq: str, sources: List[Dict] = None) -> str:
+        """Compile all parts into final article with key takeaways, FAQ, and sources"""
 
         parts = [
             f"# {title}",
             "",
             intro,
+            "",
+            key_takeaways,  # Key Takeaways right after intro
             "",
         ]
 
@@ -293,6 +401,11 @@ Write ONLY the conclusion text."""
         parts.append("## Conclusion")
         parts.append("")
         parts.append(conclusion)
+        parts.append("")
+        parts.append("")
+
+        # Add FAQ section
+        parts.append(faq)
 
         # Add Sources section if sources provided
         if sources:
