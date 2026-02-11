@@ -3,6 +3,7 @@ InternalLinkingAgent for v2
 Adds internal links to existing adriancrook.com articles
 """
 
+import asyncio
 import logging
 import re
 from typing import Dict, List, Optional
@@ -27,35 +28,57 @@ class InternalLinkingAgent(BaseAgent):
         """
         Add internal links to article content
         """
-        draft = article.final_content if hasattr(article, 'final_content') else article.draft
-
-        if not draft:
-            return AgentResult(
-                success=False,
-                data={},
-                error="No draft content found"
-            )
-
-        topic = article.title
-        logger.info(f"Finding internal links for: {topic}")
+        logger.info(f"InternalLinkingAgent.run() called for article: {article.id[:8]}")
 
         try:
+            draft = article.final_content if hasattr(article, 'final_content') else article.draft
+
+            if not draft:
+                logger.error("No draft content found")
+                return AgentResult(
+                    success=False,
+                    data={},
+                    error="No draft content found"
+                )
+
+            topic = article.title
+            logger.info(f"Finding internal links for: {topic} (length: {len(draft)} chars)")
+
             # Extract key topics from the article
+            logger.info("Extracting topics...")
             topics = self._extract_topics(topic, draft)
+            logger.info(f"Extracted {len(topics)} topics: {topics[:5]}")
 
             # Find relevant articles
+            logger.info("Finding relevant articles...")
             relevant_articles = self._find_relevant_articles(topics)
+            logger.info(f"Found {len(relevant_articles)} relevant articles")
 
             if len(relevant_articles) < self.min_links:
                 logger.warning(f"Only found {len(relevant_articles)} relevant articles (need {self.min_links})")
 
-            # Insert links into the draft
-            updated_draft = self._insert_internal_links(draft, relevant_articles)
+            # Insert links with timeout protection
+            logger.info("Inserting internal links...")
+            try:
+                updated_draft = await asyncio.wait_for(
+                    asyncio.to_thread(self._insert_internal_links, draft, relevant_articles),
+                    timeout=30.0  # 30 second timeout
+                )
+                logger.info("Internal link insertion completed")
+            except asyncio.TimeoutError:
+                logger.error("Internal link insertion timed out after 30 seconds")
+                return AgentResult(
+                    success=False,
+                    data={},
+                    error="Internal link insertion timed out"
+                )
 
             # Count inserted links
-            link_count = self._count_internal_links(updated_draft, original_count=self._count_internal_links(draft))
+            original_links = self._count_internal_links(draft)
+            final_links = self._count_internal_links(updated_draft)
+            link_count = final_links - original_links
 
-            logger.info(f"Added {link_count} internal links")
+            logger.info(f"Added {link_count} internal links (original: {original_links}, final: {final_links})")
 
             success = link_count >= self.min_links
 
@@ -72,7 +95,7 @@ class InternalLinkingAgent(BaseAgent):
             )
 
         except Exception as e:
-            logger.error(f"Internal linking failed: {e}")
+            logger.error(f"Internal linking failed: {e}", exc_info=True)
             return AgentResult(
                 success=False,
                 data={},
@@ -131,6 +154,9 @@ class InternalLinkingAgent(BaseAgent):
 
         updated_draft = draft
 
+        # Cache to track what we've already tried to avoid redundant regex
+        attempted_patterns = set()
+
         # For each article, try to find a natural place to link
         for article in articles[:self.max_links]:
             title = article['title']
@@ -142,55 +168,85 @@ class InternalLinkingAgent(BaseAgent):
                 " ".join(words[:3]),
                 " ".join(words[:4]),
                 " ".join(words[:5]),
-                " ".join(words[1:4]),  # Skip first word
             ]
 
             # Try to find and replace first occurrence
             linked = False
             for anchor in anchor_candidates:
+                if len(anchor) < 10:  # Skip very short anchors
+                    continue
+
+                anchor_lower = anchor.lower()
+                if anchor_lower in attempted_patterns:
+                    continue
+                attempted_patterns.add(anchor_lower)
+
+                # Simple case-insensitive search first (no regex)
+                if anchor_lower not in updated_draft.lower():
+                    continue
+
+                # Only use regex if we found the text
                 anchor_pattern = re.escape(anchor)
-
-                # Check if this text appears in the draft and isn't already linked
-                if re.search(r'\b' + anchor_pattern + r'\b', updated_draft, re.IGNORECASE):
-                    # Make sure it's not already a link
-                    check_pattern = r'\[.*?' + anchor_pattern + r'.*?\]'
-                    if not re.search(check_pattern, updated_draft, re.IGNORECASE):
-                        # Replace first occurrence
-                        updated_draft = re.sub(
-                            r'\b(' + anchor_pattern + r')\b',
-                            f'[\\1]({url})',
-                            updated_draft,
-                            count=1,
-                            flags=re.IGNORECASE
-                        )
-                        linked = True
-                        logger.info(f"Linked: {anchor} -> {url}")
-                        break
-
-            # If no natural anchor found, try topic-based keywords
-            if not linked:
-                for topic in article.get('topics', [])[:3]:
-                    topic_pattern = re.escape(topic)
-                    if re.search(r'\b' + topic_pattern + r'\b', updated_draft, re.IGNORECASE):
-                        # Check not already linked
-                        if not re.search(r'\[.*?' + topic_pattern + r'.*?\]', updated_draft, re.IGNORECASE):
+                try:
+                    # Check if this text appears and isn't already linked
+                    if re.search(r'\b' + anchor_pattern + r'\b', updated_draft, re.IGNORECASE):
+                        # Make sure it's not already a link (simpler check)
+                        if f'[{anchor}]' not in updated_draft and f']{anchor}' not in updated_draft.lower():
+                            # Replace first occurrence
                             updated_draft = re.sub(
-                                r'\b(' + topic_pattern + r')\b',
+                                r'\b(' + anchor_pattern + r')\b',
                                 f'[\\1]({url})',
                                 updated_draft,
                                 count=1,
                                 flags=re.IGNORECASE
                             )
-                            logger.info(f"Linked (topic): {topic} -> {url}")
+                            linked = True
+                            logger.info(f"Linked: {anchor} -> {url}")
                             break
+                except Exception as e:
+                    logger.warning(f"Regex error for anchor '{anchor}': {e}")
+                    continue
+
+            # If no natural anchor found, try topic-based keywords (limit to 2 topics)
+            if not linked:
+                for topic in article.get('topics', [])[:2]:
+                    if len(topic) < 5:  # Skip short topics
+                        continue
+
+                    topic_lower = topic.lower()
+                    if topic_lower in attempted_patterns:
+                        continue
+                    attempted_patterns.add(topic_lower)
+
+                    # Simple search first
+                    if topic_lower not in updated_draft.lower():
+                        continue
+
+                    topic_pattern = re.escape(topic)
+                    try:
+                        if re.search(r'\b' + topic_pattern + r'\b', updated_draft, re.IGNORECASE):
+                            # Check not already linked
+                            if f'[{topic}]' not in updated_draft and f']{topic}' not in updated_draft.lower():
+                                updated_draft = re.sub(
+                                    r'\b(' + topic_pattern + r')\b',
+                                    f'[\\1]({url})',
+                                    updated_draft,
+                                    count=1,
+                                    flags=re.IGNORECASE
+                                )
+                                logger.info(f"Linked (topic): {topic} -> {url}")
+                                break
+                    except Exception as e:
+                        logger.warning(f"Regex error for topic '{topic}': {e}")
+                        continue
 
         return updated_draft
 
-    def _count_internal_links(self, text: str, original_count: int = 0) -> int:
+    def _count_internal_links(self, text: str) -> int:
         """Count internal links in text (adriancrook.com links)"""
         pattern = r'\[([^\]]+)\]\((https://adriancrook\.com/[^\)]+)\)'
         matches = re.findall(pattern, text)
-        return len(matches) - original_count
+        return len(matches)
 
 
 # Export
